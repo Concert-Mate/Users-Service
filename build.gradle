@@ -17,7 +17,6 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.mongodb:mongodb-driver-sync:5.0.0'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
