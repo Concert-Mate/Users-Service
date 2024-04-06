@@ -13,6 +13,8 @@ import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestClientBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import ru.nsu.concertsmate.backend.ElasticCity;
 import ru.nsu.concertsmate.backend.services.CityService;
@@ -22,15 +24,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Component
 public class CityServiceImpl implements CityService {
+
+    @Value("${spring.application.elasticLogin}")
+    private String elasticLogin;
+
+    @Value("${spring.application.elasticPassword}")
+    private String elasticPassword;
+
+
+    @Value("${spring.application.elasticHost}")
+    private String elasticHost;
+
+
+    @Value("${spring.application.elasticPort}")
+    private int elasticPort;
+
+
     private ElasticsearchClient elasticsearchClient;
+
+
+    private boolean init = false;
 
 
     private void createElasticsearchClient(){
         final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-        credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials("elastic", "123321"));
+        credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(elasticLogin, elasticPassword));
 
-        RestClientBuilder builder = RestClient.builder( new HttpHost("localhost", 9200))
+        RestClientBuilder builder = RestClient.builder( new HttpHost(elasticHost, elasticPort))
                 .setHttpClientConfigCallback(httpClientBuilder -> {
                     httpClientBuilder.disableAuthCaching();
                     return httpClientBuilder
@@ -44,12 +66,17 @@ public class CityServiceImpl implements CityService {
 
     @Autowired
     public CityServiceImpl(){
-        createElasticsearchClient();
+
     }
 
 
     @Override
     public List<ElasticCity> getCityByName(String name) {
+        if (!init){
+            createElasticsearchClient();
+            init = true;
+        }
+
         try {
             SearchResponse<ElasticCity> response = elasticsearchClient.search(s -> s
                             .index("russian_cities")
