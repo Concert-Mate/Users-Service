@@ -72,6 +72,7 @@ public class CityServiceImpl implements CityService {
 
     @Override
     public List<ElasticCity> getCityByName(String name) {
+
         if (!init){
             createElasticsearchClient();
             init = true;
