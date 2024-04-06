@@ -2,10 +2,10 @@ services:
   postgres:
     image: postgres
     environment:
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      PROJECT_USER_NAME: ${PROJECT_USER_NAME}
-      PROJECT_USER_PASSWORD: ${PROJECT_USER_PASSWORD}
-      PROJECT_USER_DATABASE_NAME: ${PROJECT_USER_DATABASE_NAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      PROJECT_USER_NAME: ${PROJECT_USER_NAME:-admin}
+      PROJECT_USER_PASSWORD: ${PROJECT_USER_PASSWORD:-password}
+      PROJECT_USER_DATABASE_NAME: ${PROJECT_USER_DATABASE_NAME:-concerts-mate}
     ports:
       - "0.0.0.0:5432:5432"
     volumes:
@@ -24,8 +24,8 @@ services:
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
       - "xpack.security.enabled=true"
-      - "ELASTIC_PASSWORD=${ELASTIC_PASSWORD}"
-      - "ELASTIC_USER=${ELASTIC_USER}"
+      - "ELASTIC_PASSWORD=${ELASTIC_PASSWORD:-password}"
+      - "ELASTIC_USER=${ELASTIC_USER:-elastic}"
 
     ulimits:
       memlock:
