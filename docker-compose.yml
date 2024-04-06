@@ -62,7 +62,7 @@ services:
     env_file:
       - .env
 
-   rabbitmq:
+  rabbitmq:
     image: rabbitmq:3.9-management
     ports:
       - "5672:5672"
