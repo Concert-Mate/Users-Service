@@ -30,8 +30,8 @@ jobs:
 
           docker-compose exec -T postgres pg_isready -h localhost -U $POSTGRES_USER -d $POSTGRES_DB
 
-          docker-compose exec -T postgres psql -U $POSTGRES_USER -d $PROJECT_USER_DATABASE_NAME -c "SELECT * FROM pg_roles WHERE rolname='$PROJECT_USER_NAME';" | grep -q $PROJECT_USER_NAME || exit 1
-          docker-compose exec -T postgres psql -U $POSTGRES_USER -d $PROJECT_USER_DATABASE_NAME -c "SELECT * FROM pg_roles WHERE rolname='$PROJECT_USER_NAME' AND rolpassword='$PROJECT_USER_PASSWORD';" | grep -q $PROJECT_USER_NAME || exit 1
+          docker-compose exec -T postgres psql -h localhost -U $POSTGRES_USER -d $PROJECT_USER_DATABASE_NAME -c "SELECT * FROM pg_roles WHERE rolname='$PROJECT_USER_NAME';" | grep -q $PROJECT_USER_NAME || exit 1
+          docker-compose exec -T postgres psql -h localhost -U $POSTGRES_USER -d $PROJECT_USER_DATABASE_NAME -c "SELECT * FROM pg_roles WHERE rolname='$PROJECT_USER_NAME' AND rolpassword='$PROJECT_USER_PASSWORD';" | grep -q $PROJECT_USER_NAME || exit 1
 
           echo "ELASTIC_USER=$ELASTIC_USER"
           echo "ELASTIC_PASSWORD=$ELASTIC_PASSWORD"
