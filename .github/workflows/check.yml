@@ -1,0 +1,40 @@
+name: Container Health Check
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+
+jobs:
+  container-health-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run health checks
+        run: docker-compose up -d
+
+      - name: Run health checks
+        run: |
+          export $(grep -E -v '^#' .env | xargs)
+          echo "Environment variables sourced from .env file."
+
+          docker-compose up -d
+
+          docker-compose exec -T postgres pg_isready -h localhost -U $POSTGRES_USER -d $POSTGRES_DB
+
+          echo "ELASTIC_USER=$ELASTIC_USER"
+          echo "ELASTIC_PASSWORD=$ELASTIC_PASSWORD"
+          
+          docker-compose exec -T elasticsearch curl -f -X GET 'localhost:9200/_cat/health?v' --user $ELASTIC_USER:$ELASTIC_PASSWORD | grep -q 'green' || true
+
+      - name: Run health checks
+        run: docker-compose down -v
+
