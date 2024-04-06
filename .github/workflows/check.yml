@@ -35,7 +35,7 @@ jobs:
           echo $PROJECT_USER_DATABASE_NAME
           echo $PROJECT_USER_PASSWORD
 
-          docker-compose exec -T postgres psql -U $PROJECT_USER_NAME -d $PROJECT_USER_DATABASE_NAME -c "SELECT * FROM pg_roles WHERE rolname='$PROJECT_USER_NAME';" | grep $PROJECT_USER_NAME
+          docker-compose exec -T postgres psql -U $PROJECT_USER_NAME -d $PROJECT_USER_DATABASE_NAME -c "SELECT * FROM pg_roles WHERE rolname='$PROJECT_USER_NAME';" | grep -q $PROJECT_USER_NAME || exit 1
 
 
 
