@@ -28,7 +28,7 @@ public class CityServiceImpl implements CityService {
 
     private void createElasticsearchClient(){
         final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-        credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials("elastic", "123321"));
+        credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials("elastic", "password"));
 
         RestClientBuilder builder = RestClient.builder( new HttpHost("localhost", 9200))
                 .setHttpClientConfigCallback(httpClientBuilder -> {
