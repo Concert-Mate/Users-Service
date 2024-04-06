@@ -6,6 +6,8 @@ import ru.nsu.concertsmate.backend.model.entities.User;
 import ru.nsu.concertsmate.backend.repositories.UsersRepository;
 import ru.nsu.concertsmate.backend.services.UsersService;
 
+import java.util.Optional;
+
 @Service
 public class UsersServiceImpl implements UsersService {
     private final UsersRepository usersRepository;
@@ -22,7 +24,8 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public void deleteUser(long telegramId) {
-        final User user = usersRepository.findUserByTelegramId(telegramId);
-        usersRepository.delete(user);
+        final Optional<User> optionalUser = usersRepository.findByTelegramId(telegramId);
+        // TODO: check whether user exists
+        optionalUser.ifPresent(usersRepository::delete);
     }
 }

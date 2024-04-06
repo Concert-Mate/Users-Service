@@ -1,13 +1,10 @@
 package ru.nsu.concertsmate.backend.repositories;
 
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import ru.nsu.concertsmate.backend.model.entities.User;
 
-public interface UsersRepository extends CrudRepository<User, Long> {
-    @Query(value = """
-            select * from users
-            where telegram_id = :telegramId
-            """, nativeQuery = true)
-    User findUserByTelegramId(long telegramId);
+import java.util.Optional;
+
+public interface UsersRepository extends JpaRepository<User, Long> {
+    Optional<User> findByTelegramId(long telegramId);
 }
