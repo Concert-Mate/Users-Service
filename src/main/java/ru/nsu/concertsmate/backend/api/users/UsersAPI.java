@@ -1,41 +1,42 @@
-package ru.nsu.concertsmate.backend.api;
+package ru.nsu.concertsmate.backend.api.users;
 
 import org.springframework.web.bind.annotation.*;
+import ru.nsu.concertsmate.backend.model.dto.ConcertDTO;
 
-@RequestMapping("/users/{telegramId}")
+import java.util.List;
+
+@RequestMapping(value = "/users/{telegramId}")
 public interface UsersAPI {
-    // TODO: change return type from String in all methods
-
     @PostMapping
-    String addUser(@PathVariable long telegramId);
+    UsersAPIResponse addUser(@PathVariable long telegramId);
 
     @DeleteMapping
-    String deleteUser(@PathVariable long telegramId);
+    UsersAPIResponse deleteUser(@PathVariable long telegramId);
 
     @PostMapping("/city")
-    String addUserCity(
+    UsersAPIResponse addUserCity(
             @PathVariable long telegramId,
             @RequestParam(name = "city") String cityName
     );
 
     @DeleteMapping("/city")
-    String deleteUserCity(
+    UsersAPIResponse deleteUserCity(
             @PathVariable long telegramId,
             @RequestParam(name = "city") String cityName
     );
 
     @PostMapping("/tracks-list")
-    String addUserTracksList(
+    UsersAPIResponse addUserTracksList(
             @PathVariable long telegramId,
             @RequestParam(name = "url") String tracksListURL
     );
 
     @DeleteMapping("/tracks-list")
-    String deleteUserTracksList(
+    UsersAPIResponse deleteUserTracksList(
             @PathVariable long telegramId,
             @RequestParam(name = "url") String tracksListURL
     );
 
     @GetMapping("/concerts")
-    String getUserConcerts(@PathVariable long telegramId);
+    UsersAPIDataResponse<List<ConcertDTO>> getUserConcerts(@PathVariable long telegramId);
 }

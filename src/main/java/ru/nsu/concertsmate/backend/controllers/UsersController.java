@@ -2,10 +2,16 @@ package ru.nsu.concertsmate.backend.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
-import ru.nsu.concertsmate.backend.api.UsersAPI;
+import ru.nsu.concertsmate.backend.api.users.UsersAPI;
+import ru.nsu.concertsmate.backend.api.users.UsersAPIResponse;
+import ru.nsu.concertsmate.backend.model.dto.ConcertDTO;
+import ru.nsu.concertsmate.backend.api.users.UsersAPIDataResponse;
 import ru.nsu.concertsmate.backend.services.UsersService;
 
-@RestController
+import java.util.ArrayList;
+import java.util.List;
+
+@RestController()
 public class UsersController implements UsersAPI {
     private final UsersService usersService;
 
@@ -15,41 +21,41 @@ public class UsersController implements UsersAPI {
     }
 
     @Override
-    public String addUser(long telegramId) {
+    public UsersAPIResponse addUser(long telegramId) {
         // TODO: add exceptions handle
         usersService.addUser(telegramId);
-        return String.format("Adding user with telegram-id %s", telegramId);
+        return new UsersAPIResponse();
     }
 
     @Override
-    public String deleteUser(long telegramId) {
+    public UsersAPIResponse deleteUser(long telegramId) {
         // TODO: add exceptions handle
         usersService.deleteUser(telegramId);
-        return String.format("Deleting user with telegram-id %s", telegramId);
+        return new UsersAPIResponse();
     }
 
     @Override
-    public String addUserCity(long telegramId, String cityName) {
-        return String.format("Adding city %s for user with telegram id %d", cityName, telegramId);
+    public UsersAPIResponse addUserCity(long telegramId, String cityName) {
+        return new UsersAPIResponse();
     }
 
     @Override
-    public String deleteUserCity(long telegramId, String cityName) {
-        return String.format("Deleting city %s from user with telegram id %d", cityName, telegramId);
+    public UsersAPIResponse deleteUserCity(long telegramId, String cityName) {
+        return new UsersAPIResponse();
     }
 
     @Override
-    public String addUserTracksList(long telegramId, String tracksListURL) {
-        return String.format("Adding tracks-list %s for user with telegram id %d", tracksListURL, telegramId);
+    public UsersAPIResponse addUserTracksList(long telegramId, String tracksListURL) {
+        return new UsersAPIResponse();
     }
 
     @Override
-    public String deleteUserTracksList(long telegramId, String tracksListURL) {
-        return String.format("Deleting tracks-list %s from user with telegram id %d", tracksListURL, telegramId);
+    public UsersAPIResponse deleteUserTracksList(long telegramId, String tracksListURL) {
+        return new UsersAPIResponse();
     }
 
     @Override
-    public String getUserConcerts(long telegramId) {
-        return String.format("Concerts for user with telegram id %d", telegramId);
+    public UsersAPIDataResponse<List<ConcertDTO>> getUserConcerts(long telegramId) {
+        return new UsersAPIDataResponse<>(new ArrayList<>());
     }
 }

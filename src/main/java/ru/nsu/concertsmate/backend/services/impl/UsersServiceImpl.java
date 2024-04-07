@@ -19,13 +19,13 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public void addUser(long telegramId) {
-       usersRepository.save(new User(telegramId));
+        final User user = new User(telegramId);
+        usersRepository.save(user);
     }
 
     @Override
     public void deleteUser(long telegramId) {
         final Optional<User> optionalUser = usersRepository.findByTelegramId(telegramId);
-        // TODO: check whether user exists
         optionalUser.ifPresent(usersRepository::delete);
     }
 }
