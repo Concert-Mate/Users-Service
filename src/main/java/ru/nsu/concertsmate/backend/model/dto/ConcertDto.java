@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 @Data
-public class ConcertDTO {
+public class ConcertDto {
     private String title;
 
     private String afishaUrl;
@@ -23,7 +23,7 @@ public class ConcertDTO {
 
     private List<String> images;
 
-    private PriceDTO minPrice;
+    private PriceDto minPrice;
 
-    private List<ArtistDTO> artists;
+    private List<ArtistDto> artists;
 }

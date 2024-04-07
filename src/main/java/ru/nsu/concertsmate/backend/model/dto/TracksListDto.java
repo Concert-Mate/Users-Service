@@ -5,12 +5,12 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class TracksListDTO {
+public class TracksListDto {
     private String url;
 
     private String title;
 
     private String imageUrl;
 
-    private List<ArtistDTO> artists;
+    private List<ArtistDto> artists;
 }
