@@ -2,36 +2,43 @@ package ru.nsu.concertsmate.backend.api.users;
 
 import org.springframework.web.bind.annotation.*;
 import ru.nsu.concertsmate.backend.model.dto.ConcertDto;
+import ru.nsu.concertsmate.backend.model.dto.UserDto;
 
 import java.util.List;
 
 @RequestMapping(value = "/users/{telegramId}")
 public interface UsersApi {
     @PostMapping
-    UsersApiResponse addUser(@PathVariable long telegramId);
+    UsersApiDataResponse<UserDto> addUser(@PathVariable long telegramId);
 
     @DeleteMapping
-    UsersApiResponse deleteUser(@PathVariable long telegramId);
+    UsersApiDataResponse<UserDto> deleteUser(@PathVariable long telegramId);
 
-    @PostMapping("/city")
+    @GetMapping("/cities")
+    UsersApiDataResponse<List<String>> getUserCities(@PathVariable long telegramId);
+
+    @PostMapping("/cities")
     UsersApiResponse addUserCity(
             @PathVariable long telegramId,
             @RequestParam(name = "city") String cityName
     );
 
-    @DeleteMapping("/city")
+    @DeleteMapping("/cities")
     UsersApiResponse deleteUserCity(
             @PathVariable long telegramId,
             @RequestParam(name = "city") String cityName
     );
 
-    @PostMapping("/tracks-list")
+    @GetMapping("/tracks-lists")
+    UsersApiDataResponse<List<String>> getUserTracksLists(@PathVariable long telegramId);
+
+    @PostMapping("/tracks-lists")
     UsersApiResponse addUserTracksList(
             @PathVariable long telegramId,
             @RequestParam(name = "url") String tracksListURL
     );
 
-    @DeleteMapping("/tracks-list")
+    @DeleteMapping("/tracks-lists")
     UsersApiResponse deleteUserTracksList(
             @PathVariable long telegramId,
             @RequestParam(name = "url") String tracksListURL

@@ -1,7 +1,9 @@
 package ru.nsu.concertsmate.backend.services;
 
-public interface UsersService {
-    void addUser(long telegramId);
+import ru.nsu.concertsmate.backend.model.dto.UserDto;
 
-    void deleteUser(long telegramId);
+public interface UsersService {
+    UserDto addUser(long telegramId);
+
+    UserDto deleteUser(long telegramId);
 }

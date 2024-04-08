@@ -6,9 +6,9 @@ import lombok.Data;
 public class UsersApiDataResponse<O> {
     private UsersApiResponseStatus status = UsersApiResponseStatus.SUCCESS;
 
-    private O object;
+    private O result;
 
     public UsersApiDataResponse(O object) {
-        this.object = object;
+        this.result = object;
     }
 }

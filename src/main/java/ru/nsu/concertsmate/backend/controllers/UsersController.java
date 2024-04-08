@@ -6,6 +6,7 @@ import ru.nsu.concertsmate.backend.api.users.UsersApi;
 import ru.nsu.concertsmate.backend.api.users.UsersApiResponse;
 import ru.nsu.concertsmate.backend.model.dto.ConcertDto;
 import ru.nsu.concertsmate.backend.api.users.UsersApiDataResponse;
+import ru.nsu.concertsmate.backend.model.dto.UserDto;
 import ru.nsu.concertsmate.backend.services.UsersService;
 
 import java.util.ArrayList;
@@ -21,17 +22,21 @@ public class UsersController implements UsersApi {
     }
 
     @Override
-    public UsersApiResponse addUser(long telegramId) {
+    public UsersApiDataResponse<UserDto> addUser(long telegramId) {
         // TODO: add exceptions handle
-        usersService.addUser(telegramId);
-        return new UsersApiResponse();
+        return new UsersApiDataResponse<>(usersService.addUser(telegramId));
     }
 
     @Override
-    public UsersApiResponse deleteUser(long telegramId) {
+    public UsersApiDataResponse<UserDto> deleteUser(long telegramId) {
         // TODO: add exceptions handle
-        usersService.deleteUser(telegramId);
-        return new UsersApiResponse();
+        return new UsersApiDataResponse<>(usersService.deleteUser(telegramId));
+    }
+
+    @Override
+    public UsersApiDataResponse<List<String>> getUserCities(long telegramId) {
+        // TODO: implement
+        return new UsersApiDataResponse<>(new ArrayList<>());
     }
 
     @Override
@@ -44,6 +49,12 @@ public class UsersController implements UsersApi {
     public UsersApiResponse deleteUserCity(long telegramId, String cityName) {
         // TODO: implement
         return new UsersApiResponse();
+    }
+
+    @Override
+    public UsersApiDataResponse<List<String>> getUserTracksLists(long telegramId) {
+        // TODO: implement
+        return new UsersApiDataResponse<>(new ArrayList<>());
     }
 
     @Override
