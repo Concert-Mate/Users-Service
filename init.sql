@@ -1,35 +1,54 @@
 CREATE SCHEMA IF NOT EXISTS public;
 
-CREATE TABLE public.users
+create table users
 (
-    id          SERIAL,
-    telegram_id TEXT                                NOT NULL,
-    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    CONSTRAINT users_pk PRIMARY KEY (id),
-    CONSTRAINT users_pk_2 UNIQUE (telegram_id)
+    id          serial
+        constraint users_pk
+            primary key,
+    telegram_id bigint                              not null
+        constraint users_pk_2
+            unique,
+    created_at  timestamp default CURRENT_TIMESTAMP not null
 );
 
-CREATE TABLE public.users_tracklists
+alter table users
+    owner to admin;
+
+create table users_tracklists
 (
-    user_id INTEGER NOT NULL,
-    url     TEXT    NOT NULL,
-    CONSTRAINT users_tracklists_pk PRIMARY KEY (user_id, url),
-    CONSTRAINT users_tracklists_users_id_fk FOREIGN KEY (user_id) REFERENCES public.users
+    user_id integer not null
+        constraint users_tracklists_users_id_fk
+            references users,
+    url     text    not null,
+    constraint users_tracklists_pk
+        primary key (user_id, url)
 );
 
-CREATE TABLE public.users_cities
+alter table users_tracklists
+    owner to admin;
+
+create table users_cities
 (
-    user_id   INTEGER NOT NULL,
-    city_name TEXT    NOT NULL,
-    CONSTRAINT users_cities_pk PRIMARY KEY (city_name, user_id),
-    CONSTRAINT users_cities_users_id_fk FOREIGN KEY (user_id) REFERENCES public.users
+    user_id   integer not null
+        constraint users_cities_users_id_fk
+            references users,
+    city_name text    not null,
+    constraint users_cities_pk
+        primary key (city_name, user_id)
 );
 
-CREATE TABLE public.shown_concerts
+alter table users_cities
+    owner to admin;
+
+create table shown_concerts
 (
-    user_id     INTEGER NOT NULL,
-    concert_url TEXT    NOT NULL,
-    CONSTRAINT shown_concerts_pk PRIMARY KEY (user_id, concert_url),
-    CONSTRAINT shown_concerts_users_id_fk FOREIGN KEY (user_id) REFERENCES public.users
+    user_id     integer not null
+        constraint shown_concerts_users_id_fk
+            references users,
+    concert_url text    not null,
+    constraint shown_concerts_pk
+        primary key (user_id, concert_url)
 );
 
+alter table shown_concerts
+    owner to admin;

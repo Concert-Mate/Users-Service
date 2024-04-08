@@ -15,17 +15,14 @@ import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestClientBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import ru.nsu.concertsmate.backend.ElasticCity;
-import ru.nsu.concertsmate.backend.services.CityService;
+import ru.nsu.concertsmate.backend.model.dto.ElasticCity;
 
 import java.io.IOException;
 import java.util.List;
 
 @Service
-@Component
-public class CityServiceImpl implements CityService {
+public class CitiesSearchServiceImpl implements ru.nsu.concertsmate.backend.services.CitiesSearchService {
     @Value("${spring.application.elasticLogin}")
     private String elasticLogin;
 
@@ -59,12 +56,12 @@ public class CityServiceImpl implements CityService {
     }
 
     @Autowired
-    public CityServiceImpl() {
+    public CitiesSearchServiceImpl() {
 
     }
 
     @Override
-    public List<ElasticCity> getCityByName(String name) {
+    public List<ElasticCity> findCityByName(String cityName) {
         if (!init) {
             createElasticsearchClient();
             init = true;
@@ -76,7 +73,7 @@ public class CityServiceImpl implements CityService {
                             .query(q -> q
                                     .fuzzy(t -> t
                                             .field("name")
-                                            .value(name)
+                                            .value(cityName)
                                             .fuzziness("AUTO")
                                     )
                             ),

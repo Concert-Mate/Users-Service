@@ -1,4 +1,4 @@
-package ru.nsu.concertsmate.backend;
+package ru.nsu.concertsmate.backend.model.dto;
 
 public class ElasticCoords {
     private String lat;
