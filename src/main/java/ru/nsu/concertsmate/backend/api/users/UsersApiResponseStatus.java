@@ -8,4 +8,5 @@ public enum UsersApiResponseStatus {
     INVALID_CITY,
     USER_NOT_FOUND,
     CITY_ALREADY_ADDED,
+    INTERNAL_ERROR
 }

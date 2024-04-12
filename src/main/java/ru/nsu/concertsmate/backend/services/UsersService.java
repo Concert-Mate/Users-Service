@@ -6,4 +6,6 @@ public interface UsersService {
     UserDto addUser(long telegramId);
 
     UserDto deleteUser(long telegramId);
+
+    UserDto findUser(long telegramId);
 }

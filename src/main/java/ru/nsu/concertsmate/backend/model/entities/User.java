@@ -1,9 +1,14 @@
 package ru.nsu.concertsmate.backend.model.entities;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Date;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -11,6 +16,7 @@ import java.util.Date;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Setter @Getter
     private Long id;
 
     @Column(name = "telegram_id", unique = true, nullable = false)
@@ -23,5 +29,14 @@ public class User {
     public User(Long telegramId) {
         this.telegramId = telegramId;
         this.creationDatetime = new Date();
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", telegramId=" + telegramId +
+                ", creationDatetime=" + creationDatetime +
+                '}';
     }
 }
