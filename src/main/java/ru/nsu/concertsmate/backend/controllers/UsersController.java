@@ -12,6 +12,9 @@ import ru.nsu.concertsmate.backend.api.users.UsersApiDataResponse;
 import ru.nsu.concertsmate.backend.model.dto.UserDto;
 import ru.nsu.concertsmate.backend.services.UsersCitiesService;
 import ru.nsu.concertsmate.backend.services.UsersService;
+import ru.nsu.concertsmate.backend.services.exceptions.CityAlreadyExistsException;
+import ru.nsu.concertsmate.backend.services.exceptions.NoSuchCityException;
+import ru.nsu.concertsmate.backend.services.exceptions.NoSuchUserException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,19 +70,47 @@ public class UsersController implements UsersApi {
 
     @Override
     public UsersApiDataResponse<List<String>> getUserCities(long telegramId) {
-        return new UsersApiDataResponse<>(usersCitiesService.getUserCities(telegramId));
+        UsersApiDataResponse<List<String>> res = new UsersApiDataResponse<>(null);
+        try {
+            return new UsersApiDataResponse<>(usersCitiesService.getUserCities(telegramId));
+        } catch (NoSuchUserException e) {
+            res.setStatus(UsersApiResponseStatus.USER_NOT_FOUND.ordinal());
+        }
+        catch (Exception e){
+            res.setStatus(UsersApiResponseStatus.INTERNAL_ERROR.ordinal());
+        }
+        return res;
     }
 
     @Override
     public UsersApiResponse addUserCity(long telegramId, String cityName) {
-        usersCitiesService.saveUserCity(telegramId, cityName);
-        return new UsersApiResponse();
+        UsersApiResponse res = new UsersApiResponse();
+        try {
+            usersCitiesService.saveUserCity(telegramId, cityName);
+        } catch (NoSuchUserException e) {
+            res.setStatus(UsersApiResponseStatus.USER_NOT_FOUND.ordinal());
+        } catch (CityAlreadyExistsException e) {
+            res.setStatus(UsersApiResponseStatus.CITY_ALREADY_ADDED.ordinal());
+        }
+        catch (Exception e){
+            res.setStatus(UsersApiResponseStatus.INTERNAL_ERROR.ordinal());
+        }
+        return res;
     }
 
     @Override
     public UsersApiResponse deleteUserCity(long telegramId, String cityName) {
-        usersCitiesService.deleteUserCity(telegramId, cityName);
-        return new UsersApiResponse();
+        UsersApiResponse res = new UsersApiResponse();
+        try {
+            usersCitiesService.deleteUserCity(telegramId, cityName);
+        } catch (NoSuchUserException e) {
+            res.setStatus(UsersApiResponseStatus.USER_NOT_FOUND.ordinal());
+        } catch (NoSuchCityException e){
+            res.setStatus(UsersApiResponseStatus.INVALID_CITY.ordinal());
+        } catch (Exception e){
+            res.setStatus(UsersApiResponseStatus.INTERNAL_ERROR.ordinal());
+        }
+        return res;
     }
 
     @Override
