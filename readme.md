@@ -1,6 +1,14 @@
 # How to launch application
 
+```Bash
+./gradlew bootRun
+```
+
 # How to launch tests
+
+```Bash
+./gradlew check
+```
 
 # Documentation
 
