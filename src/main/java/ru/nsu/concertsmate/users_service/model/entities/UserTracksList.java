@@ -6,8 +6,8 @@ import lombok.NoArgsConstructor;
 import java.util.Objects;
 
 @Entity
-@Table(name = "users_tracks_lists", uniqueConstraints={
-        @UniqueConstraint( name = "users_tracks_lists_pk",  columnNames ={"user_id", "url"})
+@Table(name = "users_tracks_lists", uniqueConstraints = {
+        @UniqueConstraint(name = "users_tracks_lists_pk", columnNames = {"user_id", "url"})
 })
 @NoArgsConstructor
 public class UserTracksList {
@@ -19,11 +19,11 @@ public class UserTracksList {
         userTracksList = new UserTracksListEmbedded(userId, tracksListUrl);
     }
 
-    public long getUserId(){
+    public long getUserId() {
         return userTracksList.getUserId();
     }
 
-    public String getTracksListUrl(){
+    public String getTracksListUrl() {
         return userTracksList.getTracksListUrl();
     }
 

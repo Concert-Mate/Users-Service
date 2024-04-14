@@ -35,16 +35,16 @@ public class CitiesServiceImpl implements CitiesService {
     @Override
     public UserCityDto saveUserCity(long telegramId, String cityName) throws UserNotFound, CityAlreadyAdded {
         Optional<User> user = usersRepository.findByTelegramId(telegramId);
-        if (user.isEmpty()){
+        if (user.isEmpty()) {
             throw new UserNotFound();
         }
         Optional<UserCity> testUnique = usersCitiesRepository.findById(new UserCityEmbedded(user.get().getId(), cityName));
-        if (testUnique.isPresent()){
+        if (testUnique.isPresent()) {
             throw new CityAlreadyAdded();
         }
         UserCity userCity = new UserCity(user.get().getId(), cityName);
         UserCity result = usersCitiesRepository.save(userCity);
-        if (!result.equals(userCity)){
+        if (!result.equals(userCity)) {
             throw new RuntimeException("can't save user city");
         }
 
@@ -54,11 +54,11 @@ public class CitiesServiceImpl implements CitiesService {
     @Override
     public UserCityDto deleteUserCity(long telegramId, String cityName) throws UserNotFound, CityNotAdded {
         Optional<User> user = usersRepository.findByTelegramId(telegramId);
-        if (user.isEmpty()){
+        if (user.isEmpty()) {
             throw new UserNotFound();
         }
         Optional<UserCity> testUnique = usersCitiesRepository.findById(new UserCityEmbedded(user.get().getId(), cityName));
-        if (testUnique.isEmpty()){
+        if (testUnique.isEmpty()) {
             throw new CityNotAdded();
         }
         UserCity userCity = new UserCity(user.get().getId(), cityName);
@@ -70,7 +70,7 @@ public class CitiesServiceImpl implements CitiesService {
     @Override
     public List<String> getUserCities(long telegramId) throws UserNotFound {
         Optional<User> user = usersRepository.findByTelegramId(telegramId);
-        if (user.isEmpty()){
+        if (user.isEmpty()) {
             throw new UserNotFound();
         }
         return usersCitiesRepository.getUserCities(user.get().getId()).get();

@@ -33,7 +33,7 @@ public class UsersController implements Api {
             }
             usersService.addUser(telegramId);
             return new Response();
-        } catch (Exception e){
+        } catch (Exception e) {
             return new Response(ResponseStatusCode.INTERNAL_ERROR);
         }
     }
@@ -46,8 +46,7 @@ public class UsersController implements Api {
                 return new Response(ResponseStatusCode.USER_NOT_FOUND);
             }
             return new Response();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return new Response(ResponseStatusCode.INTERNAL_ERROR);
         }
     }
@@ -58,7 +57,7 @@ public class UsersController implements Api {
             return new UserCitiesResponse(citiesService.getUserCities(telegramId));
         } catch (UserNotFound e) {
             return new UserCitiesResponse(ResponseStatusCode.USER_NOT_FOUND);
-        } catch (Exception e){
+        } catch (Exception e) {
             return new UserCitiesResponse(ResponseStatusCode.INTERNAL_ERROR);
         }
     }
@@ -72,8 +71,7 @@ public class UsersController implements Api {
             return new Response(ResponseStatusCode.USER_NOT_FOUND);
         } catch (CityAlreadyAdded e) {
             return new Response(ResponseStatusCode.CITY_ALREADY_ADDED);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return new Response(ResponseStatusCode.INTERNAL_ERROR);
         }
     }
@@ -85,9 +83,9 @@ public class UsersController implements Api {
             return new Response();
         } catch (UserNotFound e) {
             return new Response(ResponseStatusCode.USER_NOT_FOUND);
-        } catch (CityNotAdded e){
+        } catch (CityNotAdded e) {
             return new Response(ResponseStatusCode.CITY_NOT_ADDED);
-        } catch (Exception e){
+        } catch (Exception e) {
             return new Response(ResponseStatusCode.INTERNAL_ERROR);
         }
     }
@@ -98,7 +96,7 @@ public class UsersController implements Api {
             return new UserTracksListsResponse(tracksListsService.getUserTracksLists(telegramId));
         } catch (UserNotFound e) {
             return new UserTracksListsResponse(ResponseStatusCode.USER_NOT_FOUND);
-        } catch (Exception e){
+        } catch (Exception e) {
             return new UserTracksListsResponse(ResponseStatusCode.INTERNAL_ERROR);
         }
     }
@@ -112,7 +110,7 @@ public class UsersController implements Api {
             return new Response(ResponseStatusCode.USER_NOT_FOUND);
         } catch (TracksListAlreadyAdded e) {
             return new Response(ResponseStatusCode.TRACKS_LIST_ALREADY_ADDED);
-        } catch (Exception e){
+        } catch (Exception e) {
             return new Response(ResponseStatusCode.INTERNAL_ERROR);
         }
     }
@@ -124,9 +122,9 @@ public class UsersController implements Api {
             return new Response();
         } catch (UserNotFound e) {
             return new Response(ResponseStatusCode.USER_NOT_FOUND);
-        } catch (TracksListNotAdded e){
+        } catch (TracksListNotAdded e) {
             return new Response(ResponseStatusCode.TRACKS_LIST_NOT_ADDED);
-        } catch (Exception e){
+        } catch (Exception e) {
             return new Response(ResponseStatusCode.INTERNAL_ERROR);
         }
     }
@@ -139,7 +137,7 @@ public class UsersController implements Api {
                 return new UserConcertsResponse(ResponseStatusCode.SUCCESS);
             }
             return new UserConcertsResponse(ResponseStatusCode.USER_NOT_FOUND);
-        } catch (Exception e){
+        } catch (Exception e) {
             return new UserConcertsResponse(ResponseStatusCode.INTERNAL_ERROR);
         }
     }

@@ -1,6 +1,9 @@
 package ru.nsu.concertsmate.users_service.model.entities;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,8 +15,8 @@ import java.util.Objects;
 @Getter
 @Embeddable
 @NoArgsConstructor
-@Table(name = "users_cities", uniqueConstraints={
-        @UniqueConstraint( name = "users_cities_pk",  columnNames ={"user_id", "city_name"})
+@Table(name = "users_cities", uniqueConstraints = {
+        @UniqueConstraint(name = "users_cities_pk", columnNames = {"user_id", "city_name"})
 })
 public class UserCityEmbedded implements Serializable {
 

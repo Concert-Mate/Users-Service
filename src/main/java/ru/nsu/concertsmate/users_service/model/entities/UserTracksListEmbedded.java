@@ -12,8 +12,8 @@ import java.util.Objects;
 
 @Embeddable
 @NoArgsConstructor
-@Table(name = "users_tracks_lists", uniqueConstraints={
-        @UniqueConstraint(name = "users_tracks_lists_pk", columnNames ={"user_id", "url"})
+@Table(name = "users_tracks_lists", uniqueConstraints = {
+        @UniqueConstraint(name = "users_tracks_lists_pk", columnNames = {"user_id", "url"})
 })
 @Getter
 @Setter

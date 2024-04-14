@@ -6,8 +6,8 @@ import lombok.NoArgsConstructor;
 import java.util.Objects;
 
 @Entity
-@Table(name = "users_cities", uniqueConstraints={
-        @UniqueConstraint( name = "users_cities_pk",  columnNames ={"user_id", "city_name"})
+@Table(name = "users_cities", uniqueConstraints = {
+        @UniqueConstraint(name = "users_cities_pk", columnNames = {"user_id", "city_name"})
 })
 @NoArgsConstructor
 public class UserCity {
@@ -22,11 +22,11 @@ public class UserCity {
     }
 
 
-    public long getUserId(){
+    public long getUserId() {
         return userCity.getUserId();
     }
 
-    public String getCityName(){
+    public String getCityName() {
         return userCity.getCityName();
     }
 

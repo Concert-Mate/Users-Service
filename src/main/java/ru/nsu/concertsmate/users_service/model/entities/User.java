@@ -13,7 +13,8 @@ import java.util.Date;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Setter @Getter
+    @Setter
+    @Getter
     private Long id;
 
     @Column(name = "telegram_id", unique = true, nullable = false)

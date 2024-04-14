@@ -2,7 +2,6 @@ package ru.nsu.concertsmate.users_service.model.dto;
 
 import lombok.Data;
 
-
 import java.util.Date;
 
 @Data

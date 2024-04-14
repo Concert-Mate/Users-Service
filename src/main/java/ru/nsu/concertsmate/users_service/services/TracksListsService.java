@@ -1,7 +1,9 @@
 package ru.nsu.concertsmate.users_service.services;
 
 import ru.nsu.concertsmate.users_service.model.dto.UserTracksListDto;
-import ru.nsu.concertsmate.users_service.services.exceptions.*;
+import ru.nsu.concertsmate.users_service.services.exceptions.TracksListAlreadyAdded;
+import ru.nsu.concertsmate.users_service.services.exceptions.TracksListNotAdded;
+import ru.nsu.concertsmate.users_service.services.exceptions.UserNotFound;
 
 import java.util.List;
 
