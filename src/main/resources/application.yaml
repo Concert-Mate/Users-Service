@@ -1,10 +1,6 @@
 spring:
   application:
     name: 'Backend'
-    elasticLogin: ${ELASTIC_LOGIN:elastic}
-    elasticPassword: ${ELASTIC_PASSWORD:password}
-    elasticHost: ${ELASTIC_HOST:localhost}
-    elasticPort: ${ELASTIC_PORT:9200}
   datasource:
     url: jdbc:postgresql://localhost:5432/concerts-mate
     username: admin
