@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CitiesRepository extends CrudRepository<UserCityEntity, UserCityEmbeddedEntity> {
-
     @Query(value = "SELECT city_name FROM public.users_cities WHERE user_id = :user_id",
             nativeQuery = true)
     Optional<List<String>> getUserCities(@Param("user_id") long userId);
