@@ -1,11 +1,16 @@
 package ru.nsu.concertsmate.backend.model.entities;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.Objects;
 
+@Setter
+@Getter
 @Embeddable
 @NoArgsConstructor
 @Table(name = "users_cities", uniqueConstraints={
@@ -21,22 +26,6 @@ public class UserCityEmbedded implements Serializable {
 
     public UserCityEmbedded(long userId, String cityName) {
         this.userId = userId;
-        this.cityName = cityName;
-    }
-
-    public long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(long userId) {
-        this.userId = userId;
-    }
-
-    public String getCityName() {
-        return cityName;
-    }
-
-    public void setCityName(String cityName) {
         this.cityName = cityName;
     }
 

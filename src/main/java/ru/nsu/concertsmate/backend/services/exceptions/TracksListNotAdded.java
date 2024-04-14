@@ -1,4 +1,4 @@
 package ru.nsu.concertsmate.backend.services.exceptions;
 
-public class NoSuchCityException extends Exception{
+public class TracksListNotAdded extends Exception {
 }

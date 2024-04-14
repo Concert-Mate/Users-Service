@@ -10,5 +10,6 @@ public enum ResponseStatusCode {
     INVALID_CITY,
     FUZZY_CITY,
     TRACKS_LIST_ALREADY_ADDED,
+    TRACKS_LIST_NOT_ADDED,
     INVALID_TRACKS_LIST,
 }
