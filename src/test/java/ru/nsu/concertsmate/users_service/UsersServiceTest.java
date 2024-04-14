@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @TestPropertySource("/application.yaml")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class UsersServiceTest {
+class UsersServiceTest {
     private static class TelegramId {
         private static final AtomicLong id = new AtomicLong();
 
