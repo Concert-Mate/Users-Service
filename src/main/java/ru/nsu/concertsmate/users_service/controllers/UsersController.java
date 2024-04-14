@@ -4,21 +4,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 import ru.nsu.concertsmate.users_service.api.users.*;
 import ru.nsu.concertsmate.users_service.model.dto.UserDto;
-import ru.nsu.concertsmate.users_service.services.CitiesService;
-import ru.nsu.concertsmate.users_service.services.TracksListsService;
+import ru.nsu.concertsmate.users_service.services.UsersCitiesService;
 import ru.nsu.concertsmate.users_service.services.UsersService;
+import ru.nsu.concertsmate.users_service.services.UsersTracksListsService;
 import ru.nsu.concertsmate.users_service.services.exceptions.*;
+
+import java.util.Optional;
 
 @RestController()
 public class UsersController implements UsersApi {
     private final UsersService usersService;
-
-    private final CitiesService citiesService;
-
-    private final TracksListsService tracksListsService;
+    private final UsersCitiesService citiesService;
+    private final UsersTracksListsService tracksListsService;
 
     @Autowired
-    public UsersController(UsersService usersService, CitiesService citiesService, TracksListsService tracksListsService) {
+    public UsersController(UsersService usersService, UsersCitiesService citiesService, UsersTracksListsService tracksListsService) {
         this.usersService = usersService;
         this.citiesService = citiesService;
         this.tracksListsService = tracksListsService;
@@ -27,13 +27,13 @@ public class UsersController implements UsersApi {
     @Override
     public UsersApiResponse addUser(long telegramId) {
         try {
-            final UserDto user = usersService.findUser(telegramId);
-            if (user != null) {
+            final Optional<UserDto> optionalUser = usersService.findUser(telegramId);
+            if (optionalUser.isPresent()) {
                 return new UsersApiResponse(UsersApiResponseStatusCode.USER_ALREADY_EXISTS);
             }
             usersService.addUser(telegramId);
             return new UsersApiResponse();
-        } catch (Exception e) {
+        } catch (Exception exception) {
             return new UsersApiResponse(UsersApiResponseStatusCode.INTERNAL_ERROR);
         }
     }
@@ -41,12 +41,11 @@ public class UsersController implements UsersApi {
     @Override
     public UsersApiResponse deleteUser(long telegramId) {
         try {
-            var user = usersService.deleteUser(telegramId);
-            if (user == null) {
-                return new UsersApiResponse(UsersApiResponseStatusCode.USER_NOT_FOUND);
-            }
+            usersService.deleteUser(telegramId);
             return new UsersApiResponse();
-        } catch (Exception e) {
+        } catch (UserNotFoundException exception) {
+            return new UsersApiResponse(UsersApiResponseStatusCode.USER_NOT_FOUND);
+        } catch (Exception exception) {
             return new UsersApiResponse(UsersApiResponseStatusCode.INTERNAL_ERROR);
         }
     }
@@ -55,9 +54,9 @@ public class UsersController implements UsersApi {
     public UserCitiesResponse getUserCities(long telegramId) {
         try {
             return new UserCitiesResponse(citiesService.getUserCities(telegramId));
-        } catch (UserNotFoundException e) {
+        } catch (UserNotFoundException exception) {
             return new UserCitiesResponse(UsersApiResponseStatusCode.USER_NOT_FOUND);
-        } catch (Exception e) {
+        } catch (Exception exception) {
             return new UserCitiesResponse(UsersApiResponseStatusCode.INTERNAL_ERROR);
         }
     }
@@ -67,11 +66,11 @@ public class UsersController implements UsersApi {
         try {
             citiesService.saveUserCity(telegramId, cityName);
             return new UsersApiResponse();
-        } catch (UserNotFoundException e) {
+        } catch (UserNotFoundException exception) {
             return new UsersApiResponse(UsersApiResponseStatusCode.USER_NOT_FOUND);
-        } catch (CityAlreadyAddedException e) {
+        } catch (CityAlreadyAddedException exception) {
             return new UsersApiResponse(UsersApiResponseStatusCode.CITY_ALREADY_ADDED);
-        } catch (Exception e) {
+        } catch (Exception exception) {
             return new UsersApiResponse(UsersApiResponseStatusCode.INTERNAL_ERROR);
         }
     }
@@ -81,11 +80,11 @@ public class UsersController implements UsersApi {
         try {
             citiesService.deleteUserCity(telegramId, cityName);
             return new UsersApiResponse();
-        } catch (UserNotFoundException e) {
+        } catch (UserNotFoundException exception) {
             return new UsersApiResponse(UsersApiResponseStatusCode.USER_NOT_FOUND);
-        } catch (CityNotAddedException e) {
+        } catch (CityNotAddedException exception) {
             return new UsersApiResponse(UsersApiResponseStatusCode.CITY_NOT_ADDED);
-        } catch (Exception e) {
+        } catch (Exception exception) {
             return new UsersApiResponse(UsersApiResponseStatusCode.INTERNAL_ERROR);
         }
     }
@@ -94,9 +93,9 @@ public class UsersController implements UsersApi {
     public UserTracksListsResponse getUserTracksLists(long telegramId) {
         try {
             return new UserTracksListsResponse(tracksListsService.getUserTracksLists(telegramId));
-        } catch (UserNotFoundException e) {
+        } catch (UserNotFoundException exception) {
             return new UserTracksListsResponse(UsersApiResponseStatusCode.USER_NOT_FOUND);
-        } catch (Exception e) {
+        } catch (Exception exception) {
             return new UserTracksListsResponse(UsersApiResponseStatusCode.INTERNAL_ERROR);
         }
     }
@@ -106,11 +105,11 @@ public class UsersController implements UsersApi {
         try {
             tracksListsService.saveUserTracksList(telegramId, tracksListURL);
             return new UsersApiResponse();
-        } catch (UserNotFoundException e) {
+        } catch (UserNotFoundException exception) {
             return new UsersApiResponse(UsersApiResponseStatusCode.USER_NOT_FOUND);
-        } catch (TracksListAlreadyAddedException e) {
+        } catch (TracksListAlreadyAddedException exception) {
             return new UsersApiResponse(UsersApiResponseStatusCode.TRACKS_LIST_ALREADY_ADDED);
-        } catch (Exception e) {
+        } catch (Exception exception) {
             return new UsersApiResponse(UsersApiResponseStatusCode.INTERNAL_ERROR);
         }
     }
@@ -120,11 +119,11 @@ public class UsersController implements UsersApi {
         try {
             tracksListsService.deleteUserTracksList(telegramId, tracksListURL);
             return new UsersApiResponse();
-        } catch (UserNotFoundException e) {
+        } catch (UserNotFoundException exception) {
             return new UsersApiResponse(UsersApiResponseStatusCode.USER_NOT_FOUND);
-        } catch (TracksListNotAddedException e) {
+        } catch (TracksListNotAddedException exception) {
             return new UsersApiResponse(UsersApiResponseStatusCode.TRACKS_LIST_NOT_ADDED);
-        } catch (Exception e) {
+        } catch (Exception exception) {
             return new UsersApiResponse(UsersApiResponseStatusCode.INTERNAL_ERROR);
         }
     }
@@ -132,12 +131,12 @@ public class UsersController implements UsersApi {
     @Override
     public UserConcertsResponse getUserConcerts(long telegramId) {
         try {
-            final UserDto user = usersService.findUser(telegramId);
-            if (user != null) {
+            final Optional<UserDto> optionalUser = usersService.findUser(telegramId);
+            if (optionalUser.isPresent()) {
                 return new UserConcertsResponse(UsersApiResponseStatusCode.SUCCESS);
             }
             return new UserConcertsResponse(UsersApiResponseStatusCode.USER_NOT_FOUND);
-        } catch (Exception e) {
+        } catch (Exception exception) {
             return new UserConcertsResponse(UsersApiResponseStatusCode.INTERNAL_ERROR);
         }
     }

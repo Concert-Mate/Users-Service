@@ -9,7 +9,7 @@ import ru.nsu.concertsmate.users_service.model.entities.UserTracksListEntity;
 import java.util.List;
 import java.util.Optional;
 
-public interface TracksListsRepository extends CrudRepository<UserTracksListEntity, UserTracksListEmbeddedEntity> {
+public interface UsersTracksListsRepository extends CrudRepository<UserTracksListEntity, UserTracksListEmbeddedEntity> {
     @Query(value = "SELECT url FROM public.users_tracks_lists WHERE user_id = :user_id",
             nativeQuery = true)
     Optional<List<String>> getUserTracksLists(@Param("user_id") long userId);

@@ -7,6 +7,7 @@ import ru.nsu.concertsmate.users_service.model.dto.UserDto;
 import ru.nsu.concertsmate.users_service.model.entities.UserEntity;
 import ru.nsu.concertsmate.users_service.repositories.UsersRepository;
 import ru.nsu.concertsmate.users_service.services.UsersService;
+import ru.nsu.concertsmate.users_service.services.exceptions.UserNotFoundException;
 
 import java.util.Optional;
 
@@ -23,27 +24,31 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public UserDto addUser(long telegramId) {
-        UserEntity user = new UserEntity(telegramId);
-        user = usersRepository.save(user);
-        return modelMapper.map(user, UserDto.class);
+        UserEntity userEntity = new UserEntity(telegramId);
+        usersRepository.save(userEntity);
+        return modelMapper.map(userEntity, UserDto.class);
     }
 
     @Override
-    public UserDto deleteUser(long telegramId) {
+    public UserDto deleteUser(long telegramId) throws UserNotFoundException {
         final Optional<UserEntity> optionalUser = usersRepository.findByTelegramId(telegramId);
 
         if (optionalUser.isPresent()) {
-            final UserEntity user = optionalUser.get();
-            usersRepository.delete(user);
-            return modelMapper.map(user, UserDto.class);
+            final UserEntity userEntity = optionalUser.get();
+            usersRepository.delete(userEntity);
+            return modelMapper.map(userEntity, UserDto.class);
         } else {
-            return null;
+            throw new UserNotFoundException();
         }
     }
 
     @Override
-    public UserDto findUser(long telegramId) {
-        Optional<UserEntity> found = usersRepository.findByTelegramId(telegramId);
-        return found.map(user -> modelMapper.map(user, UserDto.class)).orElse(null);
+    public Optional<UserDto> findUser(long telegramId) {
+        final Optional<UserEntity> optionalUserEntity = usersRepository.findByTelegramId(telegramId);
+        if (optionalUserEntity.isPresent()) {
+            return Optional.ofNullable(modelMapper.map(optionalUserEntity, UserDto.class));
+        } else {
+            return Optional.empty();
+        }
     }
 }
