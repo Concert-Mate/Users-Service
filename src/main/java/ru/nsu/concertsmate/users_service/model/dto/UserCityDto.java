@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class UserCityDto {
-
     private long userId;
+
     private String cityName;
 }

@@ -5,5 +5,6 @@ import lombok.Data;
 @Data
 public class UserTracksListDto {
     private long userId;
+
     private String tracksListUrl;
 }
