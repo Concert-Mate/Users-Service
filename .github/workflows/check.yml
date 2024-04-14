@@ -37,13 +37,5 @@ jobs:
 
           docker-compose exec -T postgres psql -U $PROJECT_USER_NAME -d $PROJECT_USER_DATABASE_NAME -c "SELECT * FROM pg_roles WHERE rolname='$PROJECT_USER_NAME';" | grep -q $PROJECT_USER_NAME || exit 1
 
-
-
-          echo "ELASTIC_USER=$ELASTIC_USER"
-          echo "ELASTIC_PASSWORD=$ELASTIC_PASSWORD"
-          
-          docker-compose exec -T elasticsearch curl -f -X GET 'localhost:9200/_cat/health?v' --user $ELASTIC_USER:$ELASTIC_PASSWORD | grep -q 'green' || true
-
       - name: Run health checks
         run: docker-compose down -v
-

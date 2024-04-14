@@ -4,7 +4,7 @@ RUN apk add --no-cache bash
 
 WORKDIR /app
 
-COPY concert-suggester-backend .
+COPY users-service .
 
 EXPOSE 8080
 
