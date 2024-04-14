@@ -69,7 +69,7 @@ public class CitiesServiceImpl implements UsersCitiesService {
         final UserCityEntity userCity = new UserCityEntity(foundUser.get().getId(), cityName);
         usersCitiesRepository.delete(userCity);
 
-        return null;
+        return modelMapper.map(userCity, UserCityDto.class);
     }
 
     @Override
