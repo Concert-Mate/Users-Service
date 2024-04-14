@@ -1,6 +1,6 @@
-package ru.nsu.concertsmate.users_service.api;
+package ru.nsu.concertsmate.users_service.api.users;
 
-public enum ResponseStatusCode {
+public enum UsersApiResponseStatusCode {
     SUCCESS,
     INTERNAL_ERROR,
     USER_ALREADY_EXISTS,

@@ -5,15 +5,15 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.nsu.concertsmate.users_service.model.dto.UserCityDto;
-import ru.nsu.concertsmate.users_service.model.entities.User;
-import ru.nsu.concertsmate.users_service.model.entities.UserCity;
-import ru.nsu.concertsmate.users_service.model.entities.UserCityEmbedded;
+import ru.nsu.concertsmate.users_service.model.entities.UserCityEmbeddedEntity;
+import ru.nsu.concertsmate.users_service.model.entities.UserCityEntity;
+import ru.nsu.concertsmate.users_service.model.entities.UserEntity;
 import ru.nsu.concertsmate.users_service.repositories.CitiesRepository;
 import ru.nsu.concertsmate.users_service.repositories.UsersRepository;
 import ru.nsu.concertsmate.users_service.services.CitiesService;
-import ru.nsu.concertsmate.users_service.services.exceptions.CityAlreadyAdded;
-import ru.nsu.concertsmate.users_service.services.exceptions.CityNotAdded;
-import ru.nsu.concertsmate.users_service.services.exceptions.UserNotFound;
+import ru.nsu.concertsmate.users_service.services.exceptions.CityAlreadyAddedException;
+import ru.nsu.concertsmate.users_service.services.exceptions.CityNotAddedException;
+import ru.nsu.concertsmate.users_service.services.exceptions.UserNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,17 +33,17 @@ public class CitiesServiceImpl implements CitiesService {
 
 
     @Override
-    public UserCityDto saveUserCity(long telegramId, String cityName) throws UserNotFound, CityAlreadyAdded {
-        Optional<User> user = usersRepository.findByTelegramId(telegramId);
+    public UserCityDto saveUserCity(long telegramId, String cityName) throws UserNotFoundException, CityAlreadyAddedException {
+        Optional<UserEntity> user = usersRepository.findByTelegramId(telegramId);
         if (user.isEmpty()) {
-            throw new UserNotFound();
+            throw new UserNotFoundException();
         }
-        Optional<UserCity> testUnique = usersCitiesRepository.findById(new UserCityEmbedded(user.get().getId(), cityName));
+        Optional<UserCityEntity> testUnique = usersCitiesRepository.findById(new UserCityEmbeddedEntity(user.get().getId(), cityName));
         if (testUnique.isPresent()) {
-            throw new CityAlreadyAdded();
+            throw new CityAlreadyAddedException();
         }
-        UserCity userCity = new UserCity(user.get().getId(), cityName);
-        UserCity result = usersCitiesRepository.save(userCity);
+        UserCityEntity userCity = new UserCityEntity(user.get().getId(), cityName);
+        UserCityEntity result = usersCitiesRepository.save(userCity);
         if (!result.equals(userCity)) {
             throw new RuntimeException("can't save user city");
         }
@@ -52,26 +52,26 @@ public class CitiesServiceImpl implements CitiesService {
     }
 
     @Override
-    public UserCityDto deleteUserCity(long telegramId, String cityName) throws UserNotFound, CityNotAdded {
-        Optional<User> user = usersRepository.findByTelegramId(telegramId);
+    public UserCityDto deleteUserCity(long telegramId, String cityName) throws UserNotFoundException, CityNotAddedException {
+        Optional<UserEntity> user = usersRepository.findByTelegramId(telegramId);
         if (user.isEmpty()) {
-            throw new UserNotFound();
+            throw new UserNotFoundException();
         }
-        Optional<UserCity> testUnique = usersCitiesRepository.findById(new UserCityEmbedded(user.get().getId(), cityName));
+        Optional<UserCityEntity> testUnique = usersCitiesRepository.findById(new UserCityEmbeddedEntity(user.get().getId(), cityName));
         if (testUnique.isEmpty()) {
-            throw new CityNotAdded();
+            throw new CityNotAddedException();
         }
-        UserCity userCity = new UserCity(user.get().getId(), cityName);
+        UserCityEntity userCity = new UserCityEntity(user.get().getId(), cityName);
         usersCitiesRepository.delete(userCity);
 
         return null;
     }
 
     @Override
-    public List<String> getUserCities(long telegramId) throws UserNotFound {
-        Optional<User> user = usersRepository.findByTelegramId(telegramId);
+    public List<String> getUserCities(long telegramId) throws UserNotFoundException {
+        Optional<UserEntity> user = usersRepository.findByTelegramId(telegramId);
         if (user.isEmpty()) {
-            throw new UserNotFound();
+            throw new UserNotFoundException();
         }
         return usersCitiesRepository.getUserCities(user.get().getId()).get();
     }

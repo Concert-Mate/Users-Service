@@ -10,12 +10,12 @@ import java.util.Date;
 @Entity
 @Table(name = "users")
 @NoArgsConstructor
-public class User {
+public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter
     @Getter
-    private Long id;
+    private long id;
 
     @Column(name = "telegram_id", unique = true, nullable = false)
     private long telegramId;
@@ -24,17 +24,8 @@ public class User {
     @Temporal(TemporalType.TIMESTAMP)
     private Date creationDatetime;
 
-    public User(Long telegramId) {
+    public UserEntity(long telegramId) {
         this.telegramId = telegramId;
         this.creationDatetime = new Date();
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", telegramId=" + telegramId +
-                ", creationDatetime=" + creationDatetime +
-                '}';
     }
 }

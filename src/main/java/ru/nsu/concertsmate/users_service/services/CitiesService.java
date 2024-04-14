@@ -1,16 +1,16 @@
 package ru.nsu.concertsmate.users_service.services;
 
 import ru.nsu.concertsmate.users_service.model.dto.UserCityDto;
-import ru.nsu.concertsmate.users_service.services.exceptions.CityAlreadyAdded;
-import ru.nsu.concertsmate.users_service.services.exceptions.CityNotAdded;
-import ru.nsu.concertsmate.users_service.services.exceptions.UserNotFound;
+import ru.nsu.concertsmate.users_service.services.exceptions.CityAlreadyAddedException;
+import ru.nsu.concertsmate.users_service.services.exceptions.CityNotAddedException;
+import ru.nsu.concertsmate.users_service.services.exceptions.UserNotFoundException;
 
 import java.util.List;
 
 public interface CitiesService {
-    UserCityDto saveUserCity(long telegramId, String cityName) throws UserNotFound, CityAlreadyAdded;
+    UserCityDto saveUserCity(long telegramId, String cityName) throws UserNotFoundException, CityAlreadyAddedException;
 
-    UserCityDto deleteUserCity(long telegramId, String cityName) throws UserNotFound, CityNotAdded;
+    UserCityDto deleteUserCity(long telegramId, String cityName) throws UserNotFoundException, CityNotAddedException;
 
-    List<String> getUserCities(long telegramId) throws UserNotFound;
+    List<String> getUserCities(long telegramId) throws UserNotFoundException;
 }

@@ -4,15 +4,15 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.nsu.concertsmate.users_service.model.dto.UserTracksListDto;
-import ru.nsu.concertsmate.users_service.model.entities.User;
-import ru.nsu.concertsmate.users_service.model.entities.UserTracksList;
-import ru.nsu.concertsmate.users_service.model.entities.UserTracksListEmbedded;
+import ru.nsu.concertsmate.users_service.model.entities.UserEntity;
+import ru.nsu.concertsmate.users_service.model.entities.UserTracksListEmbeddedEntity;
+import ru.nsu.concertsmate.users_service.model.entities.UserTracksListEntity;
 import ru.nsu.concertsmate.users_service.repositories.TracksListsRepository;
 import ru.nsu.concertsmate.users_service.repositories.UsersRepository;
 import ru.nsu.concertsmate.users_service.services.TracksListsService;
-import ru.nsu.concertsmate.users_service.services.exceptions.TracksListAlreadyAdded;
-import ru.nsu.concertsmate.users_service.services.exceptions.TracksListNotAdded;
-import ru.nsu.concertsmate.users_service.services.exceptions.UserNotFound;
+import ru.nsu.concertsmate.users_service.services.exceptions.TracksListAlreadyAddedException;
+import ru.nsu.concertsmate.users_service.services.exceptions.TracksListNotAddedException;
+import ru.nsu.concertsmate.users_service.services.exceptions.UserNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,17 +31,17 @@ public class TracksListsServiceImpl implements TracksListsService {
     }
 
     @Override
-    public UserTracksListDto saveUserTracksList(long telegramId, String tracksListUrl) throws UserNotFound, TracksListAlreadyAdded {
-        Optional<User> user = usersRepository.findByTelegramId(telegramId);
+    public UserTracksListDto saveUserTracksList(long telegramId, String tracksListUrl) throws UserNotFoundException, TracksListAlreadyAddedException {
+        Optional<UserEntity> user = usersRepository.findByTelegramId(telegramId);
         if (user.isEmpty()) {
-            throw new UserNotFound();
+            throw new UserNotFoundException();
         }
-        Optional<UserTracksList> testUnique = tracksListsRepository.findById(new UserTracksListEmbedded(user.get().getId(), tracksListUrl));
+        Optional<UserTracksListEntity> testUnique = tracksListsRepository.findById(new UserTracksListEmbeddedEntity(user.get().getId(), tracksListUrl));
         if (testUnique.isPresent()) {
-            throw new TracksListAlreadyAdded();
+            throw new TracksListAlreadyAddedException();
         }
-        UserTracksList userTracksList = new UserTracksList(user.get().getId(), tracksListUrl);
-        UserTracksList result = tracksListsRepository.save(userTracksList);
+        UserTracksListEntity userTracksList = new UserTracksListEntity(user.get().getId(), tracksListUrl);
+        UserTracksListEntity result = tracksListsRepository.save(userTracksList);
         if (!result.equals(userTracksList)) {
             throw new RuntimeException("can't save user tracks-list");
         }
@@ -50,26 +50,26 @@ public class TracksListsServiceImpl implements TracksListsService {
     }
 
     @Override
-    public UserTracksListDto deleteUserTracksList(long telegramId, String cityName) throws UserNotFound, TracksListNotAdded {
-        Optional<User> user = usersRepository.findByTelegramId(telegramId);
+    public UserTracksListDto deleteUserTracksList(long telegramId, String cityName) throws UserNotFoundException, TracksListNotAddedException {
+        Optional<UserEntity> user = usersRepository.findByTelegramId(telegramId);
         if (user.isEmpty()) {
-            throw new UserNotFound();
+            throw new UserNotFoundException();
         }
-        Optional<UserTracksList> testUnique = tracksListsRepository.findById(new UserTracksListEmbedded(user.get().getId(), cityName));
+        Optional<UserTracksListEntity> testUnique = tracksListsRepository.findById(new UserTracksListEmbeddedEntity(user.get().getId(), cityName));
         if (testUnique.isEmpty()) {
-            throw new TracksListNotAdded();
+            throw new TracksListNotAddedException();
         }
-        UserTracksList userTracksList = new UserTracksList(user.get().getId(), cityName);
+        UserTracksListEntity userTracksList = new UserTracksListEntity(user.get().getId(), cityName);
         tracksListsRepository.delete(userTracksList);
 
         return null;
     }
 
     @Override
-    public List<String> getUserTracksLists(long telegramId) throws UserNotFound {
-        Optional<User> user = usersRepository.findByTelegramId(telegramId);
+    public List<String> getUserTracksLists(long telegramId) throws UserNotFoundException {
+        Optional<UserEntity> user = usersRepository.findByTelegramId(telegramId);
         if (user.isEmpty()) {
-            throw new UserNotFound();
+            throw new UserNotFoundException();
         }
         return tracksListsRepository.getUserTracksLists(user.get().getId()).get();
     }
