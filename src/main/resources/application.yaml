@@ -1,6 +1,6 @@
 spring:
   application:
-    name: 'Backend'
+    name: 'Users-Service'
   datasource:
     url: jdbc:postgresql://localhost:5432/concerts-mate
     username: admin
