@@ -23,8 +23,8 @@ jobs:
 
       - name: Run health checks
         run: |
-          export $(grep -E -v '^#' .env | xargs)
-          echo "Environment variables sourced from .env file."
+          export $(grep -E -v '^#' .env.ci | xargs)
+          echo "Environment variables sourced from .env.ci file."
 
           docker-compose up -d
 
