@@ -2,10 +2,10 @@ services:
   postgres:
     image: postgres
     environment:
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
-      PROJECT_USER_NAME: ${PROJECT_USER_NAME:-admin}
-      PROJECT_USER_PASSWORD: ${PROJECT_USER_PASSWORD:-password}
-      PROJECT_USER_DATABASE_NAME: ${PROJECT_USER_DATABASE_NAME:-concerts-mate}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PROJECT_USER_NAME: ${PROJECT_USER_NAME}
+      PROJECT_USER_PASSWORD: ${PROJECT_USER_PASSWORD}
+      PROJECT_USER_DATABASE_NAME: ${PROJECT_USER_DATABASE_NAME}
     ports:
       - "0.0.0.0:5432:5432"
     volumes:
@@ -13,4 +13,4 @@ services:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
       - ./postgres-data:/var/lib/postgresql/data
     env_file:
-      - .env
+      - .env.ci
