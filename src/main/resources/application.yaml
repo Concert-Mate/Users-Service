@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: 'Users-Service'
+  datasource:
+    url: jdbc:postgresql://localhost:5432/${PROJECT_USER_DATABASE_NAME}
+    username: ${PROJECT_USER_NAME}
+    password: ${PROJECT_USER_PASSWORD}

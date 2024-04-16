@@ -4,8 +4,8 @@ plugins {
     id 'io.spring.dependency-management' version '1.1.4'
 }
 
-group = 'ru.nsu.concertsmate'
-version = '0.0.1-SNAPSHOT'
+group = 'ru.nsu.concerts-mate'
+version = '1.0.0-SNAPSHOT'
 
 java {
     sourceCompatibility = '17'
@@ -18,8 +18,6 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    implementation 'co.elastic.clients:elasticsearch-java:8.9.1'
-    implementation 'com.fasterxml.jackson.core:jackson-databind'
     implementation 'org.springframework.boot:spring-boot-starter-validation:3.0.8'
     implementation "me.paulschwarz:spring-dotenv:4.0.0"
     compileOnly 'org.projectlombok:lombok'
@@ -28,6 +26,7 @@ dependencies {
     runtimeOnly 'org.postgresql:postgresql'
     implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.5.0'
     implementation 'org.modelmapper:modelmapper:3.1.0'
+    testImplementation group: 'com.h2database', name: 'h2', version: '2.2.224'
 }
 
 tasks.named('test') {
