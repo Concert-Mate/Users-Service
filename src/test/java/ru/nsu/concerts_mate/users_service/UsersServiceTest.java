@@ -452,37 +452,37 @@ class UsersServiceTest {
     }
 
     void addUserWithCode(long telegramId, UsersApiResponseStatusCode code) {
-        final UsersApiResponse response = validateResponseEntity(addUser(telegramId));
+        final DefaultUsersApiResponse response = validateResponseEntity(addUser(telegramId));
         matchResponseStatus(response.getStatus(), code);
     }
 
     void deleteUserWithCode(long telegramId, UsersApiResponseStatusCode code) {
-        final UsersApiResponse response = validateResponseEntity(deleteUser(telegramId));
+        final DefaultUsersApiResponse response = validateResponseEntity(deleteUser(telegramId));
         matchResponseStatus(response.getStatus(), code);
     }
 
     void addUserCityWithCode(long telegramId, String city, UsersApiResponseStatusCode code) {
-        final UsersApiResponse response = validateResponseEntity(addUserCity(telegramId, city));
+        final DefaultUsersApiResponse response = validateResponseEntity(addUserCity(telegramId, city));
         matchResponseStatus(response.getStatus(), code);
     }
 
     void deleteUserCityWithCode(long telegramId, String city, UsersApiResponseStatusCode code) {
-        final UsersApiResponse response = validateResponseEntity(deleteUserCity(telegramId, city));
+        final DefaultUsersApiResponse response = validateResponseEntity(deleteUserCity(telegramId, city));
         matchResponseStatus(response.getStatus(), code);
     }
 
     void addUserTracksListWithCode(long telegramId, String url, UsersApiResponseStatusCode code) {
-        final UsersApiResponse response = validateResponseEntity(addUserTracksList(telegramId, url));
+        final DefaultUsersApiResponse response = validateResponseEntity(addUserTracksList(telegramId, url));
         matchResponseStatus(response.getStatus(), code);
     }
 
     void deleteUserTracksListWithCode(long telegramId, String url, UsersApiResponseStatusCode code) {
-        final UsersApiResponse response = validateResponseEntity(deleteUserTracksList(telegramId, url));
+        final DefaultUsersApiResponse response = validateResponseEntity(deleteUserTracksList(telegramId, url));
         matchResponseStatus(response.getStatus(), code);
     }
 
-    UsersApiResponse validateResponseEntity(ResponseEntity<UsersApiResponse> responseEntity) {
-        final UsersApiResponse response = responseEntity.getBody();
+    DefaultUsersApiResponse validateResponseEntity(ResponseEntity<DefaultUsersApiResponse> responseEntity) {
+        final DefaultUsersApiResponse response = responseEntity.getBody();
         assertNotNull(response);
         final UsersApiResponseStatus status = response.getStatus();
         assertNotNull(status);
@@ -495,31 +495,31 @@ class UsersServiceTest {
         assertEquals(code == UsersApiResponseStatusCode.SUCCESS, status.isSuccess());
     }
 
-    ResponseEntity<UsersApiResponse> addUser(long telegramId) {
+    ResponseEntity<DefaultUsersApiResponse> addUser(long telegramId) {
         return post(
                 getUserUrl(telegramId),
-                UsersApiResponse.class
+                DefaultUsersApiResponse.class
         );
     }
 
-    ResponseEntity<UsersApiResponse> deleteUser(long telegramId) {
+    ResponseEntity<DefaultUsersApiResponse> deleteUser(long telegramId) {
         return delete(
                 getUserUrl(telegramId),
-                UsersApiResponse.class
+                DefaultUsersApiResponse.class
         );
     }
 
-    ResponseEntity<UsersApiResponse> addUserCity(long telegramId, String city) {
+    ResponseEntity<DefaultUsersApiResponse> addUserCity(long telegramId, String city) {
         return post(
                 getUserCityUrl(telegramId, city),
-                UsersApiResponse.class
+                DefaultUsersApiResponse.class
         );
     }
 
-    ResponseEntity<UsersApiResponse> deleteUserCity(long telegramId, String city) {
+    ResponseEntity<DefaultUsersApiResponse> deleteUserCity(long telegramId, String city) {
         return delete(
                 getUserCityUrl(telegramId, city),
-                UsersApiResponse.class
+                DefaultUsersApiResponse.class
         );
     }
 
@@ -530,17 +530,17 @@ class UsersServiceTest {
         );
     }
 
-    ResponseEntity<UsersApiResponse> addUserTracksList(long telegramId, String tracksListUrl) {
+    ResponseEntity<DefaultUsersApiResponse> addUserTracksList(long telegramId, String tracksListUrl) {
         return post(
                 getUserTracksListUrl(telegramId, tracksListUrl),
-                UsersApiResponse.class
+                DefaultUsersApiResponse.class
         );
     }
 
-    ResponseEntity<UsersApiResponse> deleteUserTracksList(long telegramId, String tracksListUrl) {
+    ResponseEntity<DefaultUsersApiResponse> deleteUserTracksList(long telegramId, String tracksListUrl) {
         return delete(
                 getUserTracksListUrl(telegramId, tracksListUrl),
-                UsersApiResponse.class
+                DefaultUsersApiResponse.class
         );
     }
 

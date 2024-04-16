@@ -25,28 +25,28 @@ public class UsersController implements UsersApi {
     }
 
     @Override
-    public UsersApiResponse addUser(long telegramId) {
+    public DefaultUsersApiResponse addUser(long telegramId) {
         try {
             final Optional<UserDto> optionalUser = usersService.findUser(telegramId);
             if (optionalUser.isPresent()) {
-                return new UsersApiResponse(UsersApiResponseStatusCode.USER_ALREADY_EXISTS);
+                return new DefaultUsersApiResponse(UsersApiResponseStatusCode.USER_ALREADY_EXISTS);
             }
             usersService.addUser(telegramId);
-            return new UsersApiResponse();
+            return new DefaultUsersApiResponse();
         } catch (Exception ignored) {
-            return new UsersApiResponse(UsersApiResponseStatusCode.INTERNAL_ERROR);
+            return new DefaultUsersApiResponse(UsersApiResponseStatusCode.INTERNAL_ERROR);
         }
     }
 
     @Override
-    public UsersApiResponse deleteUser(long telegramId) {
+    public DefaultUsersApiResponse deleteUser(long telegramId) {
         try {
             usersService.deleteUser(telegramId);
-            return new UsersApiResponse();
+            return new DefaultUsersApiResponse();
         } catch (UserNotFoundException ignored) {
-            return new UsersApiResponse(UsersApiResponseStatusCode.USER_NOT_FOUND);
+            return new DefaultUsersApiResponse(UsersApiResponseStatusCode.USER_NOT_FOUND);
         } catch (Exception ignored) {
-            return new UsersApiResponse(UsersApiResponseStatusCode.INTERNAL_ERROR);
+            return new DefaultUsersApiResponse(UsersApiResponseStatusCode.INTERNAL_ERROR);
         }
     }
 
@@ -62,30 +62,30 @@ public class UsersController implements UsersApi {
     }
 
     @Override
-    public UsersApiResponse addUserCity(long telegramId, String cityName) {
+    public DefaultUsersApiResponse addUserCity(long telegramId, String cityName) {
         try {
             citiesService.saveUserCity(telegramId, cityName);
-            return new UsersApiResponse();
+            return new DefaultUsersApiResponse();
         } catch (UserNotFoundException ignored) {
-            return new UsersApiResponse(UsersApiResponseStatusCode.USER_NOT_FOUND);
+            return new DefaultUsersApiResponse(UsersApiResponseStatusCode.USER_NOT_FOUND);
         } catch (CityAlreadyAddedException ignored) {
-            return new UsersApiResponse(UsersApiResponseStatusCode.CITY_ALREADY_ADDED);
+            return new DefaultUsersApiResponse(UsersApiResponseStatusCode.CITY_ALREADY_ADDED);
         } catch (Exception ignored) {
-            return new UsersApiResponse(UsersApiResponseStatusCode.INTERNAL_ERROR);
+            return new DefaultUsersApiResponse(UsersApiResponseStatusCode.INTERNAL_ERROR);
         }
     }
 
     @Override
-    public UsersApiResponse deleteUserCity(long telegramId, String cityName) {
+    public DefaultUsersApiResponse deleteUserCity(long telegramId, String cityName) {
         try {
             citiesService.deleteUserCity(telegramId, cityName);
-            return new UsersApiResponse();
+            return new DefaultUsersApiResponse();
         } catch (UserNotFoundException ignored) {
-            return new UsersApiResponse(UsersApiResponseStatusCode.USER_NOT_FOUND);
+            return new DefaultUsersApiResponse(UsersApiResponseStatusCode.USER_NOT_FOUND);
         } catch (CityNotAddedException ignored) {
-            return new UsersApiResponse(UsersApiResponseStatusCode.CITY_NOT_ADDED);
+            return new DefaultUsersApiResponse(UsersApiResponseStatusCode.CITY_NOT_ADDED);
         } catch (Exception ignored) {
-            return new UsersApiResponse(UsersApiResponseStatusCode.INTERNAL_ERROR);
+            return new DefaultUsersApiResponse(UsersApiResponseStatusCode.INTERNAL_ERROR);
         }
     }
 
@@ -101,30 +101,30 @@ public class UsersController implements UsersApi {
     }
 
     @Override
-    public UsersApiResponse addUserTracksList(long telegramId, String tracksListURL) {
+    public DefaultUsersApiResponse addUserTracksList(long telegramId, String tracksListURL) {
         try {
             tracksListsService.saveUserTracksList(telegramId, tracksListURL);
-            return new UsersApiResponse();
+            return new DefaultUsersApiResponse();
         } catch (UserNotFoundException ignored) {
-            return new UsersApiResponse(UsersApiResponseStatusCode.USER_NOT_FOUND);
+            return new DefaultUsersApiResponse(UsersApiResponseStatusCode.USER_NOT_FOUND);
         } catch (TracksListAlreadyAddedException ignored) {
-            return new UsersApiResponse(UsersApiResponseStatusCode.TRACKS_LIST_ALREADY_ADDED);
+            return new DefaultUsersApiResponse(UsersApiResponseStatusCode.TRACKS_LIST_ALREADY_ADDED);
         } catch (Exception ignored) {
-            return new UsersApiResponse(UsersApiResponseStatusCode.INTERNAL_ERROR);
+            return new DefaultUsersApiResponse(UsersApiResponseStatusCode.INTERNAL_ERROR);
         }
     }
 
     @Override
-    public UsersApiResponse deleteUserTracksList(long telegramId, String tracksListURL) {
+    public DefaultUsersApiResponse deleteUserTracksList(long telegramId, String tracksListURL) {
         try {
             tracksListsService.deleteUserTracksList(telegramId, tracksListURL);
-            return new UsersApiResponse();
+            return new DefaultUsersApiResponse();
         } catch (UserNotFoundException ignored) {
-            return new UsersApiResponse(UsersApiResponseStatusCode.USER_NOT_FOUND);
+            return new DefaultUsersApiResponse(UsersApiResponseStatusCode.USER_NOT_FOUND);
         } catch (TracksListNotAddedException ignored) {
-            return new UsersApiResponse(UsersApiResponseStatusCode.TRACKS_LIST_NOT_ADDED);
+            return new DefaultUsersApiResponse(UsersApiResponseStatusCode.TRACKS_LIST_NOT_ADDED);
         } catch (Exception ignored) {
-            return new UsersApiResponse(UsersApiResponseStatusCode.INTERNAL_ERROR);
+            return new DefaultUsersApiResponse(UsersApiResponseStatusCode.INTERNAL_ERROR);
         }
     }
 

@@ -5,22 +5,22 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/users/{telegramId}")
 public interface UsersApi {
     @PostMapping
-    UsersApiResponse addUser(@PathVariable long telegramId);
+    DefaultUsersApiResponse addUser(@PathVariable long telegramId);
 
     @DeleteMapping
-    UsersApiResponse deleteUser(@PathVariable long telegramId);
+    DefaultUsersApiResponse deleteUser(@PathVariable long telegramId);
 
     @GetMapping("/cities")
     UserCitiesResponse getUserCities(@PathVariable long telegramId);
 
     @PostMapping("/cities")
-    UsersApiResponse addUserCity(
+    DefaultUsersApiResponse addUserCity(
             @PathVariable long telegramId,
             @RequestParam(name = "city") String cityName
     );
 
     @DeleteMapping("/cities")
-    UsersApiResponse deleteUserCity(
+    DefaultUsersApiResponse deleteUserCity(
             @PathVariable long telegramId,
             @RequestParam(name = "city") String cityName
     );
@@ -29,13 +29,13 @@ public interface UsersApi {
     UserTracksListsResponse getUserTracksLists(@PathVariable long telegramId);
 
     @PostMapping("/tracks-lists")
-    UsersApiResponse addUserTracksList(
+    DefaultUsersApiResponse addUserTracksList(
             @PathVariable long telegramId,
             @RequestParam(name = "url") String tracksListURL
     );
 
     @DeleteMapping("/tracks-lists")
-    UsersApiResponse deleteUserTracksList(
+    DefaultUsersApiResponse deleteUserTracksList(
             @PathVariable long telegramId,
             @RequestParam(name = "url") String tracksListURL
     );

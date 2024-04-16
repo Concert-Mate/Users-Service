@@ -3,14 +3,14 @@ package ru.nsu.concerts_mate.users_service.api.users;
 import lombok.Data;
 
 @Data
-public class UsersApiResponse {
+public class DefaultUsersApiResponse {
     private final UsersApiResponseStatus status;
 
-    public UsersApiResponse() {
+    public DefaultUsersApiResponse() {
         this.status = new UsersApiResponseStatus();
     }
 
-    public UsersApiResponse(UsersApiResponseStatusCode code) {
+    public DefaultUsersApiResponse(UsersApiResponseStatusCode code) {
         this.status = new UsersApiResponseStatus(code);
     }
 }
