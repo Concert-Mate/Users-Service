@@ -25,6 +25,7 @@ public interface UsersApi {
             @RequestParam(name = "city") String cityName
     );
 
+    // TODO: return list of DTO's: list of track-lists
     @GetMapping("/tracks-lists")
     UserTracksListsResponse getUserTracksLists(@PathVariable long telegramId);
 
