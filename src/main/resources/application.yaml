@@ -5,3 +5,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/${PROJECT_USER_DATABASE_NAME}
     username: ${PROJECT_USER_NAME}
     password: ${PROJECT_USER_PASSWORD}
+  music-service:
+    host: ${MUSIC_SERVICE_HOST:localhost}
+    port: ${MUSIC_SERVICE_PORT:8000}
+    schema: ${MUSIC_SERVICE_SCHEMA:http}

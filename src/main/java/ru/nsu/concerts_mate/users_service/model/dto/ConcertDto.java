@@ -11,7 +11,7 @@ import java.util.List;
 public class ConcertDto {
     private String title;
 
-    private String afishaUrl;
+    private String afisha_url;
 
     private String city;
 
@@ -21,11 +21,11 @@ public class ConcertDto {
 
     private Date datetime;
 
-    private String mapUrl;
+    private String map_url;
 
     private List<String> images;
 
-    private PriceDto minPrice;
+    private PriceDto min_price;
 
     private List<ArtistDto> artists;
 }

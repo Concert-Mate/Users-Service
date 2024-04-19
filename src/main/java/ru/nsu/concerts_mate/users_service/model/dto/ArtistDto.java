@@ -8,5 +8,5 @@ import lombok.Data;
 public class ArtistDto {
     private String name;
 
-    private int yandexMusicId;
+    private int yandex_music_id;
 }
