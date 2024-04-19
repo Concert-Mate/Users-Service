@@ -9,6 +9,8 @@ import ru.nsu.concerts_mate.users_service.repositories.UsersRepository;
 import ru.nsu.concerts_mate.users_service.services.UsersService;
 import ru.nsu.concerts_mate.users_service.services.exceptions.UserNotFoundException;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -50,5 +52,16 @@ public class UsersServiceImpl implements UsersService {
         } else {
             return Optional.empty();
         }
+    }
+
+    @Override
+    public List<UserDto> findAllUsers() {
+        final List<UserDto> result = new ArrayList<>();
+
+        for (final var it : usersRepository.findAll()) {
+            result.add(modelMapper.map(it, UserDto.class));
+        }
+
+        return result;
     }
 }
