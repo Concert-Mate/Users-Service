@@ -5,3 +5,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/${PROJECT_USER_DATABASE_NAME}
     username: ${PROJECT_USER_NAME}
     password: ${PROJECT_USER_PASSWORD}
+
+  rabbitmq:
+    username: ${RABBITMQ_DEFAULT_USER}
+    password: ${RABBITMQ_DEFAULT_PASS}
