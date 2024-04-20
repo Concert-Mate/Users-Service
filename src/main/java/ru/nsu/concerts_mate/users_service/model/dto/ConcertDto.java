@@ -1,5 +1,6 @@
 package ru.nsu.concerts_mate.users_service.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -11,7 +12,8 @@ import java.util.List;
 public class ConcertDto {
     private String title;
 
-    private String afisha_url;
+    @JsonProperty(value = "afisha_url")
+    private String afishaUrl;
 
     private String city;
 
@@ -21,11 +23,13 @@ public class ConcertDto {
 
     private Date datetime;
 
-    private String map_url;
+    @JsonProperty(value = "map_url")
+    private String mapUrl;
 
     private List<String> images;
 
-    private PriceDto min_price;
+    @JsonProperty(value = "min_price")
+    private PriceDto minPrice;
 
     private List<ArtistDto> artists;
 }
