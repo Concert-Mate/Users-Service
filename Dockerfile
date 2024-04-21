@@ -4,10 +4,16 @@ RUN apk add --no-cache bash
 
 WORKDIR /app
 
-COPY users-service .
+COPY gradlew .
+COPY gradle ./gradle
+
+COPY build.gradle .
+COPY settings.gradle .
+COPY src ./src
+
+RUN chmod +x gradlew
+RUN ./gradlew test
 
 EXPOSE 8080
 
-RUN ./gradlew build
-
-CMD ["java", "-jar", "build/libs/app.jar"]
+CMD ["./gradlew", "bootRun"]

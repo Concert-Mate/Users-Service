@@ -29,6 +29,13 @@ dependencies {
     testImplementation group: 'com.h2database', name: 'h2', version: '2.2.224'
 }
 
+jar {
+    archiveFileName = 'app.jar'
+    manifest {
+           attributes 'Main-Class': 'ru.nsu.concerts_mate.users_service.UsersService'
+    }
+}
+
 tasks.named('test') {
     useJUnitPlatform()
 }
