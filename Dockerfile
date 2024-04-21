@@ -12,7 +12,7 @@ COPY settings.gradle .
 COPY src ./src
 
 RUN chmod +x gradlew
-RUN ./gradlew test
+RUN ./gradlew check
 
 EXPOSE 8080
 
