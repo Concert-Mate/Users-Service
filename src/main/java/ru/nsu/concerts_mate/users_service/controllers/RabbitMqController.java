@@ -7,9 +7,9 @@ import ru.nsu.concerts_mate.users_service.model.dto.ArtistDto;
 import ru.nsu.concerts_mate.users_service.model.dto.ConcertDto;
 import ru.nsu.concerts_mate.users_service.model.dto.PriceDto;
 import ru.nsu.concerts_mate.users_service.model.dto.UserDto;
-import ru.nsu.concerts_mate.users_service.services.RabbitMqEvent;
-import ru.nsu.concerts_mate.users_service.services.RabbitMqService;
-import ru.nsu.concerts_mate.users_service.services.UsersService;
+import ru.nsu.concerts_mate.users_service.services.broker.BrokerEvent;
+import ru.nsu.concerts_mate.users_service.services.broker.BrokerService;
+import ru.nsu.concerts_mate.users_service.services.users.UsersService;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,11 +17,11 @@ import java.util.List;
 
 @RestController
 public class RabbitMqController implements RabbitMqApi {
-    private final RabbitMqService rabbitMqService;
+    private final BrokerService rabbitMqService;
     private final UsersService usersService;
 
     @Autowired
-    public RabbitMqController(RabbitMqService rabbitMqService, UsersService usersService) {
+    public RabbitMqController(BrokerService rabbitMqService, UsersService usersService) {
         this.rabbitMqService = rabbitMqService;
         this.usersService = usersService;
     }
@@ -61,7 +61,7 @@ public class RabbitMqController implements RabbitMqApi {
 
         try {
             for (final var user : users) {
-                rabbitMqService.sendEvent(new RabbitMqEvent(user, concerts));
+                rabbitMqService.sendEvent(new BrokerEvent(user, concerts));
             }
             return "Success";
         } catch (Exception exception) {

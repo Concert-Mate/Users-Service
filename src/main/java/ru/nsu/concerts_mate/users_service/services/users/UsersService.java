@@ -1,7 +1,7 @@
-package ru.nsu.concerts_mate.users_service.services;
+package ru.nsu.concerts_mate.users_service.services.users;
 
 import ru.nsu.concerts_mate.users_service.model.dto.UserDto;
-import ru.nsu.concerts_mate.users_service.services.exceptions.UserNotFoundException;
+import ru.nsu.concerts_mate.users_service.services.users.exceptions.UserNotFoundException;
 
 import java.util.List;
 import java.util.Optional;

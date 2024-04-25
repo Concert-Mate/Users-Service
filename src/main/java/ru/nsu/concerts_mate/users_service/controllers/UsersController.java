@@ -4,8 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 import ru.nsu.concerts_mate.users_service.api.users.*;
 import ru.nsu.concerts_mate.users_service.model.dto.*;
-import ru.nsu.concerts_mate.users_service.services.*;
-import ru.nsu.concerts_mate.users_service.services.exceptions.*;
+import ru.nsu.concerts_mate.users_service.services.music.MusicService;
+import ru.nsu.concerts_mate.users_service.services.music.exceptions.MusicServiceException;
+import ru.nsu.concerts_mate.users_service.services.users.UsersCitiesService;
+import ru.nsu.concerts_mate.users_service.services.users.UsersService;
+import ru.nsu.concerts_mate.users_service.services.users.UsersShownConcertsService;
+import ru.nsu.concerts_mate.users_service.services.users.UsersTracksListsService;
+import ru.nsu.concerts_mate.users_service.services.users.exceptions.*;
 
 
 import java.util.*;
@@ -16,10 +21,10 @@ public class UsersController implements UsersApi {
     private final UsersCitiesService citiesService;
     private final UsersTracksListsService tracksListsService;
     private final MusicService musicService;
-    private final ShownConcertsService shownConcertsService;
+    private final UsersShownConcertsService shownConcertsService;
 
     @Autowired
-    public UsersController(UsersService usersService, UsersCitiesService citiesService, UsersTracksListsService tracksListsService, MusicService musicService, ShownConcertsService shownConcertsService) {
+    public UsersController(UsersService usersService, UsersCitiesService citiesService, UsersTracksListsService tracksListsService, MusicService musicService, UsersShownConcertsService shownConcertsService) {
         this.usersService = usersService;
         this.citiesService = citiesService;
         this.tracksListsService = tracksListsService;
