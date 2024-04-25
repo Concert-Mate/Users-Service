@@ -57,7 +57,8 @@ public class RabbitMqController implements RabbitMqApi {
                     new PriceDto(1500, "RUB"),
                     List.of(new ArtistDto("Б.А.У.", 3680757))
             ));
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         try {
             for (final var user : users) {
