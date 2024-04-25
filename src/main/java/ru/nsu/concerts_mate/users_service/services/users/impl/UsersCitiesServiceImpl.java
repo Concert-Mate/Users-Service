@@ -1,4 +1,4 @@
-package ru.nsu.concerts_mate.users_service.services.impl;
+package ru.nsu.concerts_mate.users_service.services.users.impl;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -8,22 +8,22 @@ import ru.nsu.concerts_mate.users_service.model.entities.UserCityEntity;
 import ru.nsu.concerts_mate.users_service.model.entities.UserEntity;
 import ru.nsu.concerts_mate.users_service.repositories.UsersCitiesRepository;
 import ru.nsu.concerts_mate.users_service.repositories.UsersRepository;
-import ru.nsu.concerts_mate.users_service.services.UsersCitiesService;
-import ru.nsu.concerts_mate.users_service.services.exceptions.CityAlreadyAddedException;
-import ru.nsu.concerts_mate.users_service.services.exceptions.CityNotAddedException;
-import ru.nsu.concerts_mate.users_service.services.exceptions.InternalErrorException;
-import ru.nsu.concerts_mate.users_service.services.exceptions.UserNotFoundException;
+import ru.nsu.concerts_mate.users_service.services.users.UsersCitiesService;
+import ru.nsu.concerts_mate.users_service.services.users.exceptions.CityAlreadyAddedException;
+import ru.nsu.concerts_mate.users_service.services.users.exceptions.CityNotAddedException;
+import ru.nsu.concerts_mate.users_service.services.users.exceptions.InternalErrorException;
+import ru.nsu.concerts_mate.users_service.services.users.exceptions.UserNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CitiesServiceImpl implements UsersCitiesService {
+public class UsersCitiesServiceImpl implements UsersCitiesService {
     private final UsersRepository usersRepository;
     private final UsersCitiesRepository usersCitiesRepository;
     private final ModelMapper modelMapper;
 
-    public CitiesServiceImpl(UsersRepository usersRepository, UsersCitiesRepository usersCitiesRepository, ModelMapper modelMapper) {
+    public UsersCitiesServiceImpl(UsersRepository usersRepository, UsersCitiesRepository usersCitiesRepository, ModelMapper modelMapper) {
         this.usersRepository = usersRepository;
         this.usersCitiesRepository = usersCitiesRepository;
         this.modelMapper = modelMapper;

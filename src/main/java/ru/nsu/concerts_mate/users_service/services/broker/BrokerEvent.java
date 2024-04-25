@@ -1,4 +1,4 @@
-package ru.nsu.concerts_mate.users_service.services;
+package ru.nsu.concerts_mate.users_service.services.broker;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class RabbitMqEvent {
+public class BrokerEvent {
     private UserDto user;
 
     private List<ConcertDto> concerts;

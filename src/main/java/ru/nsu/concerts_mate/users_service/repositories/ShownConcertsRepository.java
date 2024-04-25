@@ -6,7 +6,6 @@ import org.springframework.data.repository.query.Param;
 import ru.nsu.concerts_mate.users_service.model.entities.ShownConcertEmbeddedEntity;
 import ru.nsu.concerts_mate.users_service.model.entities.ShownConcertEntity;
 
-
 import java.util.List;
 import java.util.Optional;
 

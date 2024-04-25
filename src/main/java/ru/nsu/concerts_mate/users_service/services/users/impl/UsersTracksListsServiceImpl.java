@@ -1,4 +1,4 @@
-package ru.nsu.concerts_mate.users_service.services.impl;
+package ru.nsu.concerts_mate.users_service.services.users.impl;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -8,22 +8,22 @@ import ru.nsu.concerts_mate.users_service.model.entities.UserTracksListEmbeddedE
 import ru.nsu.concerts_mate.users_service.model.entities.UserTracksListEntity;
 import ru.nsu.concerts_mate.users_service.repositories.UsersRepository;
 import ru.nsu.concerts_mate.users_service.repositories.UsersTracksListsRepository;
-import ru.nsu.concerts_mate.users_service.services.UsersTracksListsService;
-import ru.nsu.concerts_mate.users_service.services.exceptions.InternalErrorException;
-import ru.nsu.concerts_mate.users_service.services.exceptions.TracksListAlreadyAddedException;
-import ru.nsu.concerts_mate.users_service.services.exceptions.TracksListNotAddedException;
-import ru.nsu.concerts_mate.users_service.services.exceptions.UserNotFoundException;
+import ru.nsu.concerts_mate.users_service.services.users.UsersTracksListsService;
+import ru.nsu.concerts_mate.users_service.services.users.exceptions.InternalErrorException;
+import ru.nsu.concerts_mate.users_service.services.users.exceptions.TracksListAlreadyAddedException;
+import ru.nsu.concerts_mate.users_service.services.users.exceptions.TracksListNotAddedException;
+import ru.nsu.concerts_mate.users_service.services.users.exceptions.UserNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class TracksListsServiceImpl implements UsersTracksListsService {
+public class UsersTracksListsServiceImpl implements UsersTracksListsService {
     private final UsersRepository usersRepository;
     private final UsersTracksListsRepository tracksListsRepository;
     private final ModelMapper modelMapper;
 
-    public TracksListsServiceImpl(UsersRepository usersRepository, UsersTracksListsRepository tracksListsRepository, ModelMapper modelMapper) {
+    public UsersTracksListsServiceImpl(UsersRepository usersRepository, UsersTracksListsRepository tracksListsRepository, ModelMapper modelMapper) {
         this.usersRepository = usersRepository;
         this.tracksListsRepository = tracksListsRepository;
         this.modelMapper = modelMapper;

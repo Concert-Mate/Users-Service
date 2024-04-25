@@ -3,12 +3,21 @@ package ru.nsu.concerts_mate.users_service.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 import ru.nsu.concerts_mate.users_service.api.users.*;
-import ru.nsu.concerts_mate.users_service.model.dto.*;
-import ru.nsu.concerts_mate.users_service.services.*;
-import ru.nsu.concerts_mate.users_service.services.exceptions.*;
+import ru.nsu.concerts_mate.users_service.model.dto.ArtistDto;
+import ru.nsu.concerts_mate.users_service.model.dto.ConcertDto;
+import ru.nsu.concerts_mate.users_service.model.dto.UserDto;
+import ru.nsu.concerts_mate.users_service.services.music.MusicService;
+import ru.nsu.concerts_mate.users_service.services.music.exceptions.MusicServiceException;
+import ru.nsu.concerts_mate.users_service.services.users.UsersCitiesService;
+import ru.nsu.concerts_mate.users_service.services.users.UsersService;
+import ru.nsu.concerts_mate.users_service.services.users.UsersShownConcertsService;
+import ru.nsu.concerts_mate.users_service.services.users.UsersTracksListsService;
+import ru.nsu.concerts_mate.users_service.services.users.exceptions.*;
 
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 
 @RestController()
 public class UsersController implements UsersApi {
@@ -16,10 +25,10 @@ public class UsersController implements UsersApi {
     private final UsersCitiesService citiesService;
     private final UsersTracksListsService tracksListsService;
     private final MusicService musicService;
-    private final ShownConcertsService shownConcertsService;
+    private final UsersShownConcertsService shownConcertsService;
 
     @Autowired
-    public UsersController(UsersService usersService, UsersCitiesService citiesService, UsersTracksListsService tracksListsService, MusicService musicService, ShownConcertsService shownConcertsService) {
+    public UsersController(UsersService usersService, UsersCitiesService citiesService, UsersTracksListsService tracksListsService, MusicService musicService, UsersShownConcertsService shownConcertsService) {
         this.usersService = usersService;
         this.citiesService = citiesService;
         this.tracksListsService = tracksListsService;
@@ -115,10 +124,9 @@ public class UsersController implements UsersApi {
             return new DefaultUsersApiResponse(UsersApiResponseStatusCode.USER_NOT_FOUND);
         } catch (TracksListAlreadyAddedException ignored) {
             return new DefaultUsersApiResponse(UsersApiResponseStatusCode.TRACKS_LIST_ALREADY_ADDED);
-        } catch (MusicServiceException ignored){
+        } catch (MusicServiceException ignored) {
             return new DefaultUsersApiResponse(UsersApiResponseStatusCode.INVALID_TRACKS_LIST);
-        }
-        catch (Exception ignored) {
+        } catch (Exception ignored) {
             return new DefaultUsersApiResponse(UsersApiResponseStatusCode.INTERNAL_ERROR);
         }
     }
@@ -140,38 +148,38 @@ public class UsersController implements UsersApi {
     @Override
     public UserConcertsResponse getUserConcerts(long telegramId) {
         final Optional<UserDto> optionalUser = usersService.findUser(telegramId);
-        if (optionalUser.isEmpty()){
+        if (optionalUser.isEmpty()) {
             return new UserConcertsResponse(UsersApiResponseStatusCode.USER_NOT_FOUND);
         }
         try {
             List<String> userCities = citiesService.getUserCities(optionalUser.get().getTelegramId());
-            if (userCities.isEmpty()){
+            if (userCities.isEmpty()) {
                 return new UserConcertsResponse();
             }
             List<String> userTrackLists = tracksListsService.getUserTracksLists(telegramId);
-            if (userTrackLists.isEmpty()){
+            if (userTrackLists.isEmpty()) {
                 return new UserConcertsResponse();
             }
             HashSet<Integer> userArtists = new HashSet<>();
 
 
-            for (String trackList: userTrackLists){
+            for (String trackList : userTrackLists) {
                 try {
                     List<ArtistDto> artistDtoList = musicService.getArtistsByPlayListURL(trackList);
-                    for (ArtistDto artist: artistDtoList){
+                    for (ArtistDto artist : artistDtoList) {
                         userArtists.add(artist.getYandexMusicId());
                     }
-                } catch (MusicServiceException e){
+                } catch (MusicServiceException e) {
                     tracksListsService.deleteUserTracksList(telegramId, trackList);
                 }
             }
 
             HashSet<String> userCitiesSet = new HashSet<>(userCities);
             List<ConcertDto> ret = new ArrayList<>();
-            for (int artistId: userArtists){
+            for (int artistId : userArtists) {
                 List<ConcertDto> artistConcerts = musicService.getConcertsByArtistId(artistId);
-                for (ConcertDto concert: artistConcerts){
-                    if (userCitiesSet.contains(concert.getCity())){
+                for (ConcertDto concert : artistConcerts) {
+                    if (userCitiesSet.contains(concert.getCity())) {
                         ret.add(concert);
                         saveShownConcertNoException(telegramId, concert.getAfishaUrl());
                     }
@@ -184,10 +192,10 @@ public class UsersController implements UsersApi {
         }
     }
 
-    private void saveShownConcertNoException(long telegramId, String concertUrl){
-        try{
+    private void saveShownConcertNoException(long telegramId, String concertUrl) {
+        try {
             shownConcertsService.saveShownConcert(telegramId, concertUrl);
+        } catch (Exception ignored) {
         }
-        catch (Exception ignored){}
     }
 }

@@ -1,10 +1,10 @@
-package ru.nsu.concerts_mate.users_service.services;
+package ru.nsu.concerts_mate.users_service.services.users;
 
 import ru.nsu.concerts_mate.users_service.model.dto.UserCityDto;
-import ru.nsu.concerts_mate.users_service.services.exceptions.CityAlreadyAddedException;
-import ru.nsu.concerts_mate.users_service.services.exceptions.CityNotAddedException;
-import ru.nsu.concerts_mate.users_service.services.exceptions.InternalErrorException;
-import ru.nsu.concerts_mate.users_service.services.exceptions.UserNotFoundException;
+import ru.nsu.concerts_mate.users_service.services.users.exceptions.CityAlreadyAddedException;
+import ru.nsu.concerts_mate.users_service.services.users.exceptions.CityNotAddedException;
+import ru.nsu.concerts_mate.users_service.services.users.exceptions.InternalErrorException;
+import ru.nsu.concerts_mate.users_service.services.users.exceptions.UserNotFoundException;
 
 import java.util.List;
 

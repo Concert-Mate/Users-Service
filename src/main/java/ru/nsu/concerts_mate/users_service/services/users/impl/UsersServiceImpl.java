@@ -1,4 +1,4 @@
-package ru.nsu.concerts_mate.users_service.services.impl;
+package ru.nsu.concerts_mate.users_service.services.users.impl;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 import ru.nsu.concerts_mate.users_service.model.dto.UserDto;
 import ru.nsu.concerts_mate.users_service.model.entities.UserEntity;
 import ru.nsu.concerts_mate.users_service.repositories.UsersRepository;
-import ru.nsu.concerts_mate.users_service.services.UsersService;
-import ru.nsu.concerts_mate.users_service.services.exceptions.UserNotFoundException;
+import ru.nsu.concerts_mate.users_service.services.users.UsersService;
+import ru.nsu.concerts_mate.users_service.services.users.exceptions.UserNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
