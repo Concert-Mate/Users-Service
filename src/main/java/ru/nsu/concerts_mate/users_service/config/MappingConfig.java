@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import static org.modelmapper.config.Configuration.AccessLevel.PRIVATE;
 
 @Configuration
-public class ApplicationConfig {
+public class MappingConfig {
     @Bean
     public ModelMapper modelMapper() {
         final ModelMapper mapper = new ModelMapper();
