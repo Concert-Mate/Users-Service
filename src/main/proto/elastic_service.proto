@@ -2,7 +2,8 @@ syntax = "proto3";
 
 package api;
 
-option go_package = "./api";
+option java_package = "ru.nsu.concerts_mate.elastic";
+option java_outer_classname = "ElasticService";
 
 message Coords {
   float lat = 1;
