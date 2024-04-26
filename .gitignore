@@ -37,3 +37,4 @@ out/
 .vscode/
 postgres-data
 **/__pycache__/
+rabbitmq-data

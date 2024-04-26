@@ -6,6 +6,7 @@ import ru.nsu.concerts_mate.users_service.api.users.*;
 import ru.nsu.concerts_mate.users_service.model.dto.ArtistDto;
 import ru.nsu.concerts_mate.users_service.model.dto.ConcertDto;
 import ru.nsu.concerts_mate.users_service.model.dto.UserDto;
+import ru.nsu.concerts_mate.users_service.services.cities.CitiesService;
 import ru.nsu.concerts_mate.users_service.services.music.MusicService;
 import ru.nsu.concerts_mate.users_service.services.music.exceptions.MusicServiceException;
 import ru.nsu.concerts_mate.users_service.services.users.UsersCitiesService;
@@ -22,18 +23,20 @@ import java.util.Optional;
 @RestController()
 public class UsersController implements UsersApi {
     private final UsersService usersService;
-    private final UsersCitiesService citiesService;
-    private final UsersTracksListsService tracksListsService;
+    private final UsersCitiesService usersCitiesService;
+    private final UsersTracksListsService usersTracksListsService;
     private final MusicService musicService;
     private final UsersShownConcertsService shownConcertsService;
+    private final CitiesService citiesService;
 
     @Autowired
-    public UsersController(UsersService usersService, UsersCitiesService citiesService, UsersTracksListsService tracksListsService, MusicService musicService, UsersShownConcertsService shownConcertsService) {
+    public UsersController(UsersService usersService, UsersCitiesService usersCitiesService, UsersTracksListsService usersTracksListsService, MusicService musicService, UsersShownConcertsService shownConcertsService, CitiesService citiesService) {
         this.usersService = usersService;
-        this.citiesService = citiesService;
-        this.tracksListsService = tracksListsService;
+        this.usersCitiesService = usersCitiesService;
+        this.usersTracksListsService = usersTracksListsService;
         this.musicService = musicService;
         this.shownConcertsService = shownConcertsService;
+        this.citiesService = citiesService;
     }
 
     @Override
@@ -65,7 +68,7 @@ public class UsersController implements UsersApi {
     @Override
     public UserCitiesResponse getUserCities(long telegramId) {
         try {
-            return new UserCitiesResponse(citiesService.getUserCities(telegramId));
+            return new UserCitiesResponse(usersCitiesService.getUserCities(telegramId));
         } catch (UserNotFoundException ignored) {
             return new UserCitiesResponse(UsersApiResponseStatusCode.USER_NOT_FOUND);
         } catch (Exception ignored) {
@@ -75,8 +78,10 @@ public class UsersController implements UsersApi {
 
     @Override
     public DefaultUsersApiResponse addUserCity(long telegramId, String cityName) {
+        citiesService.findCity(cityName);
+
         try {
-            citiesService.saveUserCity(telegramId, cityName);
+            usersCitiesService.saveUserCity(telegramId, cityName);
             return new DefaultUsersApiResponse();
         } catch (UserNotFoundException ignored) {
             return new DefaultUsersApiResponse(UsersApiResponseStatusCode.USER_NOT_FOUND);
@@ -90,7 +95,7 @@ public class UsersController implements UsersApi {
     @Override
     public DefaultUsersApiResponse deleteUserCity(long telegramId, String cityName) {
         try {
-            citiesService.deleteUserCity(telegramId, cityName);
+            usersCitiesService.deleteUserCity(telegramId, cityName);
             return new DefaultUsersApiResponse();
         } catch (UserNotFoundException ignored) {
             return new DefaultUsersApiResponse(UsersApiResponseStatusCode.USER_NOT_FOUND);
@@ -106,7 +111,7 @@ public class UsersController implements UsersApi {
         // TODO: return list of DTO's: list of track-lists
 
         try {
-            return new UserTracksListsResponse(tracksListsService.getUserTracksLists(telegramId));
+            return new UserTracksListsResponse(usersTracksListsService.getUserTracksLists(telegramId));
         } catch (UserNotFoundException ignored) {
             return new UserTracksListsResponse(UsersApiResponseStatusCode.USER_NOT_FOUND);
         } catch (Exception ignored) {
@@ -118,7 +123,7 @@ public class UsersController implements UsersApi {
     public DefaultUsersApiResponse addUserTracksList(long telegramId, String tracksListURL) {
         try {
             musicService.getArtistsByPlayListURL(tracksListURL);
-            tracksListsService.saveUserTracksList(telegramId, tracksListURL);
+            usersTracksListsService.saveUserTracksList(telegramId, tracksListURL);
             return new DefaultUsersApiResponse();
         } catch (UserNotFoundException ignored) {
             return new DefaultUsersApiResponse(UsersApiResponseStatusCode.USER_NOT_FOUND);
@@ -134,7 +139,7 @@ public class UsersController implements UsersApi {
     @Override
     public DefaultUsersApiResponse deleteUserTracksList(long telegramId, String tracksListURL) {
         try {
-            tracksListsService.deleteUserTracksList(telegramId, tracksListURL);
+            usersTracksListsService.deleteUserTracksList(telegramId, tracksListURL);
             return new DefaultUsersApiResponse();
         } catch (UserNotFoundException ignored) {
             return new DefaultUsersApiResponse(UsersApiResponseStatusCode.USER_NOT_FOUND);
@@ -152,11 +157,11 @@ public class UsersController implements UsersApi {
             return new UserConcertsResponse(UsersApiResponseStatusCode.USER_NOT_FOUND);
         }
         try {
-            List<String> userCities = citiesService.getUserCities(optionalUser.get().getTelegramId());
+            List<String> userCities = usersCitiesService.getUserCities(optionalUser.get().getTelegramId());
             if (userCities.isEmpty()) {
                 return new UserConcertsResponse();
             }
-            List<String> userTrackLists = tracksListsService.getUserTracksLists(telegramId);
+            List<String> userTrackLists = usersTracksListsService.getUserTracksLists(telegramId);
             if (userTrackLists.isEmpty()) {
                 return new UserConcertsResponse();
             }
@@ -170,7 +175,7 @@ public class UsersController implements UsersApi {
                         userArtists.add(artist.getYandexMusicId());
                     }
                 } catch (MusicServiceException e) {
-                    tracksListsService.deleteUserTracksList(telegramId, trackList);
+                    usersTracksListsService.deleteUserTracksList(telegramId, trackList);
                 }
             }
 
