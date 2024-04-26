@@ -7,6 +7,7 @@ import ru.nsu.concerts_mate.users_service.model.dto.ArtistDto;
 import ru.nsu.concerts_mate.users_service.model.dto.ConcertDto;
 import ru.nsu.concerts_mate.users_service.model.dto.UserDto;
 import ru.nsu.concerts_mate.users_service.services.cities.CitiesService;
+import ru.nsu.concerts_mate.users_service.services.cities.CitiesServiceException;
 import ru.nsu.concerts_mate.users_service.services.music.MusicService;
 import ru.nsu.concerts_mate.users_service.services.music.exceptions.MusicServiceException;
 import ru.nsu.concerts_mate.users_service.services.users.UsersCitiesService;
@@ -78,7 +79,12 @@ public class UsersController implements UsersApi {
 
     @Override
     public DefaultUsersApiResponse addUserCity(long telegramId, String cityName) {
-        citiesService.findCity(cityName);
+        // TODO
+        try {
+            System.out.println(citiesService.findCity(cityName));
+        } catch (CitiesServiceException exception) {
+            System.out.println(exception.getLocalizedMessage());
+        }
 
         try {
             usersCitiesService.saveUserCity(telegramId, cityName);

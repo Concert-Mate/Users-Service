@@ -3,7 +3,7 @@ package ru.nsu.concerts_mate.users_service.services.cities;
 import ru.nsu.concerts_mate.users_service.model.dto.CoordsDto;
 
 public interface CitiesService {
-    void findCity(String cityName);
+    CitySearchByNameResult findCity(String cityName) throws CitiesServiceException;
 
-    void findCity(CoordsDto coords);
+    CitySearchByCoordsResult findCity(CoordsDto coords) throws CitiesServiceException;
 }
