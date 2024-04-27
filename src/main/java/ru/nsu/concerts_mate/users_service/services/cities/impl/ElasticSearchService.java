@@ -38,6 +38,8 @@ public class ElasticSearchService implements CitiesService {
             throw new CitiesServiceException(String.format("Request with \"%s\" failed", cityName), exception);
         }
 
+        System.out.println(response);
+
         return new CitySearchByNameResult(
                 mapCode(response.getCode()),
                 mapOptions(response.getOptionsList())
@@ -71,7 +73,7 @@ public class ElasticSearchService implements CitiesService {
 
     private CitySearchByNameCode mapCode(ElasticService.CitySearchNameResponse.ResponseCode code) throws CitiesServiceException {
         switch (code) {
-            case SUCCESS_CITY -> {
+            case SUCCESS_NAME -> {
                 return CitySearchByNameCode.SUCCESS;
             }
 
@@ -79,11 +81,11 @@ public class ElasticSearchService implements CitiesService {
                 return CitySearchByNameCode.FUZZY;
             }
 
-            case EMPTY -> {
+            case EMPTY_CITY_NAME -> {
                 return CitySearchByNameCode.NOT_FOUND;
             }
 
-            case INTERNAL_ERROR -> {
+            case INTERNAL_ERROR_NAME -> {
                 return CitySearchByNameCode.INTERNAL_ERROR;
             }
         }
@@ -93,11 +95,11 @@ public class ElasticSearchService implements CitiesService {
 
     private CitySearchByCoordsCode mapCode(ElasticService.CitySearchCoordsResponse.ResponseCode code) throws CitiesServiceException {
         switch (code) {
-            case SUCCESS -> {
+            case SUCCESS_COORDS -> {
                 return CitySearchByCoordsCode.SUCCESS;
             }
 
-            case EMPTY -> {
+            case EMPTY_CITY_COORDS -> {
                 return CitySearchByCoordsCode.NOT_FOUND;
             }
 
@@ -105,7 +107,7 @@ public class ElasticSearchService implements CitiesService {
                 return CitySearchByCoordsCode.INVALID_COORDS;
             }
 
-            case INTERNAL_ERROR -> {
+            case INTERNAL_ERROR_COORDS -> {
                 return CitySearchByCoordsCode.INTERNAL_ERROR;
             }
         }
