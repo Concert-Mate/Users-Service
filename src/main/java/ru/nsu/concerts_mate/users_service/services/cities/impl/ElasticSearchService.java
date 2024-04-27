@@ -77,11 +77,11 @@ public class ElasticSearchService implements CitiesService {
                 return CitySearchByNameCode.SUCCESS;
             }
 
-            case FUZZY_CITY -> {
+            case FUZZY_NAME -> {
                 return CitySearchByNameCode.FUZZY;
             }
 
-            case EMPTY_CITY_NAME -> {
+            case EMPTY_NAME -> {
                 return CitySearchByNameCode.NOT_FOUND;
             }
 
@@ -99,7 +99,7 @@ public class ElasticSearchService implements CitiesService {
                 return CitySearchByCoordsCode.SUCCESS;
             }
 
-            case EMPTY_CITY_COORDS -> {
+            case EMPTY_COORDS -> {
                 return CitySearchByCoordsCode.NOT_FOUND;
             }
 

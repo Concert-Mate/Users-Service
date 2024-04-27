@@ -21,8 +21,8 @@ message City {
 message CitySearchNameResponse {
   enum ResponseCode{
     SUCCESS_NAME = 0;
-    FUZZY_CITY = 1;
-    EMPTY_CITY_NAME = 2;
+    FUZZY_NAME = 1;
+    EMPTY_NAME = 2;
     INTERNAL_ERROR_NAME = 3;
   };
   ResponseCode code = 1;
@@ -32,7 +32,7 @@ message CitySearchNameResponse {
 message CitySearchCoordsResponse{
   enum ResponseCode{
     SUCCESS_COORDS = 0;
-    EMPTY_CITY_COORDS = 1;
+    EMPTY_COORDS = 1;
     INVALID_COORDS = 2;
     INTERNAL_ERROR_COORDS = 3;
   }
