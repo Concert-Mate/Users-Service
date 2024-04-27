@@ -20,10 +20,10 @@ message City {
 
 message CitySearchNameResponse {
   enum ResponseCode{
-    SUCCESS_CITY = 0;
+    SUCCESS_NAME = 0;
     FUZZY_CITY = 1;
-    EMPTY = 2;
-    INTERNAL_ERROR = 3;
+    EMPTY_CITY_NAME = 2;
+    INTERNAL_ERROR_NAME = 3;
   };
   ResponseCode code = 1;
   repeated City options = 2;
@@ -31,15 +31,14 @@ message CitySearchNameResponse {
 
 message CitySearchCoordsResponse{
   enum ResponseCode{
-    SUCCESS = 0;
-    EMPTY = 1;
+    SUCCESS_COORDS = 0;
+    EMPTY_CITY_COORDS = 1;
     INVALID_COORDS = 2;
-    INTERNAL_ERROR = 3;
+    INTERNAL_ERROR_COORDS = 3;
   }
   ResponseCode code = 1;
   repeated City options = 2;
 }
-
 
 
 message CityNameRequest {
