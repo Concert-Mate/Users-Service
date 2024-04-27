@@ -12,3 +12,8 @@ spring:
     host: ${MUSIC_SERVICE_HOST:localhost}
     port: ${MUSIC_SERVICE_PORT:8000}
     schema: ${MUSIC_SERVICE_SCHEMA:http}
+grpc:
+  client:
+    elastic-service:
+      address: ${ELASTIC_SERVICE_HOST}:${ELASTIC_SERVICE_PORT}
+      negotiation-type: plaintext
