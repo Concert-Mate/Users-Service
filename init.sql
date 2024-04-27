@@ -32,7 +32,7 @@ alter table users_cities
 
 create table if not exists shown_concerts
 (
-    user_id     integer not null constraint shown_concerts_users_id_fk references users,
+    user_id     integer not null constraint shown_concerts_users_id_fk references users on delete cascade,
     concert_url text    not null,
     constraint shown_concerts_pk primary key (user_id, concert_url)
 );
