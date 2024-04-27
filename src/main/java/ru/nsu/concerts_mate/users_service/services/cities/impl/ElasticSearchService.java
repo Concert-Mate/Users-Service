@@ -38,8 +38,6 @@ public class ElasticSearchService implements CitiesService {
             throw new CitiesServiceException(String.format("Request with \"%s\" failed", cityName), exception);
         }
 
-        System.out.println(response);
-
         return new CitySearchByNameResult(
                 mapCode(response.getCode()),
                 mapOptions(response.getOptionsList())
