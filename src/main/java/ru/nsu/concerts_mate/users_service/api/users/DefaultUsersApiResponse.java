@@ -1,16 +1,18 @@
 package ru.nsu.concerts_mate.users_service.api.users;
 
 import lombok.Data;
+import ru.nsu.concerts_mate.users_service.api.ApiResponseStatus;
+import ru.nsu.concerts_mate.users_service.api.ApiResponseStatusCode;
 
 @Data
 public class DefaultUsersApiResponse {
-    private final UsersApiResponseStatus status;
+    private final ApiResponseStatus status;
 
     public DefaultUsersApiResponse() {
-        this.status = new UsersApiResponseStatus();
+        this.status = new ApiResponseStatus();
     }
 
-    public DefaultUsersApiResponse(UsersApiResponseStatusCode code) {
-        this.status = new UsersApiResponseStatus(code);
+    public DefaultUsersApiResponse(ApiResponseStatusCode code) {
+        this.status = new ApiResponseStatus(code);
     }
 }

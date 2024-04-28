@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.web.client.RestTemplate;
+import ru.nsu.concerts_mate.users_service.api.ApiResponseStatusCode;
+import ru.nsu.concerts_mate.users_service.api.ApiResponseStatus;
 import ru.nsu.concerts_mate.users_service.api.users.*;
 
 import java.util.ArrayList;
@@ -314,48 +316,48 @@ class UsersServiceTest {
     }
 
     void addUserSuccess(long telegramId) {
-        addUserWithCode(telegramId, UsersApiResponseStatusCode.SUCCESS);
+        addUserWithCode(telegramId, ApiResponseStatusCode.SUCCESS);
     }
 
     void addUserAlreadyExists(long telegramId) {
-        addUserWithCode(telegramId, UsersApiResponseStatusCode.USER_ALREADY_EXISTS);
+        addUserWithCode(telegramId, ApiResponseStatusCode.USER_ALREADY_EXISTS);
     }
 
     void deleteUserSuccess(long telegramId) {
-        deleteUserWithCode(telegramId, UsersApiResponseStatusCode.SUCCESS);
+        deleteUserWithCode(telegramId, ApiResponseStatusCode.SUCCESS);
     }
 
     void deleteUserNotFound(long telegramId) {
-        deleteUserWithCode(telegramId, UsersApiResponseStatusCode.USER_NOT_FOUND);
+        deleteUserWithCode(telegramId, ApiResponseStatusCode.USER_NOT_FOUND);
     }
 
     void addUserCitySuccess(long telegramId, String cityName) {
-        addUserCityWithCode(telegramId, cityName, UsersApiResponseStatusCode.SUCCESS);
+        addUserCityWithCode(telegramId, cityName, ApiResponseStatusCode.SUCCESS);
     }
 
     void addUserCityUserNotFound(long telegramId, String cityName) {
-        addUserCityWithCode(telegramId, cityName, UsersApiResponseStatusCode.USER_NOT_FOUND);
+        addUserCityWithCode(telegramId, cityName, ApiResponseStatusCode.USER_NOT_FOUND);
     }
 
     void addUserCityUserAlreadyAdded(long telegramId, String cityName) {
-        addUserCityWithCode(telegramId, cityName, UsersApiResponseStatusCode.CITY_ALREADY_ADDED);
+        addUserCityWithCode(telegramId, cityName, ApiResponseStatusCode.CITY_ALREADY_ADDED);
     }
 
     void deleteUserCitySuccess(long telegramId, String cityName) {
-        deleteUserCityWithCode(telegramId, cityName, UsersApiResponseStatusCode.SUCCESS);
+        deleteUserCityWithCode(telegramId, cityName, ApiResponseStatusCode.SUCCESS);
     }
 
     void deleteUserCityUserNotFound(long telegramId, String cityName) {
-        deleteUserCityWithCode(telegramId, cityName, UsersApiResponseStatusCode.USER_NOT_FOUND);
+        deleteUserCityWithCode(telegramId, cityName, ApiResponseStatusCode.USER_NOT_FOUND);
     }
 
     void deleteUserCityNotAdded(long telegramId, String cityName) {
-        deleteUserCityWithCode(telegramId, cityName, UsersApiResponseStatusCode.CITY_NOT_ADDED);
+        deleteUserCityWithCode(telegramId, cityName, ApiResponseStatusCode.CITY_NOT_ADDED);
     }
 
     void getUserCitiesSuccess(long telegramId, List<String> expectedCities) {
         final UserCitiesResponse response = getUserCitiesAndValidate(telegramId);
-        matchResponseStatus(response.getStatus(), UsersApiResponseStatusCode.SUCCESS);
+        matchResponseStatus(response.getStatus(), ApiResponseStatusCode.SUCCESS);
         final List<String> realCities = response.getCities();
         final Set<String> expectedCitiesSet = new HashSet<>(expectedCities);
         final Set<String> realCitiesSet = new HashSet<>(realCities);
@@ -367,36 +369,36 @@ class UsersServiceTest {
 
     void getUserCitiesUserNotFound(long telegramId) {
         final UserCitiesResponse response = getUserCitiesAndValidate(telegramId);
-        matchResponseStatus(response.getStatus(), UsersApiResponseStatusCode.USER_NOT_FOUND);
+        matchResponseStatus(response.getStatus(), ApiResponseStatusCode.USER_NOT_FOUND);
     }
 
     void addUserTracksListSuccess(long telegramId, String url) {
-        addUserTracksListWithCode(telegramId, url, UsersApiResponseStatusCode.SUCCESS);
+        addUserTracksListWithCode(telegramId, url, ApiResponseStatusCode.SUCCESS);
     }
 
     void addUserTracksListUserNotFound(long telegramId, String url) {
-        addUserTracksListWithCode(telegramId, url, UsersApiResponseStatusCode.USER_NOT_FOUND);
+        addUserTracksListWithCode(telegramId, url, ApiResponseStatusCode.USER_NOT_FOUND);
     }
 
     void addUserTracksListAlreadyAdded(long telegramId, String url) {
-        addUserTracksListWithCode(telegramId, url, UsersApiResponseStatusCode.TRACKS_LIST_ALREADY_ADDED);
+        addUserTracksListWithCode(telegramId, url, ApiResponseStatusCode.TRACKS_LIST_ALREADY_ADDED);
     }
 
     void deleteUserTracksListSuccess(long telegramId, String url) {
-        deleteUserTracksListWithCode(telegramId, url, UsersApiResponseStatusCode.SUCCESS);
+        deleteUserTracksListWithCode(telegramId, url, ApiResponseStatusCode.SUCCESS);
     }
 
     void deleteUserTracksListUserNotFound(long telegramId, String url) {
-        deleteUserTracksListWithCode(telegramId, url, UsersApiResponseStatusCode.USER_NOT_FOUND);
+        deleteUserTracksListWithCode(telegramId, url, ApiResponseStatusCode.USER_NOT_FOUND);
     }
 
     void deleteUserTracksListNotAdded(long telegramId, String url) {
-        deleteUserTracksListWithCode(telegramId, url, UsersApiResponseStatusCode.TRACKS_LIST_NOT_ADDED);
+        deleteUserTracksListWithCode(telegramId, url, ApiResponseStatusCode.TRACKS_LIST_NOT_ADDED);
     }
 
     void getUserTracksListsSuccess(long telegramId, List<String> expectedTracksLists) {
         final UserTracksListsResponse response = getUserTracksListsAndValidate(telegramId);
-        matchResponseStatus(response.getStatus(), UsersApiResponseStatusCode.SUCCESS);
+        matchResponseStatus(response.getStatus(), ApiResponseStatusCode.SUCCESS);
         final List<String> realTracksLists = response.getTracksLists();
         final Set<String> expectedTracksListsSet = new HashSet<>(expectedTracksLists);
         final Set<String> realTracksListsSet = new HashSet<>(realTracksLists);
@@ -408,24 +410,24 @@ class UsersServiceTest {
 
     void getUserTracksListsUserNotFound(long telegramId) {
         final UserTracksListsResponse response = getUserTracksListsAndValidate(telegramId);
-        matchResponseStatus(response.getStatus(), UsersApiResponseStatusCode.USER_NOT_FOUND);
+        matchResponseStatus(response.getStatus(), ApiResponseStatusCode.USER_NOT_FOUND);
     }
 
     void getUserConcertsSuccess(long telegramId) {
         final UserConcertsResponse response = getUserConcertsAndValidate(telegramId);
-        matchResponseStatus(response.getStatus(), UsersApiResponseStatusCode.SUCCESS);
+        matchResponseStatus(response.getStatus(), ApiResponseStatusCode.SUCCESS);
     }
 
     void getUserConcertsUserNotFound(long telegramId) {
         final UserConcertsResponse response = getUserConcertsAndValidate(telegramId);
-        matchResponseStatus(response.getStatus(), UsersApiResponseStatusCode.USER_NOT_FOUND);
+        matchResponseStatus(response.getStatus(), ApiResponseStatusCode.USER_NOT_FOUND);
     }
 
     UserCitiesResponse getUserCitiesAndValidate(long telegramId) {
         final ResponseEntity<UserCitiesResponse> responseEntity = getUserCities(telegramId);
         final UserCitiesResponse response = responseEntity.getBody();
         assertNotNull(response);
-        final UsersApiResponseStatus status = response.getStatus();
+        final ApiResponseStatus status = response.getStatus();
         assertNotNull(status);
         assertNotNull(response.getCities());
         return response;
@@ -435,7 +437,7 @@ class UsersServiceTest {
         final ResponseEntity<UserTracksListsResponse> responseEntity = getUserTracksLists(telegramId);
         final UserTracksListsResponse response = responseEntity.getBody();
         assertNotNull(response);
-        final UsersApiResponseStatus status = response.getStatus();
+        final ApiResponseStatus status = response.getStatus();
         assertNotNull(status);
         assertNotNull(response.getTracksLists());
         return response;
@@ -445,38 +447,38 @@ class UsersServiceTest {
         final ResponseEntity<UserConcertsResponse> responseEntity = getUserConcerts(telegramId);
         final UserConcertsResponse response = responseEntity.getBody();
         assertNotNull(response);
-        final UsersApiResponseStatus status = response.getStatus();
+        final ApiResponseStatus status = response.getStatus();
         assertNotNull(status);
         assertNotNull(response.getConcerts());
         return response;
     }
 
-    void addUserWithCode(long telegramId, UsersApiResponseStatusCode code) {
+    void addUserWithCode(long telegramId, ApiResponseStatusCode code) {
         final DefaultUsersApiResponse response = validateResponseEntity(addUser(telegramId));
         matchResponseStatus(response.getStatus(), code);
     }
 
-    void deleteUserWithCode(long telegramId, UsersApiResponseStatusCode code) {
+    void deleteUserWithCode(long telegramId, ApiResponseStatusCode code) {
         final DefaultUsersApiResponse response = validateResponseEntity(deleteUser(telegramId));
         matchResponseStatus(response.getStatus(), code);
     }
 
-    void addUserCityWithCode(long telegramId, String city, UsersApiResponseStatusCode code) {
+    void addUserCityWithCode(long telegramId, String city, ApiResponseStatusCode code) {
         final DefaultUsersApiResponse response = validateResponseEntity(addUserCity(telegramId, city));
         matchResponseStatus(response.getStatus(), code);
     }
 
-    void deleteUserCityWithCode(long telegramId, String city, UsersApiResponseStatusCode code) {
+    void deleteUserCityWithCode(long telegramId, String city, ApiResponseStatusCode code) {
         final DefaultUsersApiResponse response = validateResponseEntity(deleteUserCity(telegramId, city));
         matchResponseStatus(response.getStatus(), code);
     }
 
-    void addUserTracksListWithCode(long telegramId, String url, UsersApiResponseStatusCode code) {
+    void addUserTracksListWithCode(long telegramId, String url, ApiResponseStatusCode code) {
         final DefaultUsersApiResponse response = validateResponseEntity(addUserTracksList(telegramId, url));
         matchResponseStatus(response.getStatus(), code);
     }
 
-    void deleteUserTracksListWithCode(long telegramId, String url, UsersApiResponseStatusCode code) {
+    void deleteUserTracksListWithCode(long telegramId, String url, ApiResponseStatusCode code) {
         final DefaultUsersApiResponse response = validateResponseEntity(deleteUserTracksList(telegramId, url));
         matchResponseStatus(response.getStatus(), code);
     }
@@ -484,15 +486,15 @@ class UsersServiceTest {
     DefaultUsersApiResponse validateResponseEntity(ResponseEntity<DefaultUsersApiResponse> responseEntity) {
         final DefaultUsersApiResponse response = responseEntity.getBody();
         assertNotNull(response);
-        final UsersApiResponseStatus status = response.getStatus();
+        final ApiResponseStatus status = response.getStatus();
         assertNotNull(status);
         return response;
     }
 
-    void matchResponseStatus(UsersApiResponseStatus status, UsersApiResponseStatusCode code) {
+    void matchResponseStatus(ApiResponseStatus status, ApiResponseStatusCode code) {
         assertEquals(code.ordinal(), status.getCode());
         assertEquals(code.name(), status.getMessage());
-        assertEquals(code == UsersApiResponseStatusCode.SUCCESS, status.isSuccess());
+        assertEquals(code == ApiResponseStatusCode.SUCCESS, status.isSuccess());
     }
 
     ResponseEntity<DefaultUsersApiResponse> addUser(long telegramId) {
