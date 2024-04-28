@@ -1,6 +1,6 @@
-package ru.nsu.concerts_mate.users_service.api.users;
+package ru.nsu.concerts_mate.users_service.api;
 
-public enum UsersApiResponseStatusCode {
+public enum ApiResponseStatusCode {
     SUCCESS,
     INTERNAL_ERROR,
     USER_ALREADY_EXISTS,
@@ -12,4 +12,5 @@ public enum UsersApiResponseStatusCode {
     TRACKS_LIST_ALREADY_ADDED,
     TRACKS_LIST_NOT_ADDED,
     INVALID_TRACKS_LIST,
+    INVALID_COORDS
 }

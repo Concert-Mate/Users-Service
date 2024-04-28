@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/users/{telegramId}")
 public interface UsersApi {
     @PostMapping
-    DefaultUsersApiResponse addUser(@PathVariable long telegramId);
+    AddUserApiResponse addUser(@PathVariable long telegramId);
 
     @DeleteMapping
     DefaultUsersApiResponse deleteUser(@PathVariable long telegramId);
