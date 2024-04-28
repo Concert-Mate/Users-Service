@@ -16,17 +16,19 @@ public class UserTracksListsResponse {
     private List<String> tracksLists;
 
     public UserTracksListsResponse() {
-        this.status = new ApiResponseStatus(ApiResponseStatusCode.SUCCESS);
-        this.tracksLists = new ArrayList<>();
+        this(ApiResponseStatusCode.SUCCESS, new ArrayList<>());
     }
 
     public UserTracksListsResponse(ApiResponseStatusCode code) {
-        this.status = new ApiResponseStatus(code);
-        this.tracksLists = new ArrayList<>();
+        this(code, new ArrayList<>());
     }
 
     public UserTracksListsResponse(List<String> tracksLists) {
-        this.status = new ApiResponseStatus(ApiResponseStatusCode.SUCCESS);
+        this(ApiResponseStatusCode.SUCCESS, tracksLists);
+    }
+
+    public UserTracksListsResponse(ApiResponseStatusCode code, List<String> tracksLists) {
+        this.status = new ApiResponseStatus(code);
         this.tracksLists = tracksLists;
     }
 }

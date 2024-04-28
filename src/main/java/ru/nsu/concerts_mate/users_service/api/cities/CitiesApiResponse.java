@@ -4,6 +4,7 @@ import lombok.Data;
 import ru.nsu.concerts_mate.users_service.api.ApiResponseStatus;
 import ru.nsu.concerts_mate.users_service.api.ApiResponseStatusCode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -13,12 +14,15 @@ public class CitiesApiResponse {
     private List<String> cities;
 
     public CitiesApiResponse(ApiResponseStatusCode code){
-        this.status = new ApiResponseStatus(code);
-        this.cities = List.of();
+        this(code, new ArrayList<>());
     }
 
     public CitiesApiResponse(List<String> cities){
-        this.status = new ApiResponseStatus(ApiResponseStatusCode.SUCCESS);
+        this(ApiResponseStatusCode.SUCCESS, cities);
+    }
+
+    public CitiesApiResponse(ApiResponseStatusCode code, List<String> cities){
+        this.status = new ApiResponseStatus(code);
         this.cities = cities;
     }
 }

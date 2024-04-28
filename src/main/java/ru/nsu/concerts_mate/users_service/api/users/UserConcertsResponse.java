@@ -15,17 +15,19 @@ public class UserConcertsResponse {
     private List<ConcertDto> concerts;
 
     public UserConcertsResponse() {
-        this.status = new ApiResponseStatus(ApiResponseStatusCode.SUCCESS);
-        this.concerts = new ArrayList<>();
+        this(ApiResponseStatusCode.SUCCESS, new ArrayList<>());
     }
 
     public UserConcertsResponse(ApiResponseStatusCode code) {
-        this.status = new ApiResponseStatus(code);
-        this.concerts = new ArrayList<>();
+        this(code, new ArrayList<>());
     }
 
     public UserConcertsResponse(List<ConcertDto> concerts) {
-        this.status = new ApiResponseStatus(ApiResponseStatusCode.SUCCESS);
+        this(ApiResponseStatusCode.SUCCESS, concerts);
+    }
+
+    public UserConcertsResponse(ApiResponseStatusCode code, List<ConcertDto> concerts){
+        this.status = new ApiResponseStatus(code);
         this.concerts = concerts;
     }
 }

@@ -14,13 +14,11 @@ public class AddUserApiResponse {
     private UserDto user;
 
     public AddUserApiResponse(ApiResponseStatusCode code) {
-        this.status = new ApiResponseStatus(code);
-        this.user = null;
+        this(code, null);
     }
 
     public AddUserApiResponse(UserDto user) {
-        this.status = new ApiResponseStatus(ApiResponseStatusCode.SUCCESS);
-        this.user = user;
+        this(ApiResponseStatusCode.SUCCESS, user);
     }
 
     public AddUserApiResponse(ApiResponseStatusCode code, UserDto user){

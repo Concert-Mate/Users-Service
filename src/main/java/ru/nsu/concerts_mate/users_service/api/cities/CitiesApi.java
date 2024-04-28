@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @RequestMapping(value = "/cities")
 public interface CitiesApi {
-
     @GetMapping("/")
     CitiesApiResponse getCities(@RequestParam(name = "lat") float lat, @RequestParam(name = "lon") float lon);
 }

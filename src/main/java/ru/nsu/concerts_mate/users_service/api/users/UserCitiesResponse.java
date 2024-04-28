@@ -14,18 +14,15 @@ public class UserCitiesResponse {
     private List<String> cities;
 
     public UserCitiesResponse() {
-        this.status = new ApiResponseStatus(ApiResponseStatusCode.SUCCESS);
-        this.cities = new ArrayList<>();
+        this(ApiResponseStatusCode.SUCCESS, new ArrayList<>());
     }
 
     public UserCitiesResponse(ApiResponseStatusCode code) {
-        this.status = new ApiResponseStatus(code);
-        this.cities = new ArrayList<>();
+        this(code, new ArrayList<>());
     }
 
     public UserCitiesResponse(List<String> cities) {
-        this.status = new ApiResponseStatus(ApiResponseStatusCode.SUCCESS);
-        this.cities = cities;
+        this(ApiResponseStatusCode.SUCCESS, cities);
     }
 
     public UserCitiesResponse(ApiResponseStatusCode code, List<String> cities){
