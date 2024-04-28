@@ -1,8 +1,8 @@
 package ru.nsu.concerts_mate.users_service.api.users;
 
 import lombok.Data;
-import ru.nsu.concerts_mate.users_service.api.ApiResponseStatusCode;
 import ru.nsu.concerts_mate.users_service.api.ApiResponseStatus;
+import ru.nsu.concerts_mate.users_service.api.ApiResponseStatusCode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ public class UserCitiesResponse {
         this(ApiResponseStatusCode.SUCCESS, cities);
     }
 
-    public UserCitiesResponse(ApiResponseStatusCode code, List<String> cities){
+    public UserCitiesResponse(ApiResponseStatusCode code, List<String> cities) {
         this.status = new ApiResponseStatus(code);
         this.cities = cities;
     }

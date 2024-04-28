@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 import ru.nsu.concerts_mate.users_service.api.ApiResponseStatusCode;
 import ru.nsu.concerts_mate.users_service.api.users.*;
-import ru.nsu.concerts_mate.users_service.model.dto.*;
+import ru.nsu.concerts_mate.users_service.model.dto.ArtistDto;
+import ru.nsu.concerts_mate.users_service.model.dto.ConcertDto;
+import ru.nsu.concerts_mate.users_service.model.dto.UserDto;
 import ru.nsu.concerts_mate.users_service.services.cities.CitiesService;
 import ru.nsu.concerts_mate.users_service.services.cities.CitiesServiceException;
 import ru.nsu.concerts_mate.users_service.services.cities.CitySearchByNameCode;
@@ -82,16 +84,13 @@ public class UsersController implements UsersApi {
         String cityToAdd;
         try {
             var res = citiesService.findCity(cityName);
-            if (res.getCode() == CitySearchByNameCode.SUCCESS){
+            if (res.getCode() == CitySearchByNameCode.SUCCESS) {
                 cityToAdd = res.getOptions().get(0).getName();
-            }
-            else if (res.getCode() == CitySearchByNameCode.FUZZY){
+            } else if (res.getCode() == CitySearchByNameCode.FUZZY) {
                 return new DefaultUsersApiResponse(ApiResponseStatusCode.FUZZY_CITY);
-            }
-            else if (res.getCode() == CitySearchByNameCode.NOT_FOUND){
+            } else if (res.getCode() == CitySearchByNameCode.NOT_FOUND) {
                 return new DefaultUsersApiResponse(ApiResponseStatusCode.INVALID_CITY);
-            }
-            else {
+            } else {
                 return new DefaultUsersApiResponse(ApiResponseStatusCode.INTERNAL_ERROR);
             }
         } catch (CitiesServiceException exception) {

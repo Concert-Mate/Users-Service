@@ -14,7 +14,6 @@ import ru.nsu.concerts_mate.users_service.services.cities.CitySearchByCoordsResu
 
 @RestController
 public class CitiesController implements CitiesApi {
-
     private final CitiesService citiesService;
 
     @Autowired
@@ -26,13 +25,11 @@ public class CitiesController implements CitiesApi {
     public CitiesApiResponse getCities(float lat, float lon) {
         try {
             CitySearchByCoordsResult res = citiesService.findCity(new CoordsDto(lat, lon));
-            if (res.getCode() == CitySearchByCoordsCode.SUCCESS){
+            if (res.getCode() == CitySearchByCoordsCode.SUCCESS) {
                 return new CitiesApiResponse(res.getOptions().stream().map(CityDto::getName).toList());
-            }
-            else if (res.getCode() == CitySearchByCoordsCode.NOT_FOUND){
+            } else if (res.getCode() == CitySearchByCoordsCode.NOT_FOUND) {
                 return new CitiesApiResponse(ApiResponseStatusCode.SUCCESS);
-            }
-            else if (res.getCode() == CitySearchByCoordsCode.INVALID_COORDS){
+            } else if (res.getCode() == CitySearchByCoordsCode.INVALID_COORDS) {
                 return new CitiesApiResponse(ApiResponseStatusCode.INVALID_COORDS);
             }
             return new CitiesApiResponse(ApiResponseStatusCode.INTERNAL_ERROR);

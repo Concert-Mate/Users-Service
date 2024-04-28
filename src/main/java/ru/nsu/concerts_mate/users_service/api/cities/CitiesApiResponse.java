@@ -13,15 +13,15 @@ public class CitiesApiResponse {
 
     private List<String> cities;
 
-    public CitiesApiResponse(ApiResponseStatusCode code){
+    public CitiesApiResponse(ApiResponseStatusCode code) {
         this(code, new ArrayList<>());
     }
 
-    public CitiesApiResponse(List<String> cities){
+    public CitiesApiResponse(List<String> cities) {
         this(ApiResponseStatusCode.SUCCESS, cities);
     }
 
-    public CitiesApiResponse(ApiResponseStatusCode code, List<String> cities){
+    public CitiesApiResponse(ApiResponseStatusCode code, List<String> cities) {
         this.status = new ApiResponseStatus(code);
         this.cities = cities;
     }
