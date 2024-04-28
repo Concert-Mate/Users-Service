@@ -40,7 +40,6 @@ message CitySearchCoordsResponse{
   repeated City options = 2;
 }
 
-
 message CityNameRequest {
   string name = 1;
 }
@@ -50,11 +49,7 @@ message CoordsRequest {
   float lon = 2;
 }
 
-
 service CitySearch {
   rpc SearchByName (CityNameRequest) returns (CitySearchNameResponse);
   rpc SearchByCoords (CoordsRequest) returns (CitySearchCoordsResponse);
 }
-
-
-
