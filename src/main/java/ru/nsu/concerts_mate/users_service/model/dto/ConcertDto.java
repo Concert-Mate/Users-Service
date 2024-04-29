@@ -1,5 +1,6 @@
 package ru.nsu.concerts_mate.users_service.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.AllArgsConstructor;
@@ -22,6 +23,7 @@ public class ConcertDto {
 
     private String address;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonDeserialize(using = CustomDateDeserializer.class)
     private Date datetime;
 
