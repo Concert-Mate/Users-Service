@@ -1,6 +1,7 @@
 package ru.nsu.concerts_mate.users_service.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -21,6 +22,7 @@ public class ConcertDto {
 
     private String address;
 
+    @JsonDeserialize(using = CustomDateDeserializer.class)
     private Date datetime;
 
     @JsonProperty(value = "map_url")
