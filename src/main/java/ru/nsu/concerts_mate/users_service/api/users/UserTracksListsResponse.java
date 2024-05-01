@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import ru.nsu.concerts_mate.users_service.api.ApiResponseStatus;
 import ru.nsu.concerts_mate.users_service.api.ApiResponseStatusCode;
+import ru.nsu.concerts_mate.users_service.model.dto.TrackListHeaderDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,7 @@ public class UserTracksListsResponse {
     private ApiResponseStatus status;
 
     @JsonProperty(value = "tracks_lists")
-    private List<String> tracksLists;
+    private List<TrackListHeaderDto> tracksLists;
 
     public UserTracksListsResponse() {
         this(ApiResponseStatusCode.SUCCESS, new ArrayList<>());
@@ -23,11 +24,11 @@ public class UserTracksListsResponse {
         this(code, new ArrayList<>());
     }
 
-    public UserTracksListsResponse(List<String> tracksLists) {
+    public UserTracksListsResponse(List<TrackListHeaderDto> tracksLists) {
         this(ApiResponseStatusCode.SUCCESS, tracksLists);
     }
 
-    public UserTracksListsResponse(ApiResponseStatusCode code, List<String> tracksLists) {
+    public UserTracksListsResponse(ApiResponseStatusCode code, List<TrackListHeaderDto> tracksLists) {
         this.status = new ApiResponseStatus(code);
         this.tracksLists = tracksLists;
     }
