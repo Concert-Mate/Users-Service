@@ -14,4 +14,6 @@ public interface UsersShownConcertsService {
     ShownConcertDto deleteShownConcert(long telegramId, String concertUrl) throws UserNotFoundException, ShownConcertNotFoundException;
 
     List<String> getShownConcerts(long telegramId) throws UserNotFoundException, InternalErrorException;
+
+    boolean hasShownConcert(long telegramId, String concertUrl) throws UserNotFoundException;
 }

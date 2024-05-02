@@ -72,10 +72,10 @@ public class UsersShownConcertsServiceImpl implements UsersShownConcertsService 
             throw new ShownConcertNotFoundException();
         }
 
-        final ShownConcertEntity userTracksList = new ShownConcertEntity(foundUser.get().getId(), concertUrl);
-        shownConcertsRepository.delete(userTracksList);
+        final ShownConcertEntity userShownConcert = new ShownConcertEntity(foundUser.get().getId(), concertUrl);
+        shownConcertsRepository.delete(userShownConcert);
 
-        return modelMapper.map(userTracksList, ShownConcertDto.class);
+        return modelMapper.map(userShownConcert, ShownConcertDto.class);
     }
 
     @Override
@@ -85,13 +85,26 @@ public class UsersShownConcertsServiceImpl implements UsersShownConcertsService 
             throw new UserNotFoundException();
         }
 
-        final var userTracksLists = shownConcertsRepository.getUserShownConcerts(
+        final var userShownConcerts = shownConcertsRepository.getUserShownConcerts(
                 foundUser.get().getId()
         );
-        if (userTracksLists.isEmpty()) {
+        if (userShownConcerts.isEmpty()) {
             throw new InternalErrorException();
         }
 
-        return userTracksLists.get();
+        return userShownConcerts.get();
+    }
+
+    @Override
+    public boolean hasShownConcert(long telegramId, String concertUrl) throws UserNotFoundException{
+        final Optional<UserEntity> foundUser = usersRepository.findByTelegramId(telegramId);
+        if (foundUser.isEmpty()) {
+            throw new UserNotFoundException();
+        }
+
+        final Optional<ShownConcertEntity> testUnique = shownConcertsRepository.findById(
+                new ShownConcertEmbeddedEntity(foundUser.get().getId(), concertUrl)
+        );
+        return testUnique.isPresent();
     }
 }
