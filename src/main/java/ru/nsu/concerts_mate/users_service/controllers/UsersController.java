@@ -81,7 +81,7 @@ public class UsersController implements UsersApi {
                 if (res.getCode() == CitySearchByNameCode.SUCCESS) {
                     cityToAdd = res.getOptions().get(0).getName();
                 } else if (res.getCode() == CitySearchByNameCode.FUZZY) {
-                    return new UserCityAddResponse(ApiResponseStatusCode.FUZZY_CITY);
+                    return new UserCityAddResponse(ApiResponseStatusCode.FUZZY_CITY, res.getOptions().get(0).getName());
                 } else if (res.getCode() == CitySearchByNameCode.NOT_FOUND) {
                     return new UserCityAddResponse(ApiResponseStatusCode.INVALID_CITY);
                 } else {
