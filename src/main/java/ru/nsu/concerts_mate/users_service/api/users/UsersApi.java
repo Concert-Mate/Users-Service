@@ -32,13 +32,13 @@ public interface UsersApi {
     UserTracksListsResponse getUserTracksLists(@PathVariable long telegramId);
 
     @PostMapping("/tracks-lists")
-    DefaultUsersApiResponse addUserTracksList(
+    UserTrackListResponse addUserTracksList(
             @PathVariable long telegramId,
             @RequestParam(name = "url") String tracksListURL
     );
 
     @DeleteMapping("/tracks-lists")
-    DefaultUsersApiResponse deleteUserTracksList(
+    UserTrackListResponse deleteUserTracksList(
             @PathVariable long telegramId,
             @RequestParam(name = "url") String tracksListURL
     );

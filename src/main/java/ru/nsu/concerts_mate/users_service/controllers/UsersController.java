@@ -162,33 +162,36 @@ public class UsersController implements UsersApi {
     }
 
     @Override
-    public DefaultUsersApiResponse addUserTracksList(long telegramId, String tracksListURL) {
+    public UserTrackListResponse addUserTracksList(long telegramId, String tracksListURL) {
         try {
-            musicService.getPlayListData(tracksListURL);
+            var res = musicService.getPlayListData(tracksListURL);
             usersTracksListsService.saveUserTracksList(telegramId, tracksListURL);
-            return new DefaultUsersApiResponse();
+            return new UserTrackListResponse(new TrackListHeaderDto(res.getUrl(), res.getTitle()));
         } catch (UserNotFoundException ignored) {
-            return new DefaultUsersApiResponse(ApiResponseStatusCode.USER_NOT_FOUND);
+            return new UserTrackListResponse(ApiResponseStatusCode.USER_NOT_FOUND);
         } catch (TracksListAlreadyAddedException ignored) {
-            return new DefaultUsersApiResponse(ApiResponseStatusCode.TRACKS_LIST_ALREADY_ADDED);
+            return new UserTrackListResponse(ApiResponseStatusCode.TRACKS_LIST_ALREADY_ADDED);
         } catch (MusicServiceException ignored) {
-            return new DefaultUsersApiResponse(ApiResponseStatusCode.INVALID_TRACKS_LIST);
+            return new UserTrackListResponse(ApiResponseStatusCode.INVALID_TRACKS_LIST);
         } catch (Exception ignored) {
-            return new DefaultUsersApiResponse(ApiResponseStatusCode.INTERNAL_ERROR);
+            return new UserTrackListResponse(ApiResponseStatusCode.INTERNAL_ERROR);
         }
     }
 
     @Override
-    public DefaultUsersApiResponse deleteUserTracksList(long telegramId, String tracksListURL) {
+    public UserTrackListResponse deleteUserTracksList(long telegramId, String tracksListURL) {
         try {
             usersTracksListsService.deleteUserTracksList(telegramId, tracksListURL);
-            return new DefaultUsersApiResponse();
+            var playListData = musicService.getPlayListData(tracksListURL);
+            return new UserTrackListResponse(new TrackListHeaderDto(playListData.getUrl(), playListData.getTitle()));
         } catch (UserNotFoundException ignored) {
-            return new DefaultUsersApiResponse(ApiResponseStatusCode.USER_NOT_FOUND);
+            return new UserTrackListResponse(ApiResponseStatusCode.USER_NOT_FOUND);
         } catch (TracksListNotAddedException ignored) {
-            return new DefaultUsersApiResponse(ApiResponseStatusCode.TRACKS_LIST_NOT_ADDED);
-        } catch (Exception ignored) {
-            return new DefaultUsersApiResponse(ApiResponseStatusCode.INTERNAL_ERROR);
+            return new UserTrackListResponse(ApiResponseStatusCode.TRACKS_LIST_NOT_ADDED);
+        } catch (MusicServiceException ignored) {
+            return new UserTrackListResponse();
+        }catch (Exception ignored) {
+            return new UserTrackListResponse(ApiResponseStatusCode.INTERNAL_ERROR);
         }
     }
 
