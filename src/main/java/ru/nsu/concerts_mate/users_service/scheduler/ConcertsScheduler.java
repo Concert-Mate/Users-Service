@@ -53,6 +53,7 @@ public class ConcertsScheduler {
                     mapItem.add(user);
                 }
             } catch (InternalErrorException ignored) {
+                //TODO logging
             } catch (MusicServiceException e) {
                 deleteUserPlayListNoExcept(user.getTelegramId(), playList);
             }
@@ -64,7 +65,7 @@ public class ConcertsScheduler {
         try{
             usersTracksListsService.deleteUserTracksList(telegramId, playListUrl);
         } catch (Exception ignored) {
-
+            //TODO logging
         }
     }
 
@@ -73,27 +74,29 @@ public class ConcertsScheduler {
         try {
             brokerService.sendEvent(new BrokerEvent(user, concerts));
         } catch (BrokerException ignored) {
+            //TODO logging
         }
         for (ConcertDto concert: concerts){
             try {
                 shownConcertsService.saveShownConcert(user.getTelegramId(), concert.getAfishaUrl());
             } catch (Exception ignored){
-
+                //TODO logging
             }
         }
     }
 
 
-    private boolean isConcertSend(ConcertDto concert, UserDto user){
+    private boolean isConcertSent(ConcertDto concert, UserDto user){
         try {
             return shownConcertsService.hasShownConcert(user.getTelegramId(), concert.getAfishaUrl());
         } catch (Exception e) {
+            //TODO logging
             return false;
         }
     }
 
 
-    @Scheduled(fixedRate = 1800000) // 30 min
+    @Scheduled(fixedRateString = "${spring.scheduler.fixed_rate}") // 30 min
     public void updateConcerts(){
         List<UserDto> users = usersService.findAllUsers();
         Map<Integer, List<UserDto>> artistsForUsers = new HashMap<>();
@@ -103,13 +106,14 @@ public class ConcertsScheduler {
                 List<String> userCities =  usersCitiesService.getUserCities(user.getTelegramId());
                 citiesForUsers.put(user.getTelegramId(), userCities);
             } catch (Exception ignored) {
+                //TODO logging
                 continue;
             }
             try {
                 List<String> playLists = usersTracksListsService.getUserTracksLists(user.getTelegramId());
                 fillArtistsForUsers(playLists, artistsForUsers, user);
             } catch (Exception ignored) {
-
+                //TODO logging
             }
         }
         Map<UserDto, List<ConcertDto>> concertsForUsers = new HashMap<>();
@@ -119,14 +123,14 @@ public class ConcertsScheduler {
                 for (ConcertDto concert: concerts){
                     for (UserDto user: entry.getValue()){
                         List<String> userCities = citiesForUsers.get(user.getTelegramId());
-                        if (userCities.contains(concert.getCity()) && !isConcertSend(concert, user)){
+                        if (userCities.contains(concert.getCity()) && !isConcertSent(concert, user)){
                             var mapItem = concertsForUsers.computeIfAbsent(user, k -> new ArrayList<>());
                             mapItem.add(concert);
                         }
                     }
                 }
             } catch (Exception ignored) {
-
+                //TODO logging
             }
         }
         for (Map.Entry<UserDto, List<ConcertDto>> entry: concertsForUsers.entrySet()){
