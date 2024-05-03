@@ -14,9 +14,11 @@ public interface UsersApi {
     UserCitiesResponse getUserCities(@PathVariable long telegramId);
 
     @PostMapping("/cities")
-    DefaultUsersApiResponse addUserCity(
+    UserCityAddResponse addUserCity(
             @PathVariable long telegramId,
-            @RequestParam(name = "city") String cityName
+            @RequestParam(name = "city", required = false) String cityName,
+            @RequestParam(name = "lat", required = false) Float lat,
+            @RequestParam(name = "lon", required = false) Float lon
     );
 
     @DeleteMapping("/cities")
@@ -25,18 +27,18 @@ public interface UsersApi {
             @RequestParam(name = "city") String cityName
     );
 
-    // TODO: return list of DTO's: list of track-lists
+
     @GetMapping("/tracks-lists")
     UserTracksListsResponse getUserTracksLists(@PathVariable long telegramId);
 
     @PostMapping("/tracks-lists")
-    DefaultUsersApiResponse addUserTracksList(
+    UserTrackListResponse addUserTracksList(
             @PathVariable long telegramId,
             @RequestParam(name = "url") String tracksListURL
     );
 
     @DeleteMapping("/tracks-lists")
-    DefaultUsersApiResponse deleteUserTracksList(
+    UserTrackListResponse deleteUserTracksList(
             @PathVariable long telegramId,
             @RequestParam(name = "url") String tracksListURL
     );

@@ -4,12 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 import ru.nsu.concerts_mate.users_service.api.ApiResponseStatusCode;
 import ru.nsu.concerts_mate.users_service.api.users.*;
-import ru.nsu.concerts_mate.users_service.model.dto.ArtistDto;
-import ru.nsu.concerts_mate.users_service.model.dto.ConcertDto;
-import ru.nsu.concerts_mate.users_service.model.dto.UserDto;
-import ru.nsu.concerts_mate.users_service.services.cities.CitiesService;
-import ru.nsu.concerts_mate.users_service.services.cities.CitiesServiceException;
-import ru.nsu.concerts_mate.users_service.services.cities.CitySearchByNameCode;
+import ru.nsu.concerts_mate.users_service.model.dto.*;
+import ru.nsu.concerts_mate.users_service.services.cities.*;
 import ru.nsu.concerts_mate.users_service.services.music.MusicService;
 import ru.nsu.concerts_mate.users_service.services.music.exceptions.MusicServiceException;
 import ru.nsu.concerts_mate.users_service.services.users.UsersCitiesService;
@@ -18,10 +14,7 @@ import ru.nsu.concerts_mate.users_service.services.users.UsersShownConcertsServi
 import ru.nsu.concerts_mate.users_service.services.users.UsersTracksListsService;
 import ru.nsu.concerts_mate.users_service.services.users.exceptions.*;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController()
 public class UsersController implements UsersApi {
@@ -80,32 +73,57 @@ public class UsersController implements UsersApi {
     }
 
     @Override
-    public DefaultUsersApiResponse addUserCity(long telegramId, String cityName) {
+    public UserCityAddResponse addUserCity(long telegramId, String cityName, Float lat, Float lon) {
         String cityToAdd;
-        try {
-            var res = citiesService.findCity(cityName);
-            if (res.getCode() == CitySearchByNameCode.SUCCESS) {
-                cityToAdd = res.getOptions().get(0).getName();
-            } else if (res.getCode() == CitySearchByNameCode.FUZZY) {
-                return new DefaultUsersApiResponse(ApiResponseStatusCode.FUZZY_CITY);
-            } else if (res.getCode() == CitySearchByNameCode.NOT_FOUND) {
-                return new DefaultUsersApiResponse(ApiResponseStatusCode.INVALID_CITY);
-            } else {
-                return new DefaultUsersApiResponse(ApiResponseStatusCode.INTERNAL_ERROR);
+        if (cityName == null && (lat == null || lon == null)){
+            return new UserCityAddResponse(ApiResponseStatusCode.INVALID_COORDS);
+        }
+        if (cityName != null){
+            try {
+                var res = citiesService.findCity(cityName);
+                if (res.getCode() == CitySearchByNameCode.SUCCESS) {
+                    cityToAdd = res.getOptions().get(0).getName();
+                } else if (res.getCode() == CitySearchByNameCode.FUZZY) {
+                    return new UserCityAddResponse(ApiResponseStatusCode.FUZZY_CITY, res.getOptions().get(0).getName());
+                } else if (res.getCode() == CitySearchByNameCode.NOT_FOUND) {
+                    return new UserCityAddResponse(ApiResponseStatusCode.INVALID_CITY);
+                } else {
+                    return new UserCityAddResponse(ApiResponseStatusCode.INTERNAL_ERROR);
+                }
+            } catch (CitiesServiceException exception) {
+                return new UserCityAddResponse(ApiResponseStatusCode.INTERNAL_ERROR);
             }
-        } catch (CitiesServiceException exception) {
-            return new DefaultUsersApiResponse(ApiResponseStatusCode.INTERNAL_ERROR);
+        }
+        else {
+            try {
+                CitySearchByCoordsResult res = citiesService.findCity(new CoordsDto(lat, lon));
+                if (res.getCode() == CitySearchByCoordsCode.SUCCESS) {
+                    var city = res.getOptions().stream().max(Comparator.comparingInt(CityDto::getPopulation));
+                    if (city.isEmpty()){
+                        return new UserCityAddResponse(ApiResponseStatusCode.INVALID_CITY);
+                    }
+                    cityToAdd = city.get().getName();
+                } else if (res.getCode() == CitySearchByCoordsCode.NOT_FOUND) {
+                    return new UserCityAddResponse(ApiResponseStatusCode.INVALID_CITY);
+                } else if (res.getCode() == CitySearchByCoordsCode.INVALID_COORDS) {
+                    return new UserCityAddResponse(ApiResponseStatusCode.INVALID_COORDS);
+                } else {
+                    return new UserCityAddResponse(ApiResponseStatusCode.INTERNAL_ERROR);
+                }
+            } catch (CitiesServiceException e) {
+                return new UserCityAddResponse(ApiResponseStatusCode.INTERNAL_ERROR);
+            }
         }
 
         try {
             usersCitiesService.saveUserCity(telegramId, cityToAdd);
-            return new DefaultUsersApiResponse();
+            return new UserCityAddResponse(cityToAdd);
         } catch (UserNotFoundException ignored) {
-            return new DefaultUsersApiResponse(ApiResponseStatusCode.USER_NOT_FOUND);
+            return new UserCityAddResponse(ApiResponseStatusCode.USER_NOT_FOUND);
         } catch (CityAlreadyAddedException ignored) {
-            return new DefaultUsersApiResponse(ApiResponseStatusCode.CITY_ALREADY_ADDED);
+            return new UserCityAddResponse(ApiResponseStatusCode.CITY_ALREADY_ADDED);
         } catch (Exception ignored) {
-            return new DefaultUsersApiResponse(ApiResponseStatusCode.INTERNAL_ERROR);
+            return new UserCityAddResponse(ApiResponseStatusCode.INTERNAL_ERROR);
         }
     }
 
@@ -125,10 +143,20 @@ public class UsersController implements UsersApi {
 
     @Override
     public UserTracksListsResponse getUserTracksLists(long telegramId) {
-        // TODO: return list of DTO's: list of track-lists
 
         try {
-            return new UserTracksListsResponse(usersTracksListsService.getUserTracksLists(telegramId));
+            List<String> tracksLists = usersTracksListsService.getUserTracksLists(telegramId);
+            List<TrackListHeaderDto> result = new ArrayList<>();
+            for (String trackList: tracksLists){
+                try {
+                    TracksListDto artistDtoList = musicService.getPlayListData(trackList);
+                    result.add(new TrackListHeaderDto(artistDtoList.getUrl(), artistDtoList.getTitle()));
+                } catch (MusicServiceException e) {
+                    usersTracksListsService.deleteUserTracksList(telegramId, trackList);
+                } catch (InternalErrorException ignored){
+                }
+            }
+            return new UserTracksListsResponse(result);
         } catch (UserNotFoundException ignored) {
             return new UserTracksListsResponse(ApiResponseStatusCode.USER_NOT_FOUND);
         } catch (Exception ignored) {
@@ -137,33 +165,36 @@ public class UsersController implements UsersApi {
     }
 
     @Override
-    public DefaultUsersApiResponse addUserTracksList(long telegramId, String tracksListURL) {
+    public UserTrackListResponse addUserTracksList(long telegramId, String tracksListURL) {
         try {
-            musicService.getArtistsByPlayListURL(tracksListURL);
+            var res = musicService.getPlayListData(tracksListURL);
             usersTracksListsService.saveUserTracksList(telegramId, tracksListURL);
-            return new DefaultUsersApiResponse();
+            return new UserTrackListResponse(new TrackListHeaderDto(res.getUrl(), res.getTitle()));
         } catch (UserNotFoundException ignored) {
-            return new DefaultUsersApiResponse(ApiResponseStatusCode.USER_NOT_FOUND);
+            return new UserTrackListResponse(ApiResponseStatusCode.USER_NOT_FOUND);
         } catch (TracksListAlreadyAddedException ignored) {
-            return new DefaultUsersApiResponse(ApiResponseStatusCode.TRACKS_LIST_ALREADY_ADDED);
+            return new UserTrackListResponse(ApiResponseStatusCode.TRACKS_LIST_ALREADY_ADDED);
         } catch (MusicServiceException ignored) {
-            return new DefaultUsersApiResponse(ApiResponseStatusCode.INVALID_TRACKS_LIST);
+            return new UserTrackListResponse(ApiResponseStatusCode.INVALID_TRACKS_LIST);
         } catch (Exception ignored) {
-            return new DefaultUsersApiResponse(ApiResponseStatusCode.INTERNAL_ERROR);
+            return new UserTrackListResponse(ApiResponseStatusCode.INTERNAL_ERROR);
         }
     }
 
     @Override
-    public DefaultUsersApiResponse deleteUserTracksList(long telegramId, String tracksListURL) {
+    public UserTrackListResponse deleteUserTracksList(long telegramId, String tracksListURL) {
         try {
             usersTracksListsService.deleteUserTracksList(telegramId, tracksListURL);
-            return new DefaultUsersApiResponse();
+            var playListData = musicService.getPlayListData(tracksListURL);
+            return new UserTrackListResponse(new TrackListHeaderDto(playListData.getUrl(), playListData.getTitle()));
         } catch (UserNotFoundException ignored) {
-            return new DefaultUsersApiResponse(ApiResponseStatusCode.USER_NOT_FOUND);
+            return new UserTrackListResponse(ApiResponseStatusCode.USER_NOT_FOUND);
         } catch (TracksListNotAddedException ignored) {
-            return new DefaultUsersApiResponse(ApiResponseStatusCode.TRACKS_LIST_NOT_ADDED);
-        } catch (Exception ignored) {
-            return new DefaultUsersApiResponse(ApiResponseStatusCode.INTERNAL_ERROR);
+            return new UserTrackListResponse(ApiResponseStatusCode.TRACKS_LIST_NOT_ADDED);
+        } catch (MusicServiceException ignored) {
+            return new UserTrackListResponse();
+        }catch (Exception ignored) {
+            return new UserTrackListResponse(ApiResponseStatusCode.INTERNAL_ERROR);
         }
     }
 
@@ -187,7 +218,7 @@ public class UsersController implements UsersApi {
 
             for (String trackList : userTrackLists) {
                 try {
-                    List<ArtistDto> artistDtoList = musicService.getArtistsByPlayListURL(trackList);
+                    List<ArtistDto> artistDtoList = musicService.getPlayListData(trackList).getArtists();
                     for (ArtistDto artist : artistDtoList) {
                         userArtists.add(artist.getYandexMusicId());
                     }

@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-import ru.nsu.concerts_mate.users_service.model.dto.ArtistDto;
 import ru.nsu.concerts_mate.users_service.model.dto.ConcertDto;
 import ru.nsu.concerts_mate.users_service.model.dto.TracksListDto;
 import ru.nsu.concerts_mate.users_service.services.music.MusicService;
@@ -79,7 +78,7 @@ public class MusicServiceImpl implements MusicService {
     }
 
     @Override
-    public List<ArtistDto> getArtistsByPlayListURL(String url) throws InternalErrorException, MusicServiceException {
+    public TracksListDto getPlayListData(String url) throws InternalErrorException, MusicServiceException {
         String serviceUrl = "%s://%s:%d/track-lists?url=%s".formatted(serviceSchema, serviceHost, servicePort, url);
         try {
             ResponseEntity<ResponseMusicServicePlayListDTO> res = restTemplate.getForEntity(serviceUrl, ResponseMusicServicePlayListDTO.class);
@@ -88,7 +87,7 @@ public class MusicServiceImpl implements MusicService {
             }
 
             if (Objects.requireNonNull(res.getBody()).status.code == ErrorCodes.SUCCESS.ordinal()) {
-                return Objects.requireNonNull(res.getBody()).trackList.getArtists();
+                return Objects.requireNonNull(res.getBody()).trackList;
             } else if (Objects.requireNonNull(res.getBody()).status.code == ErrorCodes.TRACK_LIST_NOT_FOUND.ordinal()) {
                 throw new TrackListNotFoundException(Objects.requireNonNull(res.getBody()).status.message);
             }
