@@ -75,6 +75,9 @@ public class UsersController implements UsersApi {
     @Override
     public UserCityAddResponse addUserCity(long telegramId, String cityName, Float lat, Float lon) {
         String cityToAdd;
+        if (cityName == null && (lat == null || lon == null)){
+            return new UserCityAddResponse(ApiResponseStatusCode.INVALID_COORDS);
+        }
         if (cityName != null){
             try {
                 var res = citiesService.findCity(cityName);
