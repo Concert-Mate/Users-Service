@@ -96,7 +96,7 @@ public class UsersShownConcertsServiceImpl implements UsersShownConcertsService 
     }
 
     @Override
-    public boolean hasShownConcert(long telegramId, String concertUrl) throws UserNotFoundException{
+    public boolean hasShownConcert(long telegramId, String concertUrl) throws UserNotFoundException, InternalErrorException{
         final Optional<UserEntity> foundUser = usersRepository.findByTelegramId(telegramId);
         if (foundUser.isEmpty()) {
             throw new UserNotFoundException();

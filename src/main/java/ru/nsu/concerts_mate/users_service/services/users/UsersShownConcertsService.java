@@ -15,5 +15,5 @@ public interface UsersShownConcertsService {
 
     List<String> getShownConcerts(long telegramId) throws UserNotFoundException, InternalErrorException;
 
-    boolean hasShownConcert(long telegramId, String concertUrl) throws UserNotFoundException;
+    boolean hasShownConcert(long telegramId, String concertUrl) throws UserNotFoundException, InternalErrorException;
 }

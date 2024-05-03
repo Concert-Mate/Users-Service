@@ -17,7 +17,6 @@ import ru.nsu.concerts_mate.users_service.services.users.UsersService;
 import ru.nsu.concerts_mate.users_service.services.users.UsersShownConcertsService;
 import ru.nsu.concerts_mate.users_service.services.users.UsersTracksListsService;
 import ru.nsu.concerts_mate.users_service.services.users.exceptions.InternalErrorException;
-import ru.nsu.concerts_mate.users_service.services.users.exceptions.UserNotFoundException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -88,7 +87,7 @@ public class ConcertsScheduler {
     private boolean isConcertSend(ConcertDto concert, UserDto user){
         try {
             return shownConcertsService.hasShownConcert(user.getTelegramId(), concert.getAfishaUrl());
-        } catch (UserNotFoundException e) {
+        } catch (Exception e) {
             return false;
         }
     }
@@ -120,7 +119,7 @@ public class ConcertsScheduler {
                 for (ConcertDto concert: concerts){
                     for (UserDto user: entry.getValue()){
                         List<String> userCities = citiesForUsers.get(user.getTelegramId());
-                        if (userCities.contains(concert.getCity()) && isConcertSend(concert, user)){
+                        if (userCities.contains(concert.getCity()) && !isConcertSend(concert, user)){
                             var mapItem = concertsForUsers.computeIfAbsent(user, k -> new ArrayList<>());
                             mapItem.add(concert);
                         }
