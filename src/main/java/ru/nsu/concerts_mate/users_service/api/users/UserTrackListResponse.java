@@ -2,10 +2,12 @@ package ru.nsu.concerts_mate.users_service.api.users;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 import ru.nsu.concerts_mate.users_service.api.ApiResponseStatus;
 import ru.nsu.concerts_mate.users_service.api.ApiResponseStatusCode;
 import ru.nsu.concerts_mate.users_service.model.dto.TrackListHeaderDto;
 
+@Data
 public class UserTrackListResponse {
     private ApiResponseStatus status;
 
