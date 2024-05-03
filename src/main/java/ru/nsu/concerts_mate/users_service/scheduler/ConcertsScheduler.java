@@ -15,7 +15,7 @@ import ru.nsu.concerts_mate.users_service.services.music.exceptions.MusicService
 import ru.nsu.concerts_mate.users_service.services.users.UsersCitiesService;
 import ru.nsu.concerts_mate.users_service.services.users.UsersService;
 import ru.nsu.concerts_mate.users_service.services.users.UsersShownConcertsService;
-import ru.nsu.concerts_mate.users_service.services.users.UsersTracksListsService;
+import ru.nsu.concerts_mate.users_service.services.users.UsersTrackListsService;
 import ru.nsu.concerts_mate.users_service.services.users.exceptions.InternalErrorException;
 
 import java.util.ArrayList;
@@ -28,16 +28,16 @@ import java.util.Map;
 public class ConcertsScheduler {
     private final UsersService usersService;
     private final UsersCitiesService usersCitiesService;
-    private final UsersTracksListsService usersTracksListsService;
+    private final UsersTrackListsService usersTrackListsService;
     private final MusicService musicService;
     private final UsersShownConcertsService shownConcertsService;
     private final BrokerService brokerService;
 
     @Autowired
-    public ConcertsScheduler(UsersService usersService, UsersCitiesService usersCitiesService, UsersTracksListsService usersTracksListsService, MusicService musicService, UsersShownConcertsService shownConcertsService, BrokerService service) {
+    public ConcertsScheduler(UsersService usersService, UsersCitiesService usersCitiesService, UsersTrackListsService usersTrackListsService, MusicService musicService, UsersShownConcertsService shownConcertsService, BrokerService service) {
         this.usersService = usersService;
         this.usersCitiesService = usersCitiesService;
-        this.usersTracksListsService = usersTracksListsService;
+        this.usersTrackListsService = usersTrackListsService;
         this.musicService = musicService;
         this.shownConcertsService = shownConcertsService;
         this.brokerService = service;
@@ -63,7 +63,7 @@ public class ConcertsScheduler {
 
     private void deleteUserPlayListNoExcept(long telegramId, String playListUrl){
         try{
-            usersTracksListsService.deleteUserTracksList(telegramId, playListUrl);
+            usersTrackListsService.deleteUserTrackList(telegramId, playListUrl);
         } catch (Exception ignored) {
             //TODO logging
         }
@@ -110,7 +110,7 @@ public class ConcertsScheduler {
                 continue;
             }
             try {
-                List<String> playLists = usersTracksListsService.getUserTracksLists(user.getTelegramId());
+                List<String> playLists = usersTrackListsService.getUserTrackLists(user.getTelegramId());
                 fillArtistsForUsers(playLists, artistsForUsers, user);
             } catch (Exception ignored) {
                 //TODO logging

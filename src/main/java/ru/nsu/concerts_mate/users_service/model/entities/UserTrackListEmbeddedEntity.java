@@ -10,15 +10,15 @@ import lombok.NoArgsConstructor;
 
 @Embeddable
 @NoArgsConstructor
-@Table(name = "users_tracks_lists", uniqueConstraints = {
-        @UniqueConstraint(name = "users_tracks_lists_pk", columnNames = {"user_id", "url"})
+@Table(name = "users_track_lists", uniqueConstraints = {
+        @UniqueConstraint(name = "users_track_lists_pk", columnNames = {"user_id", "url"})
 })
 @EqualsAndHashCode
 @AllArgsConstructor
-public class UserTracksListEmbeddedEntity {
+public class UserTrackListEmbeddedEntity {
     @Column(name = "user_id", nullable = false)
     private long userId;
 
     @Column(name = "url", nullable = false)
-    private String tracksListUrl;
+    private String trackListUrl;
 }

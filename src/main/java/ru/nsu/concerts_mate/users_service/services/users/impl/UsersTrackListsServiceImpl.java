@@ -2,13 +2,13 @@ package ru.nsu.concerts_mate.users_service.services.users.impl;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import ru.nsu.concerts_mate.users_service.model.dto.UserTracksListDto;
+import ru.nsu.concerts_mate.users_service.model.dto.UserTrackListDto;
 import ru.nsu.concerts_mate.users_service.model.entities.UserEntity;
-import ru.nsu.concerts_mate.users_service.model.entities.UserTracksListEmbeddedEntity;
-import ru.nsu.concerts_mate.users_service.model.entities.UserTracksListEntity;
+import ru.nsu.concerts_mate.users_service.model.entities.UserTrackListEmbeddedEntity;
+import ru.nsu.concerts_mate.users_service.model.entities.UserTrackListEntity;
 import ru.nsu.concerts_mate.users_service.repositories.UsersRepository;
-import ru.nsu.concerts_mate.users_service.repositories.UsersTracksListsRepository;
-import ru.nsu.concerts_mate.users_service.services.users.UsersTracksListsService;
+import ru.nsu.concerts_mate.users_service.repositories.UsersTrackListsRepository;
+import ru.nsu.concerts_mate.users_service.services.users.UsersTrackListsService;
 import ru.nsu.concerts_mate.users_service.services.users.exceptions.InternalErrorException;
 import ru.nsu.concerts_mate.users_service.services.users.exceptions.TracksListAlreadyAddedException;
 import ru.nsu.concerts_mate.users_service.services.users.exceptions.TracksListNotAddedException;
@@ -18,71 +18,71 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UsersTracksListsServiceImpl implements UsersTracksListsService {
+public class UsersTrackListsServiceImpl implements UsersTrackListsService {
     private final UsersRepository usersRepository;
-    private final UsersTracksListsRepository tracksListsRepository;
+    private final UsersTrackListsRepository tracksListsRepository;
     private final ModelMapper modelMapper;
 
-    public UsersTracksListsServiceImpl(UsersRepository usersRepository, UsersTracksListsRepository tracksListsRepository, ModelMapper modelMapper) {
+    public UsersTrackListsServiceImpl(UsersRepository usersRepository, UsersTrackListsRepository tracksListsRepository, ModelMapper modelMapper) {
         this.usersRepository = usersRepository;
         this.tracksListsRepository = tracksListsRepository;
         this.modelMapper = modelMapper;
     }
 
     @Override
-    public UserTracksListDto saveUserTracksList(long telegramId, String tracksListUrl) throws UserNotFoundException, TracksListAlreadyAddedException, InternalErrorException {
+    public UserTrackListDto saveUserTrackList(long telegramId, String tracksListUrl) throws UserNotFoundException, TracksListAlreadyAddedException, InternalErrorException {
         final Optional<UserEntity> foundUser = usersRepository.findByTelegramId(telegramId);
         if (foundUser.isEmpty()) {
             throw new UserNotFoundException();
         }
 
-        final Optional<UserTracksListEntity> testUnique = tracksListsRepository.findById(
-                new UserTracksListEmbeddedEntity(foundUser.get().getId(), tracksListUrl)
+        final Optional<UserTrackListEntity> testUnique = tracksListsRepository.findById(
+                new UserTrackListEmbeddedEntity(foundUser.get().getId(), tracksListUrl)
         );
         if (testUnique.isPresent()) {
             throw new TracksListAlreadyAddedException();
         }
 
-        final UserTracksListEntity userTracksList = new UserTracksListEntity(
+        final UserTrackListEntity userTracksList = new UserTrackListEntity(
                 foundUser.get().getId(),
                 tracksListUrl
         );
-        final UserTracksListEntity savingResult = tracksListsRepository.save(userTracksList);
+        final UserTrackListEntity savingResult = tracksListsRepository.save(userTracksList);
         if (!savingResult.equals(userTracksList)) {
             throw new InternalErrorException();
         }
 
-        return modelMapper.map(savingResult, UserTracksListDto.class);
+        return modelMapper.map(savingResult, UserTrackListDto.class);
     }
 
     @Override
-    public UserTracksListDto deleteUserTracksList(long telegramId, String cityName) throws UserNotFoundException, TracksListNotAddedException {
+    public UserTrackListDto deleteUserTrackList(long telegramId, String cityName) throws UserNotFoundException, TracksListNotAddedException {
         final Optional<UserEntity> foundUser = usersRepository.findByTelegramId(telegramId);
         if (foundUser.isEmpty()) {
             throw new UserNotFoundException();
         }
 
-        final Optional<UserTracksListEntity> testUnique = tracksListsRepository.findById(
-                new UserTracksListEmbeddedEntity(foundUser.get().getId(), cityName)
+        final Optional<UserTrackListEntity> testUnique = tracksListsRepository.findById(
+                new UserTrackListEmbeddedEntity(foundUser.get().getId(), cityName)
         );
         if (testUnique.isEmpty()) {
             throw new TracksListNotAddedException();
         }
 
-        final UserTracksListEntity userTracksList = new UserTracksListEntity(foundUser.get().getId(), cityName);
+        final UserTrackListEntity userTracksList = new UserTrackListEntity(foundUser.get().getId(), cityName);
         tracksListsRepository.delete(userTracksList);
 
-        return modelMapper.map(userTracksList, UserTracksListDto.class);
+        return modelMapper.map(userTracksList, UserTrackListDto.class);
     }
 
     @Override
-    public List<String> getUserTracksLists(long telegramId) throws UserNotFoundException, InternalErrorException {
+    public List<String> getUserTrackLists(long telegramId) throws UserNotFoundException, InternalErrorException {
         final Optional<UserEntity> foundUser = usersRepository.findByTelegramId(telegramId);
         if (foundUser.isEmpty()) {
             throw new UserNotFoundException();
         }
 
-        final var userTracksLists = tracksListsRepository.getUserTracksLists(
+        final var userTracksLists = tracksListsRepository.getUserTrackLists(
                 foundUser.get().getId()
         );
         if (userTracksLists.isEmpty()) {

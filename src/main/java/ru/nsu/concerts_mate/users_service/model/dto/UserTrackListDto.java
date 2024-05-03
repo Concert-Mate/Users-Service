@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
-public class UserTracksListDto {
+public class UserTrackListDto {
     @JsonProperty(value = "user_id")
     private long userId;
 
     @JsonProperty(value = "track_list_url")
-    private String tracksListUrl;
+    private String trackListUrl;
 }

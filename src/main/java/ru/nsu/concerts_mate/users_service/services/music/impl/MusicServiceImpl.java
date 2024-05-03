@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import ru.nsu.concerts_mate.users_service.model.dto.ConcertDto;
-import ru.nsu.concerts_mate.users_service.model.dto.TracksListDto;
+import ru.nsu.concerts_mate.users_service.model.dto.TrackListDto;
 import ru.nsu.concerts_mate.users_service.services.music.MusicService;
 import ru.nsu.concerts_mate.users_service.services.music.exceptions.ArtistNotFoundException;
 import ru.nsu.concerts_mate.users_service.services.music.exceptions.MusicServiceException;
@@ -48,7 +48,7 @@ public class MusicServiceImpl implements MusicService {
         private ResponseStatusDTO status;
 
         @JsonProperty(value = "track_list")
-        private TracksListDto trackList;
+        private TrackListDto trackList;
     }
 
     @Data
@@ -78,7 +78,7 @@ public class MusicServiceImpl implements MusicService {
     }
 
     @Override
-    public TracksListDto getPlayListData(String url) throws InternalErrorException, MusicServiceException {
+    public TrackListDto getPlayListData(String url) throws InternalErrorException, MusicServiceException {
         String serviceUrl = "%s://%s:%d/track-lists?url=%s".formatted(serviceSchema, serviceHost, servicePort, url);
         try {
             ResponseEntity<ResponseMusicServicePlayListDTO> res = restTemplate.getForEntity(serviceUrl, ResponseMusicServicePlayListDTO.class);
