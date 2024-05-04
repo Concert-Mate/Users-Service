@@ -30,7 +30,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 // TODO: add tests of adding invalid cities or invalid track-lists
 
-@TestPropertySource("/application.yaml")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class UserServiceTest {
     private static class TelegramId {
@@ -46,26 +45,14 @@ class UserServiceTest {
     }
 
     private static class City {
-        private static final AtomicLong cityIndex = new AtomicLong();
-
-        public City() {
-            cityIndex.incrementAndGet();
-        }
-
         public String getCity() {
-            return String.format("City-%d", cityIndex.get());
+            return "Москва";
         }
     }
 
     private static class TrackList {
-        private static final AtomicLong trackListIndex = new AtomicLong();
-
-        public TrackList() {
-            trackListIndex.incrementAndGet();
-        }
-
         public String getUrl() {
-            return String.format("URL-%d", trackListIndex.get());
+            return "https://music.yandex.ru/album/24354187";
         }
     }
 
