@@ -66,10 +66,10 @@ public class UsersController implements UsersApi {
     @Override
     public UserCityAddResponse addUserCity(long telegramId, String cityName, Float lat, Float lon) {
         String cityToAdd;
-        if (cityName == null && (lat == null || lon == null)){
+        if (cityName == null && (lat == null || lon == null)) {
             return new UserCityAddResponse(ApiResponseStatusCode.INVALID_COORDS);
         }
-        if (cityName != null){
+        if (cityName != null) {
             try {
                 var res = citiesService.findCity(cityName);
                 if (res.getCode() == CitySearchByNameCode.SUCCESS) {
@@ -84,13 +84,12 @@ public class UsersController implements UsersApi {
             } catch (CitiesServiceException exception) {
                 return new UserCityAddResponse(ApiResponseStatusCode.INTERNAL_ERROR);
             }
-        }
-        else {
+        } else {
             try {
                 CitySearchByCoordsResult res = citiesService.findCity(new CoordsDto(lat, lon));
                 if (res.getCode() == CitySearchByCoordsCode.SUCCESS) {
                     var city = res.getOptions().stream().max(Comparator.comparingInt(CityDto::getPopulation));
-                    if (city.isEmpty()){
+                    if (city.isEmpty()) {
                         return new UserCityAddResponse(ApiResponseStatusCode.INVALID_CITY);
                     }
                     cityToAdd = city.get().getName();
@@ -143,7 +142,7 @@ public class UsersController implements UsersApi {
                     result.add(new TrackListHeaderDto(artistDtoList.getUrl(), artistDtoList.getTitle()));
                 } catch (MusicServiceException e) {
                     usersTrackListsService.deleteUserTrackList(telegramId, trackList);
-                } catch (InternalErrorException ignored){
+                } catch (InternalErrorException ignored) {
                 }
             }
             return new UserTrackListsResponse(result);
@@ -183,7 +182,7 @@ public class UsersController implements UsersApi {
             return new UserTrackListResponse(ApiResponseStatusCode.TRACK_LIST_NOT_ADDED);
         } catch (MusicServiceException ignored) {
             return new UserTrackListResponse();
-        }catch (Exception ignored) {
+        } catch (Exception ignored) {
             return new UserTrackListResponse(ApiResponseStatusCode.INTERNAL_ERROR);
         }
     }
