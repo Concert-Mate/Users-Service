@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class TracksListDto {
+public class TrackListDto {
     private String url;
 
     private String title;

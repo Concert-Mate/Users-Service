@@ -28,17 +28,17 @@ public interface UsersApi {
     );
 
 
-    @GetMapping("/tracks-lists")
-    UserTracksListsResponse getUserTracksLists(@PathVariable long telegramId);
+    @GetMapping("/track-lists")
+    UserTracksListsResponse getUserTrackLists(@PathVariable long telegramId);
 
-    @PostMapping("/tracks-lists")
-    UserTrackListResponse addUserTracksList(
+    @PostMapping("/track-lists")
+    UserTrackListResponse addUserTrackList(
             @PathVariable long telegramId,
             @RequestParam(name = "url") String tracksListURL
     );
 
-    @DeleteMapping("/tracks-lists")
-    UserTrackListResponse deleteUserTracksList(
+    @DeleteMapping("/track-lists")
+    UserTrackListResponse deleteUserTrackList(
             @PathVariable long telegramId,
             @RequestParam(name = "url") String tracksListURL
     );

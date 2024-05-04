@@ -10,14 +10,14 @@ create table if not exists users
 alter table users
     owner to admin;
 
-create table if not exists users_tracks_lists
+create table if not exists users_track_lists
 (
-    user_id integer not null constraint users_tracks_lists_users_id_fk references users on delete cascade,
+    user_id integer not null constraint users_track_lists_users_id_fk references users on delete cascade,
     url     text    not null,
-    constraint users_tracks_lists_pk primary key (user_id, url)
+    constraint users_track_lists_pk primary key (user_id, url)
 );
 
-alter table users_tracks_lists
+alter table users_track_lists
     owner to admin;
 
 create table if not exists users_cities

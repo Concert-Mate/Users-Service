@@ -11,7 +11,7 @@ import ru.nsu.concerts_mate.users_service.services.music.exceptions.MusicService
 import ru.nsu.concerts_mate.users_service.services.users.UsersCitiesService;
 import ru.nsu.concerts_mate.users_service.services.users.UsersService;
 import ru.nsu.concerts_mate.users_service.services.users.UsersShownConcertsService;
-import ru.nsu.concerts_mate.users_service.services.users.UsersTracksListsService;
+import ru.nsu.concerts_mate.users_service.services.users.UsersTrackListsService;
 import ru.nsu.concerts_mate.users_service.services.users.exceptions.*;
 
 import java.util.*;
@@ -20,16 +20,16 @@ import java.util.*;
 public class UsersController implements UsersApi {
     private final UsersService usersService;
     private final UsersCitiesService usersCitiesService;
-    private final UsersTracksListsService usersTracksListsService;
+    private final UsersTrackListsService usersTrackListsService;
     private final MusicService musicService;
     private final UsersShownConcertsService shownConcertsService;
     private final CitiesService citiesService;
 
     @Autowired
-    public UsersController(UsersService usersService, UsersCitiesService usersCitiesService, UsersTracksListsService usersTracksListsService, MusicService musicService, UsersShownConcertsService shownConcertsService, CitiesService citiesService) {
+    public UsersController(UsersService usersService, UsersCitiesService usersCitiesService, UsersTrackListsService usersTrackListsService, MusicService musicService, UsersShownConcertsService shownConcertsService, CitiesService citiesService) {
         this.usersService = usersService;
         this.usersCitiesService = usersCitiesService;
-        this.usersTracksListsService = usersTracksListsService;
+        this.usersTrackListsService = usersTrackListsService;
         this.musicService = musicService;
         this.shownConcertsService = shownConcertsService;
         this.citiesService = citiesService;
@@ -142,17 +142,17 @@ public class UsersController implements UsersApi {
     }
 
     @Override
-    public UserTracksListsResponse getUserTracksLists(long telegramId) {
+    public UserTracksListsResponse getUserTrackLists(long telegramId) {
 
         try {
-            List<String> tracksLists = usersTracksListsService.getUserTracksLists(telegramId);
+            List<String> tracksLists = usersTrackListsService.getUserTrackLists(telegramId);
             List<TrackListHeaderDto> result = new ArrayList<>();
             for (String trackList: tracksLists){
                 try {
-                    TracksListDto artistDtoList = musicService.getPlayListData(trackList);
+                    TrackListDto artistDtoList = musicService.getPlayListData(trackList);
                     result.add(new TrackListHeaderDto(artistDtoList.getUrl(), artistDtoList.getTitle()));
                 } catch (MusicServiceException e) {
-                    usersTracksListsService.deleteUserTracksList(telegramId, trackList);
+                    usersTrackListsService.deleteUserTrackList(telegramId, trackList);
                 } catch (InternalErrorException ignored){
                 }
             }
@@ -165,10 +165,10 @@ public class UsersController implements UsersApi {
     }
 
     @Override
-    public UserTrackListResponse addUserTracksList(long telegramId, String tracksListURL) {
+    public UserTrackListResponse addUserTrackList(long telegramId, String tracksListURL) {
         try {
             var res = musicService.getPlayListData(tracksListURL);
-            usersTracksListsService.saveUserTracksList(telegramId, tracksListURL);
+            usersTrackListsService.saveUserTrackList(telegramId, tracksListURL);
             return new UserTrackListResponse(new TrackListHeaderDto(res.getUrl(), res.getTitle()));
         } catch (UserNotFoundException ignored) {
             return new UserTrackListResponse(ApiResponseStatusCode.USER_NOT_FOUND);
@@ -182,9 +182,9 @@ public class UsersController implements UsersApi {
     }
 
     @Override
-    public UserTrackListResponse deleteUserTracksList(long telegramId, String tracksListURL) {
+    public UserTrackListResponse deleteUserTrackList(long telegramId, String tracksListURL) {
         try {
-            usersTracksListsService.deleteUserTracksList(telegramId, tracksListURL);
+            usersTrackListsService.deleteUserTrackList(telegramId, tracksListURL);
             var playListData = musicService.getPlayListData(tracksListURL);
             return new UserTrackListResponse(new TrackListHeaderDto(playListData.getUrl(), playListData.getTitle()));
         } catch (UserNotFoundException ignored) {
@@ -209,7 +209,7 @@ public class UsersController implements UsersApi {
             if (userCities.isEmpty()) {
                 return new UserConcertsResponse();
             }
-            List<String> userTrackLists = usersTracksListsService.getUserTracksLists(telegramId);
+            List<String> userTrackLists = usersTrackListsService.getUserTrackLists(telegramId);
             if (userTrackLists.isEmpty()) {
                 return new UserConcertsResponse();
             }
@@ -223,7 +223,7 @@ public class UsersController implements UsersApi {
                         userArtists.add(artist.getYandexMusicId());
                     }
                 } catch (MusicServiceException e) {
-                    usersTracksListsService.deleteUserTracksList(telegramId, trackList);
+                    usersTrackListsService.deleteUserTrackList(telegramId, trackList);
                 }
             }
 
