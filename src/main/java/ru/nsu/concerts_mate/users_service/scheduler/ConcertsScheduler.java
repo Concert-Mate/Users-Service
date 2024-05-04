@@ -1,6 +1,6 @@
 package ru.nsu.concerts_mate.users_service.scheduler;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -25,6 +25,7 @@ import java.util.Map;
 
 @Configuration
 @EnableScheduling
+@RequiredArgsConstructor
 public class ConcertsScheduler {
     private final UsersService usersService;
     private final UsersCitiesService usersCitiesService;
@@ -33,21 +34,10 @@ public class ConcertsScheduler {
     private final UsersShownConcertsService shownConcertsService;
     private final BrokerService brokerService;
 
-    @Autowired
-    public ConcertsScheduler(UsersService usersService, UsersCitiesService usersCitiesService, UsersTrackListsService usersTrackListsService, MusicService musicService, UsersShownConcertsService shownConcertsService, BrokerService service) {
-        this.usersService = usersService;
-        this.usersCitiesService = usersCitiesService;
-        this.usersTrackListsService = usersTrackListsService;
-        this.musicService = musicService;
-        this.shownConcertsService = shownConcertsService;
-        this.brokerService = service;
-    }
-
-
-    private void fillArtistsForUsers(List<String> playLists, Map<Integer, List<UserDto>> artistsForUsers, UserDto user){
-        for (String playList: playLists){
+    private void fillArtistsForUsers(List<String> trackLists, Map<Integer, List<UserDto>> artistsForUsers, UserDto user){
+        for (String trackList : trackLists){
             try {
-                List<ArtistDto> artists = musicService.getTrackListData(playList).getArtists();
+                List<ArtistDto> artists = musicService.getTrackListData(trackList).getArtists();
                 for (ArtistDto artist: artists){
                     var mapItem = artistsForUsers.computeIfAbsent(artist.getYandexMusicId(), k -> new ArrayList<>());
                     mapItem.add(user);
@@ -55,11 +45,10 @@ public class ConcertsScheduler {
             } catch (InternalErrorException ignored) {
                 //TODO logging
             } catch (MusicServiceException e) {
-                deleteUserPlayListNoExcept(user.getTelegramId(), playList);
+                deleteUserPlayListNoExcept(user.getTelegramId(), trackList);
             }
         }
     }
-
 
     private void deleteUserPlayListNoExcept(long telegramId, String playListUrl){
         try{
@@ -69,13 +58,13 @@ public class ConcertsScheduler {
         }
     }
 
-
     private void sendConcertToUser(List<ConcertDto> concerts, UserDto user){
         try {
             brokerService.sendEvent(new BrokerEvent(user, concerts));
         } catch (BrokerException ignored) {
             //TODO logging
         }
+
         for (ConcertDto concert: concerts){
             try {
                 shownConcertsService.saveShownConcert(user.getTelegramId(), concert.getAfishaUrl());
@@ -84,7 +73,6 @@ public class ConcertsScheduler {
             }
         }
     }
-
 
     private boolean isConcertSent(ConcertDto concert, UserDto user){
         try {
@@ -95,36 +83,38 @@ public class ConcertsScheduler {
         }
     }
 
-
     @Scheduled(fixedRateString = "${spring.scheduler.fixed_rate}") // 30 min
     public void updateConcerts(){
-        List<UserDto> users = usersService.findAllUsers();
-        Map<Integer, List<UserDto>> artistsForUsers = new HashMap<>();
-        Map<Long, List<String>> citiesForUsers = new HashMap<>();
+        final List<UserDto> users = usersService.findAllUsers();
+        final Map<Integer, List<UserDto>> artistsForUsers = new HashMap<>();
+        final Map<Long, List<String>> citiesForUsers = new HashMap<>();
+
         for (UserDto user: users){
             try {
-                List<String> userCities =  usersCitiesService.getUserCities(user.getTelegramId());
+                final List<String> userCities =  usersCitiesService.getUserCities(user.getTelegramId());
                 citiesForUsers.put(user.getTelegramId(), userCities);
             } catch (Exception ignored) {
                 //TODO logging
                 continue;
             }
             try {
-                List<String> playLists = usersTrackListsService.getUserTrackLists(user.getTelegramId());
-                fillArtistsForUsers(playLists, artistsForUsers, user);
+                final List<String> trackLists = usersTrackListsService.getUserTrackLists(user.getTelegramId());
+                fillArtistsForUsers(trackLists, artistsForUsers, user);
             } catch (Exception ignored) {
                 //TODO logging
             }
         }
-        Map<UserDto, List<ConcertDto>> concertsForUsers = new HashMap<>();
+
+        final Map<UserDto, List<ConcertDto>> concertsForUsers = new HashMap<>();
+
         for (Map.Entry<Integer, List<UserDto>> entry: artistsForUsers.entrySet()){
             try {
-                List<ConcertDto> concerts = musicService.getConcertsByArtistId(entry.getKey());
+                final List<ConcertDto> concerts = musicService.getConcertsByArtistId(entry.getKey());
                 for (ConcertDto concert: concerts){
                     for (UserDto user: entry.getValue()){
-                        List<String> userCities = citiesForUsers.get(user.getTelegramId());
+                        final List<String> userCities = citiesForUsers.get(user.getTelegramId());
                         if (userCities.contains(concert.getCity()) && !isConcertSent(concert, user)){
-                            var mapItem = concertsForUsers.computeIfAbsent(user, k -> new ArrayList<>());
+                            var mapItem = concertsForUsers.computeIfAbsent(user, c -> new ArrayList<>());
                             mapItem.add(concert);
                         }
                     }
@@ -133,9 +123,12 @@ public class ConcertsScheduler {
                 //TODO logging
             }
         }
+
         for (Map.Entry<UserDto, List<ConcertDto>> entry: concertsForUsers.entrySet()){
             sendConcertToUser(entry.getValue(), entry.getKey());
         }
+
+        // TODO: log to file
         System.out.println("scheduling is finished");
     }
 }
