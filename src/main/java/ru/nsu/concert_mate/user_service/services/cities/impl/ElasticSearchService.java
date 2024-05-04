@@ -1,8 +1,8 @@
 package ru.nsu.concert_mate.user_service.services.cities.impl;
 
+import lombok.RequiredArgsConstructor;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.nsu.concert_mate.CitySearchGrpc;
 import ru.nsu.concert_mate.ElasticService;
@@ -13,16 +13,12 @@ import ru.nsu.concert_mate.user_service.services.cities.*;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ElasticSearchService implements CitiesService {
     @GrpcClient("elastic-service")
     private CitySearchGrpc.CitySearchBlockingStub stub;
 
     private final ModelMapper modelMapper;
-
-    @Autowired
-    public ElasticSearchService(ModelMapper modelMapper) {
-        this.modelMapper = modelMapper;
-    }
 
     @Override
     public CitySearchByNameResult findCity(String cityName) throws CitiesServiceException {

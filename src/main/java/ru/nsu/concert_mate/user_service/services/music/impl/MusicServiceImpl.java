@@ -68,8 +68,8 @@ public class MusicServiceImpl implements MusicService {
     @Value("${spring.music-service.port}")
     private int servicePort;
 
-    @Value("${spring.music-service.schema}")
-    private String serviceSchema;
+    @Value("${spring.music-service.scheme}")
+    private String serviceScheme;
 
     private final RestTemplate restTemplate;
 
@@ -81,7 +81,7 @@ public class MusicServiceImpl implements MusicService {
     @Override
     public TrackListDto getTrackListData(String url) throws InternalErrorException, MusicServiceException {
         final String serviceUrl = "%s://%s:%d/track-lists?url=%s".formatted(
-                serviceSchema,
+                serviceScheme,
                 serviceHost,
                 servicePort,
                 url
@@ -110,7 +110,7 @@ public class MusicServiceImpl implements MusicService {
     @Override
     public List<ConcertDto> getConcertsByArtistId(int artistId) throws InternalErrorException, MusicServiceException {
         final String serviceUrl = "%s://%s:%d/concerts?artist_id=%d".formatted(
-                serviceSchema,
+                serviceScheme,
                 serviceHost,
                 servicePort,
                 artistId

@@ -2,18 +2,19 @@ spring:
   application:
     name: 'Users-Service'
   datasource:
-    url: jdbc:postgresql://localhost:5432/${PROJECT_USER_DATABASE_NAME}
-    username: ${PROJECT_USER_NAME}
-    password: ${PROJECT_USER_PASSWORD}
+    url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_USER_DATABASE_NAME}
+    username: ${POSTGRES_USER_NAME}
+    password: ${POSTGRES_USER_PASSWORD}
   rabbitmq:
     username: ${RABBITMQ_DEFAULT_USER}
-    password: ${RABBITMQ_DEFAULT_PASS}
+    password: ${RABBITMQ_DEFAULT_PASSWORD}
+    port:
   music-service:
-    host: ${MUSIC_SERVICE_HOST:localhost}
-    port: ${MUSIC_SERVICE_PORT:8000}
-    schema: ${MUSIC_SERVICE_SCHEMA:http}
+    host: ${MUSIC_SERVICE_HOST}
+    port: ${MUSIC_SERVICE_PORT}
+    scheme: ${MUSIC_SERVICE_SCHEME}
   scheduler:
-    fixed_rate: 1800000
+    fixed_rate: ${SCHEDULER_FIXED_RATE}
 grpc:
   client:
     elastic-service:
