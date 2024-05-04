@@ -1,41 +1,50 @@
-name: Container Health Check
+name: Deploy
 
 on:
   push:
     branches:
       - main
-      - master
-  pull_request:
-    branches:
-      - main
-      - master
 
 jobs:
-  container-health-check:
+  deploy:
     runs-on: ubuntu-latest
-
+    
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: executing remote ssh commands using ssh key
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          debug: true
+          script: |
+            whoami
+            cd ~/User-Service
+            git reset --hard
+            git pull origin main
+             cat << EOF > .env
+            USER_SERVICE_ADDRESS=localhost
+            USER_SERVICE_PORT=${{ SECRETS.USER_SERVICE_PORT }}
 
-      - name: Run health checks
-        run: docker-compose up -d
+            POSTGRES_HOST=${{ secrets.POSTGRES_HOST }}
+            POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}
+            POSTGRES_USER_DATABASE_NAME=${{ secrets.POSTGRES_USER_DATABASE_NAME }}
+            POSTGRES_USER_NAME=${{ secrets.POSTGRES_USER_NAME }}
+            POSTGRES_USER_PASSWORD=${{ secrets.POSTGRES_USER_PASSWORD }}
+            POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
 
-      - name: Run health checks
-        run: |
-          export $(grep -E -v '^#' .env | xargs)
-          echo "Environment variables sourced from .env.ci file."
+            RABBITMQ_DEFAULT_USER=${{ secrets.RABBITMQ_DEFAULT_USER }}
+            RABBITMQ_DEFAULT_PASSWORD=${{ secrets.RABBITMQ_DEFAULT_PASSWORD  }}
 
-          docker-compose up -d
+            MUSIC_SERVICE_HOST=${{ secrets.HOST }}
+            MUSIC_SERVICE_PORT=${{ secrets.MUSIC_SERVICE_PORT }}
+            MUSIC_SERVICE_SCHEME=http
 
-          docker-compose exec -T postgres pg_isready
-          export PGPASSWORD="$PROJECT_USER_PASSWORD"
+            SCHEDULER_FIXED_RATE=${{ secrets.SCHEDULER_FIXED_RATE }}
 
-          echo $PROJECT_USER_NAME
-          echo $PROJECT_USER_DATABASE_NAME
-          echo $PROJECT_USER_PASSWORD
+            ELASTIC_SERVICE_HOST=${{ secrets.HOST }}
+            ELASTIC_SERVICE_PORT=${{ secrets.ELASTIC_SERVICE_PORT }}
 
-          docker-compose exec -T postgres psql -U $PROJECT_USER_NAME -d $PROJECT_USER_DATABASE_NAME -c "SELECT * FROM pg_roles WHERE rolname='$PROJECT_USER_NAME';" | grep -q $PROJECT_USER_NAME || exit 1
-
-      - name: Run health checks
-        run: docker-compose down -v
+            EOF
+            docker compose -f deploy.yml up --build -d --force-recreate

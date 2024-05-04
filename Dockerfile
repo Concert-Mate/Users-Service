@@ -1,13 +1,17 @@
-FROM openjdk:17-jdk-alpine
-
-RUN apk add --no-cache bash
+FROM openjdk:17-jdk-alpine AS build
 
 WORKDIR /app
 
-COPY user-service .
+COPY build.gradle settings.gradle gradlew /app/
+COPY gradle /app/gradle
 
-EXPOSE 8080
+RUN ./gradlew
 
-RUN ./gradlew build
+FROM openjdk:17-jdk-alpine AS runtime
 
-CMD ["java", "-jar", "build/libs/app.jar"]
+WORKDIR /app
+
+# Copy the built JAR file from the build stage
+COPY --from=build .gradlew .gradlew
+
+CMD ./gradlew build && java -jar app.jar
