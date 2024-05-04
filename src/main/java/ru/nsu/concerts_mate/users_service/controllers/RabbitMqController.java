@@ -1,6 +1,6 @@
 package ru.nsu.concerts_mate.users_service.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 import ru.nsu.concerts_mate.users_service.api.rabbitmq.RabbitMqApi;
 import ru.nsu.concerts_mate.users_service.model.dto.ArtistDto;
@@ -16,15 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 public class RabbitMqController implements RabbitMqApi {
     private final BrokerService rabbitMqService;
     private final UsersService usersService;
-
-    @Autowired
-    public RabbitMqController(BrokerService rabbitMqService, UsersService usersService) {
-        this.rabbitMqService = rabbitMqService;
-        this.usersService = usersService;
-    }
 
     @Override
     public String emit() {

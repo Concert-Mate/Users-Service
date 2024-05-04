@@ -1,6 +1,6 @@
 package ru.nsu.concerts_mate.users_service.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 import ru.nsu.concerts_mate.users_service.api.ApiResponseStatusCode;
 import ru.nsu.concerts_mate.users_service.api.users.*;
@@ -17,6 +17,7 @@ import ru.nsu.concerts_mate.users_service.services.users.exceptions.*;
 import java.util.*;
 
 @RestController()
+@RequiredArgsConstructor
 public class UsersController implements UsersApi {
     private final UsersService usersService;
     private final UsersCitiesService usersCitiesService;
@@ -24,16 +25,6 @@ public class UsersController implements UsersApi {
     private final MusicService musicService;
     private final UsersShownConcertsService shownConcertsService;
     private final CitiesService citiesService;
-
-    @Autowired
-    public UsersController(UsersService usersService, UsersCitiesService usersCitiesService, UsersTrackListsService usersTrackListsService, MusicService musicService, UsersShownConcertsService shownConcertsService, CitiesService citiesService) {
-        this.usersService = usersService;
-        this.usersCitiesService = usersCitiesService;
-        this.usersTrackListsService = usersTrackListsService;
-        this.musicService = musicService;
-        this.shownConcertsService = shownConcertsService;
-        this.citiesService = citiesService;
-    }
 
     @Override
     public AddUserApiResponse addUser(long telegramId) {
@@ -143,11 +134,10 @@ public class UsersController implements UsersApi {
 
     @Override
     public UserTrackListsResponse getUserTrackLists(long telegramId) {
-
         try {
-            List<String> tracksLists = usersTrackListsService.getUserTrackLists(telegramId);
-            List<TrackListHeaderDto> result = new ArrayList<>();
-            for (String trackList: tracksLists){
+            final List<String> trackLists = usersTrackListsService.getUserTrackLists(telegramId);
+            final List<TrackListHeaderDto> result = new ArrayList<>();
+            for (String trackList : trackLists) {
                 try {
                     TrackListDto artistDtoList = musicService.getTrackListData(trackList);
                     result.add(new TrackListHeaderDto(artistDtoList.getUrl(), artistDtoList.getTitle()));
@@ -165,10 +155,10 @@ public class UsersController implements UsersApi {
     }
 
     @Override
-    public UserTrackListResponse addUserTrackList(long telegramId, String tracksListURL) {
+    public UserTrackListResponse addUserTrackList(long telegramId, String tracksListUrl) {
         try {
-            var res = musicService.getTrackListData(tracksListURL);
-            usersTrackListsService.saveUserTrackList(telegramId, tracksListURL);
+            final TrackListDto res = musicService.getTrackListData(tracksListUrl);
+            usersTrackListsService.saveUserTrackList(telegramId, tracksListUrl);
             return new UserTrackListResponse(new TrackListHeaderDto(res.getUrl(), res.getTitle()));
         } catch (UserNotFoundException ignored) {
             return new UserTrackListResponse(ApiResponseStatusCode.USER_NOT_FOUND);
@@ -182,11 +172,11 @@ public class UsersController implements UsersApi {
     }
 
     @Override
-    public UserTrackListResponse deleteUserTrackList(long telegramId, String tracksListURL) {
+    public UserTrackListResponse deleteUserTrackList(long telegramId, String tracksListUrl) {
         try {
-            usersTrackListsService.deleteUserTrackList(telegramId, tracksListURL);
-            var playListData = musicService.getTrackListData(tracksListURL);
-            return new UserTrackListResponse(new TrackListHeaderDto(playListData.getUrl(), playListData.getTitle()));
+            usersTrackListsService.deleteUserTrackList(telegramId, tracksListUrl);
+            final TrackListDto trackListData = musicService.getTrackListData(tracksListUrl);
+            return new UserTrackListResponse(new TrackListHeaderDto(trackListData.getUrl(), trackListData.getTitle()));
         } catch (UserNotFoundException ignored) {
             return new UserTrackListResponse(ApiResponseStatusCode.USER_NOT_FOUND);
         } catch (TrackListNotAddedException ignored) {

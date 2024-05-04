@@ -1,6 +1,6 @@
 package ru.nsu.concerts_mate.users_service.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 import ru.nsu.concerts_mate.users_service.api.ApiResponseStatusCode;
 import ru.nsu.concerts_mate.users_service.api.cities.CitiesApi;
@@ -13,13 +13,9 @@ import ru.nsu.concerts_mate.users_service.services.cities.CitySearchByCoordsCode
 import ru.nsu.concerts_mate.users_service.services.cities.CitySearchByCoordsResult;
 
 @RestController
+@RequiredArgsConstructor
 public class CitiesController implements CitiesApi {
     private final CitiesService citiesService;
-
-    @Autowired
-    public CitiesController(CitiesService citiesService) {
-        this.citiesService = citiesService;
-    }
 
     @Override
     public CitiesApiResponse getCities(float lat, float lon) {

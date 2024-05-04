@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-// TODO: add tests for adding invalid cities or invalid track-lists
+// TODO: add tests of adding invalid cities or invalid track-lists
 
 @TestPropertySource("/application.yaml")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
