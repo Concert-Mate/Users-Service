@@ -15,12 +15,12 @@ services:
       - .env
 
   rabbitmq:
-    image: rabbitmq:3.9-management
+    image: rabbitmq:3.13.2
     ports:
       - "5672:5672"
       - "15672:15672"
     volumes:
-      - ./rabbitmq-data:/var/lib/rabbitmq/mnesia
+      - ./rabbitmq-data:/var/lib/rabbitmq
     healthcheck:
       test: ["CMD", "rabbitmqctl", "status"]
       interval: 1ms
