@@ -6,6 +6,7 @@ import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,10 +16,13 @@ public class RabbitMqConfig {
 
     private final Queue queue;
 
+    @Value("${spring.rabbitmq.queue}")
+    private String queueName;
+
     @Autowired
     public RabbitMqConfig(AmqpAdmin amqpAdmin) {
         this.amqpAdmin = amqpAdmin;
-        this.queue = new Queue("new-concerts-queue");
+        this.queue = new Queue(queueName);
     }
 
     @PostConstruct

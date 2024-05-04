@@ -11,7 +11,7 @@ spring:
   rabbitmq:
     username: ${RABBITMQ_DEFAULT_USER}
     password: ${RABBITMQ_DEFAULT_PASSWORD}
-    port:
+    queue: ${RABBITMQ_QUEUE}
   music-service:
     host: ${MUSIC_SERVICE_HOST}
     port: ${MUSIC_SERVICE_PORT}
