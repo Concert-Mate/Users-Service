@@ -1,3 +1,6 @@
+server:
+  address: ${USER_SERVICE_ADDRESS}
+  port: ${USER_SERVICE_PORT}
 spring:
   application:
     name: 'Users-Service'
