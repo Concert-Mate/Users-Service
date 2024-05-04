@@ -44,14 +44,22 @@ class UserServiceTest {
     }
 
     private static class City {
-        public String getCity() {
+        public static String getCity1() {
             return "Москва";
+        }
+
+        public static String getCity2() {
+            return "Новосибирск";
         }
     }
 
     private static class TrackList {
-        public String getUrl() {
+        public static String getUrl1() {
             return "https://music.yandex.ru/album/24354187";
+        }
+
+        public static String getUrl2() {
+            return "https://music.yandex.ru/album/29400784";
         }
     }
 
@@ -72,7 +80,9 @@ class UserServiceTest {
 
     @Test
     void testAddUser() {
-        addUserSuccess(new TelegramId().getId());
+        final long telegramId = new TelegramId().getId();
+        addUserSuccess(telegramId);
+        deleteUserSuccess(telegramId);
     }
 
     @Test
@@ -80,6 +90,7 @@ class UserServiceTest {
         final long telegramId = new TelegramId().getId();
         addUserSuccess(telegramId);
         addUserAlreadyExists(telegramId);
+        deleteUserSuccess(telegramId);
     }
 
     @Test
@@ -106,48 +117,52 @@ class UserServiceTest {
     @Test
     void testAddUserCity() {
         final long telegramId = new TelegramId().getId();
-        final String city = new City().getCity();
+        final String city = City.getCity1();
         addUserSuccess(telegramId);
         addUserCitySuccess(telegramId, city);
+        deleteUserSuccess(telegramId);
     }
 
     @Test
     void testAddUserCityAlreadyAdded() {
         final long telegramId = new TelegramId().getId();
-        final String city = new City().getCity();
+        final String city = City.getCity1();
         addUserSuccess(telegramId);
         addUserCitySuccess(telegramId, city);
         addUserCityUserAlreadyAdded(telegramId, city);
+        deleteUserSuccess(telegramId);
     }
 
     @Test
     void testAddUnknownUserCity() {
         final long telegramId = new TelegramId().getId();
-        final String city = new City().getCity();
+        final String city = City.getCity1();
         addUserCityUserNotFound(telegramId, city);
     }
 
     @Test
     void deleteUserCity() {
         final long telegramId = new TelegramId().getId();
-        final String city = new City().getCity();
+        final String city = City.getCity1();
         addUserSuccess(telegramId);
         addUserCitySuccess(telegramId, city);
         deleteUserCitySuccess(telegramId, city);
+        deleteUserSuccess(telegramId);
     }
 
     @Test
     void deleteUserCityNotAdded() {
         final long telegramId = new TelegramId().getId();
-        final String city = new City().getCity();
+        final String city = City.getCity1();
         addUserSuccess(telegramId);
         deleteUserCityNotAdded(telegramId, city);
+        deleteUserSuccess(telegramId);
     }
 
     @Test
     void deleteUnknownUserCity() {
         final long telegramId = new TelegramId().getId();
-        final String city = new City().getCity();
+        final String city = City.getCity1();
         deleteUserCityUserNotFound(telegramId, city);
     }
 
@@ -156,29 +171,31 @@ class UserServiceTest {
         final long telegramId = new TelegramId().getId();
         addUserSuccess(telegramId);
         getUserCitiesSuccess(telegramId, new ArrayList<>());
+        deleteUserSuccess(telegramId);
     }
 
     @Test
     void testGetOneUserCity() {
         final long telegramId = new TelegramId().getId();
-        final String city = new City().getCity();
+        final String city = City.getCity1();
         addUserSuccess(telegramId);
         addUserCitySuccess(telegramId, city);
         getUserCitiesSuccess(telegramId, List.of(city));
+        deleteUserSuccess(telegramId);
     }
 
     @Test
     void testGetSeveralUserCities() {
         final long telegramId = new TelegramId().getId();
-        final int citiesCount = 10;
-        final List<String> cities = new ArrayList<>(citiesCount);
+        final List<String> cities = List.of(City.getCity1(), City.getCity2());
         addUserSuccess(telegramId);
-        for (int i = 0; i < citiesCount; i++) {
-            final String city = new City().getCity();
-            cities.add(city);
-            addUserCitySuccess(telegramId, city);
+
+        for (final var it : cities) {
+            addUserCitySuccess(telegramId, it);
         }
+
         getUserCitiesSuccess(telegramId, cities);
+        deleteUserSuccess(telegramId);
     }
 
     @Test
@@ -190,59 +207,64 @@ class UserServiceTest {
     @Test
     void testGetAndDeleteUserCity() {
         final long telegramId = new TelegramId().getId();
-        final String city = new City().getCity();
+        final String city = City.getCity1();
         addUserSuccess(telegramId);
         addUserCitySuccess(telegramId, city);
         getUserCitiesSuccess(telegramId, List.of(city));
         deleteUserCitySuccess(telegramId, city);
         getUserCitiesSuccess(telegramId, new ArrayList<>());
+        deleteUserSuccess(telegramId);
     }
 
     @Test
     void testAddUserTrackList() {
         final long telegramId = new TelegramId().getId();
-        final String trackListUrl = new TrackList().getUrl();
+        final String trackListUrl = TrackList.getUrl1();
         addUserSuccess(telegramId);
         addUserTrackList(telegramId, trackListUrl);
+        deleteUserSuccess(telegramId);
     }
 
     @Test
     void testAddUserTrackListAlreadyAdded() {
         final long telegramId = new TelegramId().getId();
-        final String trackListUrl = new TrackList().getUrl();
+        final String trackListUrl = TrackList.getUrl1();
         addUserSuccess(telegramId);
         addUserTrackListSuccess(telegramId, trackListUrl);
         addUserTrackListAlreadyAdded(telegramId, trackListUrl);
+        deleteUserSuccess(telegramId);
     }
 
     @Test
     void testAddUnknownUserTrackList() {
         final long telegramId = new TelegramId().getId();
-        final String trackListUrl = new TrackList().getUrl();
+        final String trackListUrl = TrackList.getUrl1();
         addUserTrackListUserNotFound(telegramId, trackListUrl);
     }
 
     @Test
     void deleteUserTrackList() {
         final long telegramId = new TelegramId().getId();
-        final String trackListUrl = new TrackList().getUrl();
+        final String trackListUrl = TrackList.getUrl1();
         addUserSuccess(telegramId);
         addUserTrackListSuccess(telegramId, trackListUrl);
         deleteUserTrackListSuccess(telegramId, trackListUrl);
+        deleteUserSuccess(telegramId);
     }
 
     @Test
     void deleteUserTrackListNotAdded() {
         final long telegramId = new TelegramId().getId();
-        final String trackListUrl = new TrackList().getUrl();
+        final String trackListUrl = TrackList.getUrl1();
         addUserSuccess(telegramId);
         deleteUserTrackListNotAdded(telegramId, trackListUrl);
+        deleteUserSuccess(telegramId);
     }
 
     @Test
     void deleteUnknownUserTrackList() {
         final long telegramId = new TelegramId().getId();
-        final String trackListUrl = new TrackList().getUrl();
+        final String trackListUrl = TrackList.getUrl1();
         deleteUserTrackListUserNotFound(telegramId, trackListUrl);
     }
 
@@ -251,29 +273,31 @@ class UserServiceTest {
         final long telegramId = new TelegramId().getId();
         addUserSuccess(telegramId);
         getUserTrackListsSuccess(telegramId, new ArrayList<>());
+        deleteUserSuccess(telegramId);
     }
 
     @Test
     void testGetOneUserTrackList() {
         final long telegramId = new TelegramId().getId();
-        final String trackListUrl = new TrackList().getUrl();
+        final String trackListUrl = TrackList.getUrl1();
         addUserSuccess(telegramId);
         addUserTrackListSuccess(telegramId, trackListUrl);
         getUserTrackListsSuccess(telegramId, List.of(trackListUrl));
+        deleteUserSuccess(telegramId);
     }
 
     @Test
     void testGetSeveralUserTrackLists() {
         final long telegramId = new TelegramId().getId();
-        final int trackListsCount = 10;
-        final List<String> urls = new ArrayList<>(trackListsCount);
+        final List<String> urls = List.of(TrackList.getUrl1(), TrackList.getUrl2());
         addUserSuccess(telegramId);
-        for (int i = 0; i < trackListsCount; i++) {
-            final String url = new TrackList().getUrl();
-            urls.add(url);
-            addUserTrackListSuccess(telegramId, url);
+
+        for (final var it : urls) {
+            addUserTrackListSuccess(telegramId, it);
         }
+
         getUserTrackListsSuccess(telegramId, urls);
+        deleteUserSuccess(telegramId);
     }
 
     @Test
@@ -285,12 +309,13 @@ class UserServiceTest {
     @Test
     void testGetAndDeleteUserTrackList() {
         final long telegramId = new TelegramId().getId();
-        final String trackListUrl = new TrackList().getUrl();
+        final String trackListUrl = TrackList.getUrl1();
         addUserSuccess(telegramId);
         addUserTrackList(telegramId, trackListUrl);
         getUserTrackListsSuccess(telegramId, List.of(trackListUrl));
         deleteUserTrackListSuccess(telegramId, trackListUrl);
         getUserTrackListsSuccess(telegramId, new ArrayList<>());
+        deleteUserSuccess(telegramId);
     }
 
     @Test
@@ -298,6 +323,7 @@ class UserServiceTest {
         final long telegramId = new TelegramId().getId();
         addUserSuccess(telegramId);
         getUserConcertsSuccess(telegramId);
+        deleteUserSuccess(telegramId);
     }
 
     @Test
