@@ -5,7 +5,7 @@ plugins {
     id "com.google.protobuf" version "0.9.4"
 }
 
-group = 'ru.nsu.concerts-mate'
+group = 'ru.nsu.concert-mate'
 version = '1.0.0-SNAPSHOT'
 
 java {
