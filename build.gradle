@@ -56,3 +56,11 @@ protobuf {
         }
     }
 }
+
+springBoot {
+    mainClass = "ru.nsu.concert_mate.user_service.UserServiceApplication"
+}
+
+bootJar {
+    archiveFileName.set("app.jar")
+}
