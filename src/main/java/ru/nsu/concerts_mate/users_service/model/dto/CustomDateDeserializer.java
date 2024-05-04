@@ -14,8 +14,7 @@ import java.util.TimeZone;
 import static java.util.Objects.isNull;
 @JsonComponent
 public class CustomDateDeserializer extends JsonDeserializer<Date> {
-    private final SimpleDateFormat formatter
-            = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    private final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm");
 
     @Override
     public Date deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
