@@ -1,6 +1,5 @@
 package ru.nsu.concerts_mate.users_service.model.entities;
 
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Table;

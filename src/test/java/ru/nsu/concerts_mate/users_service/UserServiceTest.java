@@ -13,21 +13,23 @@ import org.springframework.web.client.RestTemplate;
 import ru.nsu.concerts_mate.users_service.api.ApiResponseStatusCode;
 import ru.nsu.concerts_mate.users_service.api.ApiResponseStatus;
 import ru.nsu.concerts_mate.users_service.api.users.*;
+import ru.nsu.concerts_mate.users_service.model.dto.TrackListHeaderDto;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-// TODO: add tests for adding invalid cities or invalid tracks-lists
+// TODO: add tests for adding invalid cities or invalid track-lists
 
 @TestPropertySource("/application.yaml")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class UsersServiceTest {
+class UserServiceTest {
     private static class TelegramId {
         private static final AtomicLong id = new AtomicLong();
 
@@ -52,15 +54,15 @@ class UsersServiceTest {
         }
     }
 
-    private static class TracksList {
-        private static final AtomicLong tracksListIndex = new AtomicLong();
+    private static class TrackList {
+        private static final AtomicLong trackListIndex = new AtomicLong();
 
-        public TracksList() {
-            tracksListIndex.incrementAndGet();
+        public TrackList() {
+            trackListIndex.incrementAndGet();
         }
 
         public String getUrl() {
-            return String.format("URL-%d", tracksListIndex.get());
+            return String.format("URL-%d", trackListIndex.get());
         }
     }
 
@@ -208,98 +210,98 @@ class UsersServiceTest {
     }
 
     @Test
-    void testAddUserTracksList() {
+    void testAddUserTrackList() {
         final long telegramId = new TelegramId().getId();
-        final String tracksListUrl = new TracksList().getUrl();
+        final String trackListUrl = new TrackList().getUrl();
         addUserSuccess(telegramId);
-        addUserTracksList(telegramId, tracksListUrl);
+        addUserTrackList(telegramId, trackListUrl);
     }
 
     @Test
-    void testAddUserTracksListAlreadyAdded() {
+    void testAddUserTrackListAlreadyAdded() {
         final long telegramId = new TelegramId().getId();
-        final String tracksListUrl = new TracksList().getUrl();
+        final String trackListUrl = new TrackList().getUrl();
         addUserSuccess(telegramId);
-        addUserTracksListSuccess(telegramId, tracksListUrl);
-        addUserTracksListAlreadyAdded(telegramId, tracksListUrl);
+        addUserTrackListSuccess(telegramId, trackListUrl);
+        addUserTrackListAlreadyAdded(telegramId, trackListUrl);
     }
 
     @Test
-    void testAddUnknownUserTracksList() {
+    void testAddUnknownUserTrackList() {
         final long telegramId = new TelegramId().getId();
-        final String tracksListUrl = new TracksList().getUrl();
-        addUserTracksListUserNotFound(telegramId, tracksListUrl);
+        final String trackListUrl = new TrackList().getUrl();
+        addUserTrackListUserNotFound(telegramId, trackListUrl);
     }
 
     @Test
-    void deleteUserTracksList() {
+    void deleteUserTrackList() {
         final long telegramId = new TelegramId().getId();
-        final String tracksListUrl = new TracksList().getUrl();
+        final String trackListUrl = new TrackList().getUrl();
         addUserSuccess(telegramId);
-        addUserTracksListSuccess(telegramId, tracksListUrl);
-        deleteUserTracksListSuccess(telegramId, tracksListUrl);
+        addUserTrackListSuccess(telegramId, trackListUrl);
+        deleteUserTrackListSuccess(telegramId, trackListUrl);
     }
 
     @Test
-    void deleteUserTracksListNotAdded() {
+    void deleteUserTrackListNotAdded() {
         final long telegramId = new TelegramId().getId();
-        final String tracksListUrl = new TracksList().getUrl();
+        final String trackListUrl = new TrackList().getUrl();
         addUserSuccess(telegramId);
-        deleteUserTracksListNotAdded(telegramId, tracksListUrl);
+        deleteUserTrackListNotAdded(telegramId, trackListUrl);
     }
 
     @Test
-    void deleteUnknownUserTracksList() {
+    void deleteUnknownUserTrackList() {
         final long telegramId = new TelegramId().getId();
-        final String tracksListUrl = new TracksList().getUrl();
-        deleteUserTracksListUserNotFound(telegramId, tracksListUrl);
+        final String trackListUrl = new TrackList().getUrl();
+        deleteUserTrackListUserNotFound(telegramId, trackListUrl);
     }
 
     @Test
-    void testGetZeroUserTracksLists() {
+    void testGetZeroUserTrackLists() {
         final long telegramId = new TelegramId().getId();
         addUserSuccess(telegramId);
-        getUserTracksListsSuccess(telegramId, new ArrayList<>());
+        getUserTrackListsSuccess(telegramId, new ArrayList<>());
     }
 
     @Test
-    void testGetOneUserTracksList() {
+    void testGetOneUserTrackList() {
         final long telegramId = new TelegramId().getId();
-        final String tracksListUrl = new TracksList().getUrl();
+        final String trackListUrl = new TrackList().getUrl();
         addUserSuccess(telegramId);
-        addUserTracksListSuccess(telegramId, tracksListUrl);
-        getUserTracksListsSuccess(telegramId, List.of(tracksListUrl));
+        addUserTrackListSuccess(telegramId, trackListUrl);
+        getUserTrackListsSuccess(telegramId, List.of(trackListUrl));
     }
 
     @Test
-    void testGetSeveralUserTracksLists() {
+    void testGetSeveralUserTrackLists() {
         final long telegramId = new TelegramId().getId();
-        final int tracksListsCount = 10;
-        final List<String> urls = new ArrayList<>(tracksListsCount);
+        final int trackListsCount = 10;
+        final List<String> urls = new ArrayList<>(trackListsCount);
         addUserSuccess(telegramId);
-        for (int i = 0; i < tracksListsCount; i++) {
-            final String url = new TracksList().getUrl();
+        for (int i = 0; i < trackListsCount; i++) {
+            final String url = new TrackList().getUrl();
             urls.add(url);
-            addUserTracksListSuccess(telegramId, url);
+            addUserTrackListSuccess(telegramId, url);
         }
-        getUserTracksListsSuccess(telegramId, urls);
+        getUserTrackListsSuccess(telegramId, urls);
     }
 
     @Test
-    void testGetUnknownUserTracksLists() {
+    void testGetUnknownUserTrackLists() {
         final long telegramId = new TelegramId().getId();
-        getUserTracksListsUserNotFound(telegramId);
+        getUserTrackListsUserNotFound(telegramId);
     }
 
     @Test
-    void testGetAndDeleteUserTracksList() {
+    void testGetAndDeleteUserTrackList() {
         final long telegramId = new TelegramId().getId();
-        final String tracksListUrl = new TracksList().getUrl();
+        final String trackListUrl = new TrackList().getUrl();
         addUserSuccess(telegramId);
-        addUserTracksList(telegramId, tracksListUrl);
-        getUserTracksListsSuccess(telegramId, List.of(tracksListUrl));
-        deleteUserTracksListSuccess(telegramId, tracksListUrl);
-        getUserTracksListsSuccess(telegramId, new ArrayList<>());
+        addUserTrackList(telegramId, trackListUrl);
+        getUserTrackListsSuccess(telegramId, List.of(trackListUrl));
+        deleteUserTrackListSuccess(telegramId, trackListUrl);
+        getUserTrackListsSuccess(telegramId, new ArrayList<>());
     }
 
     @Test
@@ -372,44 +374,45 @@ class UsersServiceTest {
         matchResponseStatus(response.getStatus(), ApiResponseStatusCode.USER_NOT_FOUND);
     }
 
-    void addUserTracksListSuccess(long telegramId, String url) {
-        addUserTracksListWithCode(telegramId, url, ApiResponseStatusCode.SUCCESS);
+    void addUserTrackListSuccess(long telegramId, String url) {
+        addUserTrackListWithCode(telegramId, url, ApiResponseStatusCode.SUCCESS);
     }
 
-    void addUserTracksListUserNotFound(long telegramId, String url) {
-        addUserTracksListWithCode(telegramId, url, ApiResponseStatusCode.USER_NOT_FOUND);
+    void addUserTrackListUserNotFound(long telegramId, String url) {
+        addUserTrackListWithCode(telegramId, url, ApiResponseStatusCode.USER_NOT_FOUND);
     }
 
-    void addUserTracksListAlreadyAdded(long telegramId, String url) {
-        addUserTracksListWithCode(telegramId, url, ApiResponseStatusCode.TRACKS_LIST_ALREADY_ADDED);
+    void addUserTrackListAlreadyAdded(long telegramId, String url) {
+        addUserTrackListWithCode(telegramId, url, ApiResponseStatusCode.TRACK_LIST_ALREADY_ADDED);
     }
 
-    void deleteUserTracksListSuccess(long telegramId, String url) {
-        deleteUserTracksListWithCode(telegramId, url, ApiResponseStatusCode.SUCCESS);
+    void deleteUserTrackListSuccess(long telegramId, String url) {
+        deleteUserTrackListWithCode(telegramId, url, ApiResponseStatusCode.SUCCESS);
     }
 
-    void deleteUserTracksListUserNotFound(long telegramId, String url) {
-        deleteUserTracksListWithCode(telegramId, url, ApiResponseStatusCode.USER_NOT_FOUND);
+    void deleteUserTrackListUserNotFound(long telegramId, String url) {
+        deleteUserTrackListWithCode(telegramId, url, ApiResponseStatusCode.USER_NOT_FOUND);
     }
 
-    void deleteUserTracksListNotAdded(long telegramId, String url) {
-        deleteUserTracksListWithCode(telegramId, url, ApiResponseStatusCode.TRACKS_LIST_NOT_ADDED);
+    void deleteUserTrackListNotAdded(long telegramId, String url) {
+        deleteUserTrackListWithCode(telegramId, url, ApiResponseStatusCode.TRACK_LIST_NOT_ADDED);
     }
 
-    void getUserTracksListsSuccess(long telegramId, List<String> expectedTracksLists) {
-        final UserTracksListsResponse response = getUserTracksListsAndValidate(telegramId);
+    void getUserTrackListsSuccess(long telegramId, List<String> expectedTrackLists) {
+        final UserTrackListsResponse response = getUserTrackListsAndValidate(telegramId);
         matchResponseStatus(response.getStatus(), ApiResponseStatusCode.SUCCESS);
-        final List<String> realTracksLists = response.getTracksLists();
-        final Set<String> expectedTracksListsSet = new HashSet<>(expectedTracksLists);
-        final Set<String> realTracksListsSet = new HashSet<>(realTracksLists);
-        assertEquals(expectedTracksListsSet, realTracksListsSet);
+        final List<TrackListHeaderDto> realTrackLists = response.getTrackLists();
+        final Set<String> expectedTrackListsSet = new HashSet<>(expectedTrackLists);
+        final Set<String> realTrackListsSet = realTrackLists.stream().map(TrackListHeaderDto::getUrl).collect(Collectors.toSet());
 
-        // Check that response doesn't contain tracks-lists duplicates
-        assertEquals(realTracksListsSet.size(), realTracksLists.size());
+        assertEquals(expectedTrackListsSet, realTrackListsSet);
+
+        // Check that response doesn't contain track-lists duplicates
+        assertEquals(realTrackListsSet.size(), realTrackLists.size());
     }
 
-    void getUserTracksListsUserNotFound(long telegramId) {
-        final UserTracksListsResponse response = getUserTracksListsAndValidate(telegramId);
+    void getUserTrackListsUserNotFound(long telegramId) {
+        final UserTrackListsResponse response = getUserTrackListsAndValidate(telegramId);
         matchResponseStatus(response.getStatus(), ApiResponseStatusCode.USER_NOT_FOUND);
     }
 
@@ -433,13 +436,13 @@ class UsersServiceTest {
         return response;
     }
 
-    UserTracksListsResponse getUserTracksListsAndValidate(long telegramId) {
-        final ResponseEntity<UserTracksListsResponse> responseEntity = getUserTracksLists(telegramId);
-        final UserTracksListsResponse response = responseEntity.getBody();
+    UserTrackListsResponse getUserTrackListsAndValidate(long telegramId) {
+        final ResponseEntity<UserTrackListsResponse> responseEntity = getUserTrackLists(telegramId);
+        final UserTrackListsResponse response = responseEntity.getBody();
         assertNotNull(response);
         final ApiResponseStatus status = response.getStatus();
         assertNotNull(status);
-        assertNotNull(response.getTracksLists());
+        assertNotNull(response.getTrackLists());
         return response;
     }
 
@@ -473,13 +476,13 @@ class UsersServiceTest {
         matchResponseStatus(response.getStatus(), code);
     }
 
-    void addUserTracksListWithCode(long telegramId, String url, ApiResponseStatusCode code) {
-        final DefaultUsersApiResponse response = validateResponseEntity(addUserTracksList(telegramId, url));
+    void addUserTrackListWithCode(long telegramId, String url, ApiResponseStatusCode code) {
+        final DefaultUsersApiResponse response = validateResponseEntity(addUserTrackList(telegramId, url));
         matchResponseStatus(response.getStatus(), code);
     }
 
-    void deleteUserTracksListWithCode(long telegramId, String url, ApiResponseStatusCode code) {
-        final DefaultUsersApiResponse response = validateResponseEntity(deleteUserTracksList(telegramId, url));
+    void deleteUserTrackListWithCode(long telegramId, String url, ApiResponseStatusCode code) {
+        final DefaultUsersApiResponse response = validateResponseEntity(deleteUserTrackList(telegramId, url));
         matchResponseStatus(response.getStatus(), code);
     }
 
@@ -532,24 +535,24 @@ class UsersServiceTest {
         );
     }
 
-    ResponseEntity<DefaultUsersApiResponse> addUserTracksList(long telegramId, String tracksListUrl) {
+    ResponseEntity<DefaultUsersApiResponse> addUserTrackList(long telegramId, String trackListUrl) {
         return post(
-                getUserTracksListUrl(telegramId, tracksListUrl),
+                getUserTrackListUrl(telegramId, trackListUrl),
                 DefaultUsersApiResponse.class
         );
     }
 
-    ResponseEntity<DefaultUsersApiResponse> deleteUserTracksList(long telegramId, String tracksListUrl) {
+    ResponseEntity<DefaultUsersApiResponse> deleteUserTrackList(long telegramId, String trackListUrl) {
         return delete(
-                getUserTracksListUrl(telegramId, tracksListUrl),
+                getUserTrackListUrl(telegramId, trackListUrl),
                 DefaultUsersApiResponse.class
         );
     }
 
-    ResponseEntity<UserTracksListsResponse> getUserTracksLists(long telegramId) {
+    ResponseEntity<UserTrackListsResponse> getUserTrackLists(long telegramId) {
         return get(
-                getUserTracksListsUrl(telegramId),
-                UserTracksListsResponse.class
+                getUserTrackListsUrl(telegramId),
+                UserTrackListsResponse.class
         );
     }
 
@@ -596,12 +599,12 @@ class UsersServiceTest {
         return getUserCitiesUrl(telegramId) + String.format("?city=%s", cityName);
     }
 
-    private String getUserTracksListsUrl(long telegramId) {
-        return getUserUrl(telegramId) + "/tracks-lists";
+    private String getUserTrackListsUrl(long telegramId) {
+        return getUserUrl(telegramId) + "/track-lists";
     }
 
-    private String getUserTracksListUrl(long telegramId, String url) {
-        return getUserTracksListsUrl(telegramId) + String.format("?url=%s", url);
+    private String getUserTrackListUrl(long telegramId, String url) {
+        return getUserTrackListsUrl(telegramId) + String.format("?url=%s", url);
     }
 
     private String getUserConcertsUrl(long telegramId) {

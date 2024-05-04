@@ -4,8 +4,6 @@ import lombok.Data;
 import ru.nsu.concerts_mate.users_service.api.ApiResponseStatus;
 import ru.nsu.concerts_mate.users_service.api.ApiResponseStatusCode;
 
-
-
 @Data
 public class UserCityAddResponse {
     private ApiResponseStatus status;

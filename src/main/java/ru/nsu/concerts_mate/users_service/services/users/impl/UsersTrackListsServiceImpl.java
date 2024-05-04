@@ -1,5 +1,6 @@
 package ru.nsu.concerts_mate.users_service.services.users.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import ru.nsu.concerts_mate.users_service.model.dto.UserTrackListDto;
@@ -10,45 +11,40 @@ import ru.nsu.concerts_mate.users_service.repositories.UsersRepository;
 import ru.nsu.concerts_mate.users_service.repositories.UsersTrackListsRepository;
 import ru.nsu.concerts_mate.users_service.services.users.UsersTrackListsService;
 import ru.nsu.concerts_mate.users_service.services.users.exceptions.InternalErrorException;
-import ru.nsu.concerts_mate.users_service.services.users.exceptions.TracksListAlreadyAddedException;
-import ru.nsu.concerts_mate.users_service.services.users.exceptions.TracksListNotAddedException;
+import ru.nsu.concerts_mate.users_service.services.users.exceptions.TrackListAlreadyAddedException;
+import ru.nsu.concerts_mate.users_service.services.users.exceptions.TrackListNotAddedException;
 import ru.nsu.concerts_mate.users_service.services.users.exceptions.UserNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UsersTrackListsServiceImpl implements UsersTrackListsService {
     private final UsersRepository usersRepository;
-    private final UsersTrackListsRepository tracksListsRepository;
+    private final UsersTrackListsRepository trackListsRepository;
     private final ModelMapper modelMapper;
 
-    public UsersTrackListsServiceImpl(UsersRepository usersRepository, UsersTrackListsRepository tracksListsRepository, ModelMapper modelMapper) {
-        this.usersRepository = usersRepository;
-        this.tracksListsRepository = tracksListsRepository;
-        this.modelMapper = modelMapper;
-    }
-
     @Override
-    public UserTrackListDto saveUserTrackList(long telegramId, String tracksListUrl) throws UserNotFoundException, TracksListAlreadyAddedException, InternalErrorException {
+    public UserTrackListDto saveUserTrackList(long telegramId, String trackListUrl) throws UserNotFoundException, TrackListAlreadyAddedException, InternalErrorException {
         final Optional<UserEntity> foundUser = usersRepository.findByTelegramId(telegramId);
         if (foundUser.isEmpty()) {
             throw new UserNotFoundException();
         }
 
-        final Optional<UserTrackListEntity> testUnique = tracksListsRepository.findById(
-                new UserTrackListEmbeddedEntity(foundUser.get().getId(), tracksListUrl)
+        final Optional<UserTrackListEntity> testUnique = trackListsRepository.findById(
+                new UserTrackListEmbeddedEntity(foundUser.get().getId(), trackListUrl)
         );
         if (testUnique.isPresent()) {
-            throw new TracksListAlreadyAddedException();
+            throw new TrackListAlreadyAddedException();
         }
 
-        final UserTrackListEntity userTracksList = new UserTrackListEntity(
+        final UserTrackListEntity userTrackList = new UserTrackListEntity(
                 foundUser.get().getId(),
-                tracksListUrl
+                trackListUrl
         );
-        final UserTrackListEntity savingResult = tracksListsRepository.save(userTracksList);
-        if (!savingResult.equals(userTracksList)) {
+        final UserTrackListEntity savingResult = trackListsRepository.save(userTrackList);
+        if (!savingResult.equals(userTrackList)) {
             throw new InternalErrorException();
         }
 
@@ -56,23 +52,23 @@ public class UsersTrackListsServiceImpl implements UsersTrackListsService {
     }
 
     @Override
-    public UserTrackListDto deleteUserTrackList(long telegramId, String cityName) throws UserNotFoundException, TracksListNotAddedException {
+    public UserTrackListDto deleteUserTrackList(long telegramId, String cityName) throws UserNotFoundException, TrackListNotAddedException {
         final Optional<UserEntity> foundUser = usersRepository.findByTelegramId(telegramId);
         if (foundUser.isEmpty()) {
             throw new UserNotFoundException();
         }
 
-        final Optional<UserTrackListEntity> testUnique = tracksListsRepository.findById(
+        final Optional<UserTrackListEntity> testUnique = trackListsRepository.findById(
                 new UserTrackListEmbeddedEntity(foundUser.get().getId(), cityName)
         );
         if (testUnique.isEmpty()) {
-            throw new TracksListNotAddedException();
+            throw new TrackListNotAddedException();
         }
 
-        final UserTrackListEntity userTracksList = new UserTrackListEntity(foundUser.get().getId(), cityName);
-        tracksListsRepository.delete(userTracksList);
+        final UserTrackListEntity userTrackList = new UserTrackListEntity(foundUser.get().getId(), cityName);
+        trackListsRepository.delete(userTrackList);
 
-        return modelMapper.map(userTracksList, UserTrackListDto.class);
+        return modelMapper.map(userTrackList, UserTrackListDto.class);
     }
 
     @Override
@@ -82,13 +78,13 @@ public class UsersTrackListsServiceImpl implements UsersTrackListsService {
             throw new UserNotFoundException();
         }
 
-        final var userTracksLists = tracksListsRepository.getUserTrackLists(
+        final var userTrackLists = trackListsRepository.getUserTrackLists(
                 foundUser.get().getId()
         );
-        if (userTracksLists.isEmpty()) {
+        if (userTrackLists.isEmpty()) {
             throw new InternalErrorException();
         }
 
-        return userTracksLists.get();
+        return userTrackLists.get();
     }
 }

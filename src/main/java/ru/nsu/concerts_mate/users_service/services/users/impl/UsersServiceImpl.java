@@ -1,7 +1,7 @@
 package ru.nsu.concerts_mate.users_service.services.users.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.nsu.concerts_mate.users_service.model.dto.UserDto;
 import ru.nsu.concerts_mate.users_service.model.entities.UserEntity;
@@ -14,15 +14,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UsersServiceImpl implements UsersService {
     private final UsersRepository usersRepository;
     private final ModelMapper modelMapper;
-
-    @Autowired
-    public UsersServiceImpl(UsersRepository usersRepository, ModelMapper modelMapper) {
-        this.usersRepository = usersRepository;
-        this.modelMapper = modelMapper;
-    }
 
     @Override
     public UserDto addUser(long telegramId) {

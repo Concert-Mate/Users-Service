@@ -8,9 +8,7 @@ import ru.nsu.concerts_mate.users_service.services.users.exceptions.InternalErro
 import java.util.List;
 
 public interface MusicService {
-
-    TrackListDto getPlayListData(String url) throws InternalErrorException, MusicServiceException;
+    TrackListDto getTrackListData(String url) throws InternalErrorException, MusicServiceException;
 
     List<ConcertDto> getConcertsByArtistId(int artistId) throws InternalErrorException, MusicServiceException;
-
 }

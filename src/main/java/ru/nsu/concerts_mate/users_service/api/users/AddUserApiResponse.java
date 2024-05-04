@@ -5,7 +5,6 @@ import ru.nsu.concerts_mate.users_service.api.ApiResponseStatus;
 import ru.nsu.concerts_mate.users_service.api.ApiResponseStatusCode;
 import ru.nsu.concerts_mate.users_service.model.dto.UserDto;
 
-
 @Data
 public class AddUserApiResponse {
     private ApiResponseStatus status;

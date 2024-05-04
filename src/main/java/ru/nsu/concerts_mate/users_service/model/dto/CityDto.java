@@ -7,8 +7,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CityDto {
     private CoordsDto coords;
+
     private String district;
+
     private String name;
+
     private int population;
+
     private String subject;
 }

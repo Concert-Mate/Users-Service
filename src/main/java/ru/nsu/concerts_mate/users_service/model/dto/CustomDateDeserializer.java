@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import static java.util.Objects.isNull;
+
 @JsonComponent
 public class CustomDateDeserializer extends JsonDeserializer<Date> {
     private final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm");

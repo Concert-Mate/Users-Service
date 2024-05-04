@@ -47,7 +47,7 @@ public class ConcertsScheduler {
     private void fillArtistsForUsers(List<String> playLists, Map<Integer, List<UserDto>> artistsForUsers, UserDto user){
         for (String playList: playLists){
             try {
-                List<ArtistDto> artists = musicService.getPlayListData(playList).getArtists();
+                List<ArtistDto> artists = musicService.getTrackListData(playList).getArtists();
                 for (ArtistDto artist: artists){
                     var mapItem = artistsForUsers.computeIfAbsent(artist.getYandexMusicId(), k -> new ArrayList<>());
                     mapItem.add(user);

@@ -1,6 +1,5 @@
 package ru.nsu.concerts_mate.users_service.api.users;
 
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import ru.nsu.concerts_mate.users_service.api.ApiResponseStatus;
@@ -12,7 +11,7 @@ public class UserTrackListResponse {
     private ApiResponseStatus status;
 
     @JsonProperty(value = "tracks_list")
-    private TrackListHeaderDto tracksList;
+    private TrackListHeaderDto trackList;
 
     public UserTrackListResponse() {
         this(ApiResponseStatusCode.SUCCESS, null);
@@ -22,12 +21,12 @@ public class UserTrackListResponse {
         this(code, null);
     }
 
-    public UserTrackListResponse(TrackListHeaderDto tracksList) {
-        this(ApiResponseStatusCode.SUCCESS, tracksList);
+    public UserTrackListResponse(TrackListHeaderDto trackList) {
+        this(ApiResponseStatusCode.SUCCESS, trackList);
     }
 
-    public UserTrackListResponse(ApiResponseStatusCode code, TrackListHeaderDto tracksList) {
+    public UserTrackListResponse(ApiResponseStatusCode code, TrackListHeaderDto trackList) {
         this.status = new ApiResponseStatus(code);
-        this.tracksList = tracksList;
+        this.trackList = trackList;
     }
 }

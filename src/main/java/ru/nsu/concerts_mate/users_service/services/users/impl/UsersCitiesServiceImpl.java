@@ -1,5 +1,6 @@
 package ru.nsu.concerts_mate.users_service.services.users.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import ru.nsu.concerts_mate.users_service.model.dto.UserCityDto;
@@ -18,16 +19,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UsersCitiesServiceImpl implements UsersCitiesService {
     private final UsersRepository usersRepository;
     private final UsersCitiesRepository usersCitiesRepository;
     private final ModelMapper modelMapper;
-
-    public UsersCitiesServiceImpl(UsersRepository usersRepository, UsersCitiesRepository usersCitiesRepository, ModelMapper modelMapper) {
-        this.usersRepository = usersRepository;
-        this.usersCitiesRepository = usersCitiesRepository;
-        this.modelMapper = modelMapper;
-    }
 
     @Override
     public UserCityDto saveUserCity(long telegramId, String cityName) throws UserNotFoundException, CityAlreadyAddedException, InternalErrorException {

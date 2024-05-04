@@ -4,7 +4,7 @@ RUN apk add --no-cache bash
 
 WORKDIR /app
 
-COPY users-service .
+COPY user-service .
 
 EXPOSE 8080
 

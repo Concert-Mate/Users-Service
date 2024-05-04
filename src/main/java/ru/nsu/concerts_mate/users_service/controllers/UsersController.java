@@ -142,40 +142,40 @@ public class UsersController implements UsersApi {
     }
 
     @Override
-    public UserTracksListsResponse getUserTrackLists(long telegramId) {
+    public UserTrackListsResponse getUserTrackLists(long telegramId) {
 
         try {
             List<String> tracksLists = usersTrackListsService.getUserTrackLists(telegramId);
             List<TrackListHeaderDto> result = new ArrayList<>();
             for (String trackList: tracksLists){
                 try {
-                    TrackListDto artistDtoList = musicService.getPlayListData(trackList);
+                    TrackListDto artistDtoList = musicService.getTrackListData(trackList);
                     result.add(new TrackListHeaderDto(artistDtoList.getUrl(), artistDtoList.getTitle()));
                 } catch (MusicServiceException e) {
                     usersTrackListsService.deleteUserTrackList(telegramId, trackList);
                 } catch (InternalErrorException ignored){
                 }
             }
-            return new UserTracksListsResponse(result);
+            return new UserTrackListsResponse(result);
         } catch (UserNotFoundException ignored) {
-            return new UserTracksListsResponse(ApiResponseStatusCode.USER_NOT_FOUND);
+            return new UserTrackListsResponse(ApiResponseStatusCode.USER_NOT_FOUND);
         } catch (Exception ignored) {
-            return new UserTracksListsResponse(ApiResponseStatusCode.INTERNAL_ERROR);
+            return new UserTrackListsResponse(ApiResponseStatusCode.INTERNAL_ERROR);
         }
     }
 
     @Override
     public UserTrackListResponse addUserTrackList(long telegramId, String tracksListURL) {
         try {
-            var res = musicService.getPlayListData(tracksListURL);
+            var res = musicService.getTrackListData(tracksListURL);
             usersTrackListsService.saveUserTrackList(telegramId, tracksListURL);
             return new UserTrackListResponse(new TrackListHeaderDto(res.getUrl(), res.getTitle()));
         } catch (UserNotFoundException ignored) {
             return new UserTrackListResponse(ApiResponseStatusCode.USER_NOT_FOUND);
-        } catch (TracksListAlreadyAddedException ignored) {
-            return new UserTrackListResponse(ApiResponseStatusCode.TRACKS_LIST_ALREADY_ADDED);
+        } catch (TrackListAlreadyAddedException ignored) {
+            return new UserTrackListResponse(ApiResponseStatusCode.TRACK_LIST_ALREADY_ADDED);
         } catch (MusicServiceException ignored) {
-            return new UserTrackListResponse(ApiResponseStatusCode.INVALID_TRACKS_LIST);
+            return new UserTrackListResponse(ApiResponseStatusCode.INVALID_TRACK_LIST);
         } catch (Exception ignored) {
             return new UserTrackListResponse(ApiResponseStatusCode.INTERNAL_ERROR);
         }
@@ -185,12 +185,12 @@ public class UsersController implements UsersApi {
     public UserTrackListResponse deleteUserTrackList(long telegramId, String tracksListURL) {
         try {
             usersTrackListsService.deleteUserTrackList(telegramId, tracksListURL);
-            var playListData = musicService.getPlayListData(tracksListURL);
+            var playListData = musicService.getTrackListData(tracksListURL);
             return new UserTrackListResponse(new TrackListHeaderDto(playListData.getUrl(), playListData.getTitle()));
         } catch (UserNotFoundException ignored) {
             return new UserTrackListResponse(ApiResponseStatusCode.USER_NOT_FOUND);
-        } catch (TracksListNotAddedException ignored) {
-            return new UserTrackListResponse(ApiResponseStatusCode.TRACKS_LIST_NOT_ADDED);
+        } catch (TrackListNotAddedException ignored) {
+            return new UserTrackListResponse(ApiResponseStatusCode.TRACK_LIST_NOT_ADDED);
         } catch (MusicServiceException ignored) {
             return new UserTrackListResponse();
         }catch (Exception ignored) {
@@ -218,7 +218,7 @@ public class UsersController implements UsersApi {
 
             for (String trackList : userTrackLists) {
                 try {
-                    List<ArtistDto> artistDtoList = musicService.getPlayListData(trackList).getArtists();
+                    List<ArtistDto> artistDtoList = musicService.getTrackListData(trackList).getArtists();
                     for (ArtistDto artist : artistDtoList) {
                         userArtists.add(artist.getYandexMusicId());
                     }

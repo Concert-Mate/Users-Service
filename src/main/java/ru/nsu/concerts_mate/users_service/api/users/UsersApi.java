@@ -29,7 +29,7 @@ public interface UsersApi {
 
 
     @GetMapping("/track-lists")
-    UserTracksListsResponse getUserTrackLists(@PathVariable long telegramId);
+    UserTrackListsResponse getUserTrackLists(@PathVariable long telegramId);
 
     @PostMapping("/track-lists")
     UserTrackListResponse addUserTrackList(

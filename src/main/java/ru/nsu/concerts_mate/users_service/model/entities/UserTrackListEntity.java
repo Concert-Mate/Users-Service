@@ -13,9 +13,9 @@ import lombok.NoArgsConstructor;
 public class UserTrackListEntity {
     @EmbeddedId
     @Column(unique = true)
-    private UserTrackListEmbeddedEntity userTracksList;
+    private UserTrackListEmbeddedEntity userTrackList;
 
     public UserTrackListEntity(long userId, String tracksListUrl) {
-        userTracksList = new UserTrackListEmbeddedEntity(userId, tracksListUrl);
+        userTrackList = new UserTrackListEmbeddedEntity(userId, tracksListUrl);
     }
 }

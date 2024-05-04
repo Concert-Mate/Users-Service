@@ -1,7 +1,7 @@
 package ru.nsu.concerts_mate.users_service.services.users.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.nsu.concerts_mate.users_service.model.dto.ShownConcertDto;
 import ru.nsu.concerts_mate.users_service.model.entities.ShownConcertEmbeddedEntity;
@@ -19,18 +19,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UsersShownConcertsServiceImpl implements UsersShownConcertsService {
     private final UsersRepository usersRepository;
     private final ShownConcertsRepository shownConcertsRepository;
     private final ModelMapper modelMapper;
-
-    @Autowired
-    public UsersShownConcertsServiceImpl(UsersRepository usersRepository, ShownConcertsRepository shownConcertsRepository, ModelMapper modelMapper) {
-        this.usersRepository = usersRepository;
-        this.shownConcertsRepository = shownConcertsRepository;
-        this.modelMapper = modelMapper;
-    }
-
 
     @Override
     public ShownConcertDto saveShownConcert(long telegramId, String concertUrl) throws UserNotFoundException, ShownConcertAlreadyAddedException, InternalErrorException {
@@ -96,7 +89,7 @@ public class UsersShownConcertsServiceImpl implements UsersShownConcertsService 
     }
 
     @Override
-    public boolean hasShownConcert(long telegramId, String concertUrl) throws UserNotFoundException, InternalErrorException{
+    public boolean hasShownConcert(long telegramId, String concertUrl) throws UserNotFoundException, InternalErrorException {
         final Optional<UserEntity> foundUser = usersRepository.findByTelegramId(telegramId);
         if (foundUser.isEmpty()) {
             throw new UserNotFoundException();

@@ -26,7 +26,7 @@ import java.util.Objects;
 
 @Service
 public class MusicServiceImpl implements MusicService {
-    // todo сделать нормально после релиза
+    // TODO: сделать нормально после релиза
     enum ErrorCodes {
         SUCCESS, INTERNAL_ERROR, ARTIST_NOT_FOUND, TRACK_LIST_NOT_FOUND
     }
@@ -37,6 +37,7 @@ public class MusicServiceImpl implements MusicService {
     @Getter
     private static class ResponseStatusDTO {
         private int code;
+
         private String message;
     }
 
@@ -78,10 +79,19 @@ public class MusicServiceImpl implements MusicService {
     }
 
     @Override
-    public TrackListDto getPlayListData(String url) throws InternalErrorException, MusicServiceException {
-        String serviceUrl = "%s://%s:%d/track-lists?url=%s".formatted(serviceSchema, serviceHost, servicePort, url);
+    public TrackListDto getTrackListData(String url) throws InternalErrorException, MusicServiceException {
+        final String serviceUrl = "%s://%s:%d/track-lists?url=%s".formatted(
+                serviceSchema,
+                serviceHost,
+                servicePort,
+                url
+        );
+
         try {
-            ResponseEntity<ResponseMusicServicePlayListDTO> res = restTemplate.getForEntity(serviceUrl, ResponseMusicServicePlayListDTO.class);
+            final ResponseEntity<ResponseMusicServicePlayListDTO> res = restTemplate.getForEntity(
+                    serviceUrl,
+                    ResponseMusicServicePlayListDTO.class
+            );
             if (res.getStatusCode() == HttpStatus.UNPROCESSABLE_ENTITY || !res.hasBody()) {
                 throw new InternalErrorException();
             }
@@ -99,9 +109,18 @@ public class MusicServiceImpl implements MusicService {
 
     @Override
     public List<ConcertDto> getConcertsByArtistId(int artistId) throws InternalErrorException, MusicServiceException {
-        String serviceUrl = "%s://%s:%d/concerts?artist_id=%d".formatted(serviceSchema, serviceHost, servicePort, artistId);
+        final String serviceUrl = "%s://%s:%d/concerts?artist_id=%d".formatted(
+                serviceSchema,
+                serviceHost,
+                servicePort,
+                artistId
+        );
+
         try {
-            ResponseEntity<ResponseMusicServiceConcertsDTO> res = restTemplate.getForEntity(serviceUrl, ResponseMusicServiceConcertsDTO.class);
+            final ResponseEntity<ResponseMusicServiceConcertsDTO> res = restTemplate.getForEntity(
+                    serviceUrl,
+                    ResponseMusicServiceConcertsDTO.class
+            );
             if (res.getStatusCode() == HttpStatus.UNPROCESSABLE_ENTITY || !res.hasBody()) {
                 throw new InternalErrorException();
             }
