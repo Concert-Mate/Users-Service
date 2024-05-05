@@ -12,7 +12,7 @@ spring:
     host: ${RABBITMQ_HOST}
     port: ${RABBITMQ_PORT}
     username: ${RABBITMQ_DEFAULT_USER}
-    password: ${RABBITMQ_DEFAULT_PASS}
+    password: ${RABBITMQ_DEFAULT_PASSWORD}
     queue: ${RABBITMQ_QUEUE}
   music-service:
     host: ${MUSIC_SERVICE_HOST}

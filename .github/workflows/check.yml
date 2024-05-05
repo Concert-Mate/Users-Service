@@ -38,6 +38,7 @@ jobs:
             RABBITMQ_PORT=${{ secrets.RABBITMQ_PORT }}
             RABBITMQ_DEFAULT_USER=${{ secrets.RABBITMQ_DEFAULT_USER }}
             RABBITMQ_DEFAULT_PASS=${{ secrets.RABBITMQ_DEFAULT_PASS  }}
+            RABBITMQ_DEFAULT_PASSWORD=${{ secrets.RABBITMQ_DEFAULT_PASS  }}
             RABBITMQ_QUEUE=${{ secrets.RABBITMQ_QUEUE }}
             
             MUSIC_SERVICE_HOST=${{ secrets.HOST }}
