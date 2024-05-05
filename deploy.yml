@@ -6,7 +6,7 @@ services:
     volumes:
       - ./init.sh:/docker-entrypoint-initdb.d/init.sh
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-      - postgres-data:/var/lib/postgresql/data
+      - ./postgres-data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER_NAME} -d ${POSTGRES_USER_DATABASE_NAME}"]
       interval: 1ms
@@ -20,7 +20,7 @@ services:
       - "5672:5672"
       - "15672:15672"
     volumes:
-      - rabbitmq-data:/var/lib/rabbitmq
+      - ./rabbitmq-data:/var/lib/rabbitmq
     healthcheck:
       test: ["CMD", "rabbitmq-diagnostics", "status"]
       interval: 30s
