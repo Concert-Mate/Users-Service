@@ -1,0 +1,44 @@
+services:
+  postgres:
+    image: postgres
+    ports:
+      - "0.0.0.0:5432:5432"
+    volumes:
+      - ./init.sh:/docker-entrypoint-initdb.d/init.sh
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER_NAME} -d ${POSTGRES_USER_DATABASE_NAME}"]
+      interval: 1ms
+      retries: 10000
+    env_file:
+      - .env
+
+  rabbitmq:
+    image: rabbitmq:3.9-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - ./rabbitmq-data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    env_file:
+      - .env
+
+  user-service-backend:
+    ports:
+      - "8080:8080"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    env_file:
+      - .env

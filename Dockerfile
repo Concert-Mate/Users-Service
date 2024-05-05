@@ -1,13 +1,14 @@
-FROM openjdk:17-jdk-alpine
-
-RUN apk add --no-cache bash
+FROM ubuntu:latest
 
 WORKDIR /app
 
-COPY user-service .
+COPY . /app/
 
-EXPOSE 8080
+RUN apt-get update && \
+    apt-get install -y protobuf-compiler openjdk-17-jdk && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN ./gradlew build
+RUN ./gradlew
 
-CMD ["java", "-jar", "build/libs/app.jar"]
+#CMD ./gradlew build && java -jar /app/build/libs/app.jar
+CMD ./gradlew bootRun
