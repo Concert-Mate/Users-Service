@@ -9,6 +9,8 @@ spring:
     username: ${POSTGRES_USER_NAME}
     password: ${POSTGRES_USER_PASSWORD}
   rabbitmq:
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_PORT}
     username: ${RABBITMQ_DEFAULT_USER}
     password: ${RABBITMQ_DEFAULT_PASSWORD}
     queue: ${RABBITMQ_QUEUE}
