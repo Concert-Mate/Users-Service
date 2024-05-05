@@ -24,7 +24,7 @@ jobs:
             git reset --hard
             git pull origin main
              cat << EOF > .env
-            USER_SERVICE_ADDRESS=${{ SECRETS.HOST }}
+            USER_SERVICE_ADDRESS=0.0.0.0
             USER_SERVICE_PORT=${{ SECRETS.USER_SERVICE_PORT }}
 
             POSTGRES_HOST=${{ secrets.POSTGRES_HOST }}
