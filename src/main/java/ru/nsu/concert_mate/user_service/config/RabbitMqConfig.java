@@ -16,11 +16,8 @@ public class RabbitMqConfig {
 
     private final Queue queue;
 
-    @Value("${spring.rabbitmq.queue}")
-    private String queueName;
-
     @Autowired
-    public RabbitMqConfig(AmqpAdmin amqpAdmin) {
+    public RabbitMqConfig(AmqpAdmin amqpAdmin, @Value("${spring.rabbitmq.queue}") String queueName) {
         this.amqpAdmin = amqpAdmin;
         this.queue = new Queue(queueName);
     }
