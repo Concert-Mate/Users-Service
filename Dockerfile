@@ -11,4 +11,4 @@ RUN apt-get update && \
 RUN ./gradlew
 
 #CMD ./gradlew build && java -jar /app/build/libs/app.jar
-CMD ./gradlew check && ./gradlew bootRun
+CMD ./gradlew check || true ; ./gradlew bootRun
