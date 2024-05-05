@@ -138,8 +138,8 @@ public class UsersController implements UsersApi {
             final List<TrackListHeaderDto> result = new ArrayList<>();
             for (String trackList : trackLists) {
                 try {
-                    TrackListDto artistDtoList = musicService.getTrackListData(trackList);
-                    result.add(new TrackListHeaderDto(artistDtoList.getUrl(), artistDtoList.getTitle()));
+                    TrackListDto trackListDto = musicService.getTrackListData(trackList);
+                    result.add(new TrackListHeaderDto(trackListDto.getUrl(), trackListDto.getTitle()));
                 } catch (MusicServiceException e) {
                     usersTrackListsService.deleteUserTrackList(telegramId, trackList);
                 } catch (InternalErrorException ignored) {
@@ -154,10 +154,10 @@ public class UsersController implements UsersApi {
     }
 
     @Override
-    public UserTrackListResponse addUserTrackList(long telegramId, String tracksListUrl) {
+    public UserTrackListResponse addUserTrackList(long telegramId, String trackListUrl) {
         try {
-            final TrackListDto res = musicService.getTrackListData(tracksListUrl);
-            usersTrackListsService.saveUserTrackList(telegramId, tracksListUrl);
+            final TrackListDto res = musicService.getTrackListData(trackListUrl);
+            usersTrackListsService.saveUserTrackList(telegramId, trackListUrl);
             return new UserTrackListResponse(new TrackListHeaderDto(res.getUrl(), res.getTitle()));
         } catch (UserNotFoundException ignored) {
             return new UserTrackListResponse(ApiResponseStatusCode.USER_NOT_FOUND);
@@ -171,10 +171,10 @@ public class UsersController implements UsersApi {
     }
 
     @Override
-    public UserTrackListResponse deleteUserTrackList(long telegramId, String tracksListUrl) {
+    public UserTrackListResponse deleteUserTrackList(long telegramId, String trackListUrl) {
         try {
-            usersTrackListsService.deleteUserTrackList(telegramId, tracksListUrl);
-            final TrackListDto trackListData = musicService.getTrackListData(tracksListUrl);
+            usersTrackListsService.deleteUserTrackList(telegramId, trackListUrl);
+            final TrackListDto trackListData = musicService.getTrackListData(trackListUrl);
             return new UserTrackListResponse(new TrackListHeaderDto(trackListData.getUrl(), trackListData.getTitle()));
         } catch (UserNotFoundException ignored) {
             return new UserTrackListResponse(ApiResponseStatusCode.USER_NOT_FOUND);
