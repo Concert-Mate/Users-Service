@@ -10,7 +10,7 @@ import ru.nsu.concert_mate.user_service.model.dto.TrackListHeaderDto;
 public class UserTrackListResponse {
     private ApiResponseStatus status;
 
-    @JsonProperty(value = "tracks_list")
+    @JsonProperty(value = "track_list")
     private TrackListHeaderDto trackList;
 
     public UserTrackListResponse() {

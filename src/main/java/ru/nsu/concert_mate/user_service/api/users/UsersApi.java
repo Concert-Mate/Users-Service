@@ -34,13 +34,13 @@ public interface UsersApi {
     @PostMapping("/track-lists")
     UserTrackListResponse addUserTrackList(
             @PathVariable long telegramId,
-            @RequestParam(name = "url") String tracksListURL
+            @RequestParam(name = "url") String trackListURL
     );
 
     @DeleteMapping("/track-lists")
     UserTrackListResponse deleteUserTrackList(
             @PathVariable long telegramId,
-            @RequestParam(name = "url") String tracksListURL
+            @RequestParam(name = "url") String trackListURL
     );
 
     @GetMapping("/concerts")
