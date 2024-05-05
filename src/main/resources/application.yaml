@@ -23,5 +23,5 @@ spring:
 grpc:
   client:
     elastic-service:
-      address: ${ELASTIC_SERVICE_HOST}:${ELASTIC_SERVICE_PORT}
+      address: static://${ELASTIC_SERVICE_HOST}:${ELASTIC_SERVICE_PORT}
       negotiation-type: plaintext
