@@ -36,7 +36,8 @@ jobs:
 
             RABBITMQ_DEFAULT_USER=${{ secrets.RABBITMQ_DEFAULT_USER }}
             RABBITMQ_DEFAULT_PASSWORD=${{ secrets.RABBITMQ_DEFAULT_PASSWORD  }}
-
+            RABBITMQ_QUEUE=${{ secrets.RABBITMQ_QUEUE }}
+            
             MUSIC_SERVICE_HOST=${{ secrets.HOST }}
             MUSIC_SERVICE_PORT=${{ secrets.MUSIC_SERVICE_PORT }}
             MUSIC_SERVICE_SCHEME=http
