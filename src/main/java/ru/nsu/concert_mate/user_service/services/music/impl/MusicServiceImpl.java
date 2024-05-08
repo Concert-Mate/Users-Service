@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -25,6 +26,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
+@Slf4j
 public class MusicServiceImpl implements MusicService {
     // TODO: сделать нормально после релиза
     enum ErrorCodes {
@@ -93,16 +95,21 @@ public class MusicServiceImpl implements MusicService {
                     ResponseMusicServicePlayListDTO.class
             );
             if (res.getStatusCode() == HttpStatus.UNPROCESSABLE_ENTITY || !res.hasBody()) {
+                log.error("invalid Music-Service request or response for {}", serviceUrl);
                 throw new InternalErrorException();
             }
 
             if (Objects.requireNonNull(res.getBody()).status.code == ErrorCodes.SUCCESS.ordinal()) {
+                log.info("service successfully answered {}", Objects.requireNonNull(res.getBody()).trackList);
                 return Objects.requireNonNull(res.getBody()).trackList;
             } else if (Objects.requireNonNull(res.getBody()).status.code == ErrorCodes.TRACK_LIST_NOT_FOUND.ordinal()) {
+                log.info("tracklist not found {}", url);
                 throw new TrackListNotFoundException(Objects.requireNonNull(res.getBody()).status.message);
             }
+            log.warn("invalid status code in answer {}", res.getBody().status);
             throw new InternalErrorException();
         } catch (RestClientException e) {
+            log.error("error during making request {}: {}", serviceUrl, e.getLocalizedMessage());
             throw new InternalErrorException();
         }
     }
@@ -122,16 +129,21 @@ public class MusicServiceImpl implements MusicService {
                     ResponseMusicServiceConcertsDTO.class
             );
             if (res.getStatusCode() == HttpStatus.UNPROCESSABLE_ENTITY || !res.hasBody()) {
+                log.error("invalid Music-Service request or response for {}", serviceUrl);
                 throw new InternalErrorException();
             }
 
             if (Objects.requireNonNull(res.getBody()).status.code == ErrorCodes.SUCCESS.ordinal()) {
+                log.info("service successfully answered {}",Objects.requireNonNull(res.getBody()).concerts);
                 return Objects.requireNonNull(res.getBody()).concerts;
             } else if (Objects.requireNonNull(res.getBody()).status.code == ErrorCodes.ARTIST_NOT_FOUND.ordinal()) {
+                log.info("artist concerts not found for {}", artistId);
                 throw new ArtistNotFoundException(Objects.requireNonNull(res.getBody()).status.message);
             }
+            log.warn("invalid status code in answer {}", res.getBody().status);
             throw new InternalErrorException();
         } catch (RestClientException e) {
+            log.error("error during making request {}: {}", serviceUrl, e.getLocalizedMessage());
             throw new InternalErrorException();
         }
     }
