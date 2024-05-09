@@ -19,7 +19,7 @@ import ru.nsu.concert_mate.user_service.services.users.UsersShownConcertsService
 import ru.nsu.concert_mate.user_service.services.users.UsersTrackListsService;
 import ru.nsu.concert_mate.user_service.services.users.exceptions.InternalErrorException;
 
-import java.lang.reflect.Array;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
